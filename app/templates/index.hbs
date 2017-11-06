@@ -1,0 +1,13 @@
+<div class='row main'>
+  <div class='col-md-4'>
+    <h1>Posts</h1>
+    {{#each model as |post|}}
+      <br>
+      <h2 class='post-title'>{{#link-to 'posts' post.slug}}{{post.title}}{{/link-to}}</h2>
+      <section class='post excerpt'>
+        <p>{{excerpt post.body}} -{{post.user.username}}</p>
+      </section>
+      {{#link-to 'posts' post.slug}}continue reading &#8594;{{/link-to}}
+    {{/each}}
+  </div>
+</div>

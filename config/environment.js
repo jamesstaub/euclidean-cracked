@@ -21,6 +21,18 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+
+    firebase: {
+      apiKey: "AIzaSyAESGR-rqetWMWsOxCHjZHPvtgfs-UQ9L0",
+      authDomain: "euclidean-cracked.firebaseapp.com",
+      databaseURL: "https://euclidean-cracked.firebaseio.com",
+      projectId: "euclidean-cracked",
+      storageBucket: "",
+      messagingSenderId: "13537402201"
+    },
+    torii: {
+      sessionServiceName: 'session'
     }
   };
 

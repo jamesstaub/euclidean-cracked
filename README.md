@@ -1,7 +1,16 @@
 # euclidean-cracked
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+## Goals
+rebuild from scratch a prototype web drum sequencer.
+
+- use torii and firebase to authenticate users.
+- users can save and recall drum sequences they program and view sequences made by others
+  - refactor and expand cracked.js audio signalpath for each drum track. allow configuration of filters, distortion, lfos
+
+-  create a listview of all sequences created by users with an interface to create a super-sequence, sequencing multiple sequences together at different durations
+
+
+
 
 ## Prerequisites
 
@@ -21,11 +30,7 @@ You will need the following things properly installed on your computer.
 ## Running / Development
 
 * `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
+[http://localhost:4200](http://localhost:4200).
 
 ### Running Tests
 
@@ -40,11 +45,3 @@ Make use of the many generators for code, try `ember help generate` for more det
 ### Deploying
 
 Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](http://emberjs.com/)
-* [ember-cli](https://ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
