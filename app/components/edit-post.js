@@ -44,8 +44,9 @@ export default Ember.Component.extend({
       this.sendAction('delete', post);
       set(this, 'isEditing', false);
     },
+
     createComment(author, body, post) {
       this.sendAction('createComment', author, body, post);
-    }
+    },
   }
 });

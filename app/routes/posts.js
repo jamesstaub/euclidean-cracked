@@ -2,8 +2,10 @@ import Ember from 'ember';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
 
+
 const {
-  get
+  get,
+  debug
 } = Ember;
 
 export default Ember.Route.extend({
@@ -26,6 +28,29 @@ export default Ember.Route.extend({
       post.save();
       this.transitionTo('index');
     },
+
+
+    createTrack(post, filename, hits, steps, offset) {
+      let track = this.store.createRecord('track', {
+        filename, hits, steps, offset,
+      });
+
+      post.get('tracks').addObject(track)
+
+      return track.save()
+        .then(()=>{
+          debug('track saved succesfully');
+          return post.save();
+        })
+        .catch((error) => {
+          debug(`track:  ${error}`);
+          track.rollbackAttributes();
+        })
+        .then(() => {
+          debug('post saved successfuly');
+        })
+    },
+
     createComment(author, body, post) {
       let user = null;
       let comment = this.store.createRecord('comment', {
@@ -42,26 +67,26 @@ export default Ember.Route.extend({
         post.get('comments').addObject(comment);
 
         return comment.save().then(() => {
-            console.log('comment saved succesfully');
+            debug('comment saved succesfully');
             return post.save();
           })
           .catch((error) => {
-            console.log(`comment:  ${error}`);
+            debug(`comment:  ${error}`);
             comment.rollbackAttributes();
           })
           .then(() => {
-            console.log('post saved successfuly');
+            debug('post saved successfuly');
             return userData.save();
           })
           .catch((error) => {
-            console.log(`post:  ${error}`);
+            debug(`post:  ${error}`);
             post.rollbackAttributes();
           })
           .then(() => {
-            console.log('user saved successfuly');
+            debug('user saved successfuly');
           })
           .catch((error) => {
-            console.log(`user:  ${error}`);
+            debug(`user:  ${error}`);
             user.rollbackAttributes();
           });
 

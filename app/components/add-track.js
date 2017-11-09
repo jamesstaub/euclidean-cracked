@@ -5,8 +5,8 @@ export default Ember.Component.extend({
   actions: {
     createTrack(filename, hits, steps, offset) {
       let post = this.get('post');
-      // mock default vals
-      hits, steps, offset = 3;
+      hits, steps, offset = 3; // mock for default vals
+
       get(this, 'onCreateTrack')(post, filename, hits, steps, offset)
 
       this.setProperties({
