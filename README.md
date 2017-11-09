@@ -1,4 +1,8 @@
 # euclidean-cracked
+This project is in development.
+
+After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/sequencer) euclidean rhythm sequencer, the aim of this rebuild is to deal with application concerns such as authentication, and data modeling as a foundation, then to reimplement the web audio components.
+
 
 ## Goals
 rebuild from scratch a prototype web drum sequencer.
