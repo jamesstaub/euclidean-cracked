@@ -1,19 +1,34 @@
 import Ember from 'ember';
+import DS from 'ember-data';
+
 const {
   get,
-  set
+  set,
+  computed,
 } = Ember;
 
 export default Ember.Component.extend({
   isEditing: false,
   classNames: 'edit',
-  isAllowed: Ember.computed('model.firstObject.user.username', 'session.currentUser.username', function() {
-    return get(this, 'model.firstObject.user.username') === get(this, 'session.currentUser.username');
+
+  isAllowed: computed('model.firstObject.user.uid', 'session.currentUser.uid',{
+    get() {
+
+      const currentUser = get(this, 'session.currentUser.uid');
+
+      const creatorPromise = get(this, 'model.firstObject.user').then((creator)=>{
+        return get(creator, 'uid') === currentUser;
+      });
+
+      return DS.PromiseObject.create({promise: creatorPromise});
+
+    }
   }),
+
   actions: {
     save(post) {
-      let sessionName = get(this, 'session.currentUser.username');
-      if (sessionName === post.get('user.username')) {
+      let sessionName = get(this, 'session.currentUser.uid');
+      if (sessionName === post.get('user.uid')) {
         set(this, 'isEditing', false);
         this.sendAction('save', post);
 

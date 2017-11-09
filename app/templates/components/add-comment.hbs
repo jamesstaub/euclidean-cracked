@@ -5,14 +5,14 @@
 {{/unless}}
     {{#each post.comments as |comment|}}
 <div class='comments'>
-    <img src='{{comment.user.avatar}}'/>
+    <img src='{{comment.user.photoURL}}'/>
         {{comment.body}}<br>
 </div>
     {{/each}}
 
 {{#if session.isAuthenticated}}
-<div class='box'>
-    <img src='{{session.currentUser.profileImageURL}}' height='70px' width='70px'/>
+<div>
+    <img src='{{session.currentUser.photoURL}}' height='35px' width='35px'/>
     <textarea rows='2' placeholder='Add New Comment' value= {{body}} onchange={{action (mut body) value='target.value'}} />
     <button {{action 'submitComment' session body}}>Submit</button>
 </div>
