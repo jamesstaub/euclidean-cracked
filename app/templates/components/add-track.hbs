@@ -1,0 +1,19 @@
+{{yield}}
+
+<p>tracks</p>
+
+{{#unless post.tracks}}
+    <h4> No tracks</h4>
+{{/unless}}
+
+{{#each post.tracks as |track|}}
+  <div class='tracks'>
+    {{track.filename}}
+  </div>
+{{/each}}
+
+
+<div>
+  <textarea rows='2' placeholder='filename' value= {{filename}} onchange= {{action (mut filename) value='target.value'}} />
+  <button class='btn btn-primary' {{action 'createTrack' filename}}>add track</button>
+</div>
