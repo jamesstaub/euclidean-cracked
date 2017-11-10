@@ -9,6 +9,7 @@ const {
 } = Ember;
 
 export default Ember.Route.extend({
+
   model(param) {
     return this.store.query('post', {
       orderBy: 'slug',

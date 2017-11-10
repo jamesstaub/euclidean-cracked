@@ -4,12 +4,12 @@ import getOrCreateUser from '../utils/get-or-create-user';
 
 const {
   get,
-  set
 } = Ember;
 
 export default Ember.Route.extend({
+
   actions: {
-    save(title, body) {
+    async save(title, body) {
       let user = null;
       let slug = cleanURI(title);
       let uid = get(this, 'session.uid');
@@ -25,21 +25,15 @@ export default Ember.Route.extend({
       // TODO: get auth type here
       // allow custom username for anonymous or google auth
       // TODO make sure display name is saving correctly
-      user = getOrCreateUser(uid, get(this, 'session.currentUser.displayName'),
+      user = await getOrCreateUser(uid, get(this, 'session.currentUser.displayName'),
         get(this, 'session.currentUser.profileImageURL'),
         this.store);
 
-      user.then((userData) => {
-        userData.get('posts').addObject(post);
-        post.save().then(() => {
-          return userData.save();
-        });
+      await user.get('posts').addObject(post);
+      post = await post.save();
+      await user.save();
+      return this.transitionTo('posts', get(post, 'slug'));
 
-      });
-
-      set(this, 'title', '');
-      set(this, 'body', '');
-      this.transitionTo('index');
     }
   }
 });

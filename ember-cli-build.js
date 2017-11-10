@@ -9,6 +9,9 @@ module.exports = function(defaults) {
       'importBootstrapFont': true,
       'importBootstrapCSS': false
     },
+    babel: {
+      includePolyfill: true
+    },
 
   });
 
