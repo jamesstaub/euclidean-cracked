@@ -1,12 +1,17 @@
 {{#edit-post
   model=model
   session=session
-  save='save'
+  onSavePost=(route-action 'save')
   delete='delete'
   createComment='createComment'
   as |post|
 }}
-  {{add-track post=post session=session onCreateTrack=(route-action 'createTrack')}}
+  {{add-track
+    post=post
+    session=session
+    onCreateTrack=(route-action 'createTrack')
+  }}
+
 {{/edit-post}}
 
 {{outlet}}

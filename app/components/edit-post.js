@@ -9,11 +9,10 @@ const {
 
 export default Ember.Component.extend({
   isEditing: false,
-  classNames: 'edit',
+  classNames: 'edit-post',
 
   isAllowed: computed('model.firstObject.user.uid', 'session.currentUser.uid',{
     get() {
-
       const currentUser = get(this, 'session.currentUser.uid');
 
       const creatorPromise = get(this, 'model.firstObject.user').then((creator)=>{
@@ -30,7 +29,7 @@ export default Ember.Component.extend({
       let sessionName = get(this, 'session.currentUser.uid');
       if (sessionName === post.get('user.uid')) {
         set(this, 'isEditing', false);
-        this.sendAction('save', post);
+        get(this, 'onSavePost')(post);
 
       } else {
         alert('Sorry not authorized');
@@ -40,6 +39,12 @@ export default Ember.Component.extend({
     edit() {
       set(this, 'isEditing', true);
     },
+
+    updatePost(post) {
+
+
+    },
+
     delete(post) {
       this.sendAction('delete', post);
       set(this, 'isEditing', false);

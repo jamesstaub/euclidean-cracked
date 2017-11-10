@@ -25,13 +25,16 @@ export default Ember.Route.extend({
     },
     save(post) {
       let slug = cleanURI(post.get('title'));
+
       post.set('slug', slug);
-      post.save();
-      this.transitionTo('index');
+      post.save()
+      .then((post)=> {
+        this.transitionTo('posts', get(post, 'slug'));
+      });
     },
 
-
     createTrack(post, filename, hits, steps, offset) {
+
       let track = this.store.createRecord('track', {
         filename, hits, steps, offset,
       });
