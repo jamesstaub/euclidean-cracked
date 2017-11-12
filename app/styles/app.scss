@@ -1,7 +1,8 @@
 @import 'components/edit-post';
+@import 'components/edit-track';
 
 body {
-  padding-top: 15px;
+  padding-top: 50px;
 }
 .main {
     padding: 40px;
@@ -22,8 +23,8 @@ body {
 
 .border{
     border-radius: 10px;
-    border: 2px solid black;
-    width: 560px;
+    border: 1px solid black;
+    width: 700px;
     height: 100%;
     padding: 20px;
     margin: 20px;
@@ -40,6 +41,15 @@ body {
     margin: 20px;
     padding: 20px;
 
+}
+
+.ui-dial {
+
+  .value {
+    width: 55px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 @import "ember-bootstrap/bootstrap";

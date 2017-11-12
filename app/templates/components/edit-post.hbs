@@ -1,36 +1,35 @@
 {{#each model as |post|}}
   <div class='row'>
+    <div class='container-fluid border'>
+      <h1><img src='{{post.user.avatar}}'/>{{post.title}}</h1>
+      <h3>{{markdown-to-html markdown=post.body}}</h3>
+      <h4>{{post.user.displayName}}</h4>
+      {{#if post.date}}
+        {{moment-from-now post.date}}
+      {{/if}}
+    </div>
     {{#if isEditing}}
+      {{#if isEditingMeta}}
+        <div class='container-fluid border'>
+          <form {{action 'save' post on='submit'}}>
+            <legend>edit post data</legend>
+            <div class='post-meta form-group'>
+                <label>Title<input cols=40 rows='1' value= {{post.title}} oninput={{action (mut post.title) value='target.value'}} /></label>
+                <!-- <label><textarea cols=40 rows='6'  value= {{post.body}} oninput={{action (mut post.body) value='target.value'}} /></label> -->
+            </div>
+            <button type='submit' class='btn btn-primary'>Done</button>
+          </form>
+
+        </div>
+      {{/if}}
+
       <div class='container-fluid border'>
-        <form class="navbar-form navbar-right"{{action 'save' post on='submit'}}>
-          <legend>edit post data</legend>
-
-          <div class='post-meta form-group'>
-              <label>Title  <input cols=40 rows='1' value= {{post.title}} oninput={{action (mut post.title) value='target.value'}} /></label>
-              <!-- <label><textarea cols=40 rows='6'  value= {{post.body}} oninput={{action (mut post.body) value='target.value'}} /></label> -->
-          </div>
-          <button type='submit' class='btn btn-primary'>Done</button>
-        </form>
-
-        <label>
-          <input type="range" name="test" value={{post.testParameter}} oninput={{action (mut post.testParameter) value='target.value' }}>
-        </label>
-        
         <section>
           {{yield post}}
         </section>
       </div>
     {{else}}
       <div class='container-fluid border'>
-        <h1><img src='{{post.user.avatar}}'/>{{post.title}}</h1>
-        <h3>{{markdown-to-html markdown=post.body}}</h3>
-        <h4>{{post.user.displayName}}</h4>
-        <h4>{{post.testParameter}}</h4>
-        {{#if post.date}}
-          {{moment-from-now post.date}}
-        {{/if}}
-
-
         {{#if session.isAuthenticated}}
           {{#if isAllowed}}
             {{#unless isEditing}}

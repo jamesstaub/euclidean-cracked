@@ -1,7 +1,7 @@
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('track-container', 'Integration | Component | track container', {
+moduleForComponent('ui-dial', 'Integration | Component | ui dial', {
   integration: true
 });
 
@@ -10,15 +10,15 @@ test('it renders', function(assert) {
   // Set any properties with this.set('myProperty', 'value');
   // Handle any actions with this.on('myAction', function(val) { ... });
 
-  this.render(hbs`{{track-container}}`);
+  this.render(hbs`{{ui-dial}}`);
 
   assert.equal(this.$().text().trim(), '');
 
   // Template block usage:
   this.render(hbs`
-    {{#track-container}}
+    {{#ui-dial}}
       template block text
-    {{/track-container}}
+    {{/ui-dial}}
   `);
 
   assert.equal(this.$().text().trim(), 'template block text');

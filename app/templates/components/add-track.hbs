@@ -1,14 +1,10 @@
 {{yield}}
 
-<div>
-  <!-- <textarea rows='2' placeholder='filename' value= {{filename}} onchange= {{action (mut filename) value='target.value'}} /> -->
-  <button class='btn btn-primary' {{action 'createTrack' filename}}>add track</button>
-</div>
-
+<button class='btn btn-primary' {{action 'createTrack' filename}}>add track</button>
 
 <div class='tracks'>
 {{#each post.tracks as |track|}}
-  {{track-container track=track}}
+  {{edit-track track=track}}
 {{else}}
   <h4> No tracks</h4>
 {{/each}}

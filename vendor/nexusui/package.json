@@ -1,0 +1,77 @@
+{
+  "_from": "nexusui@^2.0.0",
+  "_id": "nexusui@2.0.0",
+  "_inBundle": false,
+  "_integrity": "sha1-DXwmzF+Vn2q9do4tKAHplfDNVB8=",
+  "_location": "/nexusui",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "nexusui@^2.0.0",
+    "name": "nexusui",
+    "escapedName": "nexusui",
+    "rawSpec": "^2.0.0",
+    "saveSpec": null,
+    "fetchSpec": "^2.0.0"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/nexusui/-/nexusui-2.0.0.tgz",
+  "_shasum": "0d7c26cc5f959f6abd768e2d2801e995f0cd541f",
+  "_spec": "nexusui@^2.0.0",
+  "_where": "/Users/james/repos/cracked-synth-ember",
+  "author": {
+    "name": "Benjamin Taylor"
+  },
+  "bugs": {
+    "url": "https://github.com/nexus-js/ui/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "NexusUI: Web Audio Interfaces",
+  "devDependencies": {
+    "babel-core": "^4.7.16",
+    "babel-jest": "^4.0.0",
+    "babel-loader": "^4.0.0",
+    "babelify": "^5.0.3",
+    "color-ops": "^2.0.0",
+    "es6ify": "^1.6.0",
+    "fuse": "^0.4.0",
+    "jest": "^0.1.37",
+    "jshint": "^2.6.3",
+    "jshint-loader": "^0.8.3",
+    "uglify-js": "^2.4.16",
+    "waaclock": "^0.5.3",
+    "webpack": "^1.5.3"
+  },
+  "homepage": "https://nexus-js.github.io/ui",
+  "jest": {
+    "scriptPreprocessor": "./node_modules/babel-jest",
+    "testFileExtensions": [
+      "es6",
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ]
+  },
+  "keywords": [],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "nexusui",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nexus-js/ui.git"
+  },
+  "scripts": {
+    "serve": "script/watch",
+    "start": "script/build",
+    "test": "jest"
+  },
+  "version": "2.0.0"
+}

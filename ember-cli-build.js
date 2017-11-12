@@ -9,11 +9,14 @@ module.exports = function(defaults) {
       'importBootstrapFont': true,
       'importBootstrapCSS': false
     },
-    babel: {
+    'ember-cli-babel': {
       includePolyfill: true
     },
-
   });
+
+  app.import('vendor/i_dropped_my_phone_the_screen_cracked/dist/cracked.js');
+  app.import('vendor/nexusui/dist/NexusUi.js');
+
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

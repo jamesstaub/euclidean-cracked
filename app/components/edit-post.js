@@ -40,11 +40,6 @@ export default Ember.Component.extend({
       set(this, 'isEditing', true);
     },
 
-    updatePost(post) {
-
-
-    },
-
     delete(post) {
       this.sendAction('delete', post);
       set(this, 'isEditing', false);
