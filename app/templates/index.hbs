@@ -1,5 +1,5 @@
 <div class='row main'>
-  <div class='col-md-4'>
+  <div class='container-fluid'>
 
     {{#each model as |post|}}
       <div class="card">
@@ -8,10 +8,11 @@
         <section class='post excerpt'>
           <p>{{post.body}}</p>
           <p>{{post.user.displayName}}</p>
-          <p>{{post.testParameter}}</p>
         </section>
       </div>
-
+    {{else}}
+      There are no posts...
     {{/each}}
+
   </div>
 </div>

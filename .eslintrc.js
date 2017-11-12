@@ -9,5 +9,11 @@ module.exports = {
     browser: true
   },
   rules: {
-  }
+  },
+  globals: {
+    "__": true,
+    "cracked":true,
+    "NexusUI": true,
+    "Nexus": true,
+}
 };

@@ -14,6 +14,10 @@ rebuild from scratch a prototype web drum sequencer.
 -  create a listview of all sequences created by users with an interface to create a super-sequence, sequencing multiple sequences together at different durations
 
 
+## Interface notes
+
+
+
 
 
 ## Prerequisites

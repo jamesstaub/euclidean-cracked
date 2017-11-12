@@ -1,15 +1,9 @@
-<div class='col-md-4 border'>
+<div class='container-fluid border'>
   <p>New Post</p>
-  <form {{action 'save' title body testParameter on='submit'}}>
+  <form {{action 'save' title body on='submit'}}>
     <div class="form-group">
       <dt>Title:<br> <textarea cols=40 rows='1' placeholder='Title' value= {{title}} oninput={{action (mut title) value='target.value'}} /></dt>
-      <dt>Body:<br> <textarea cols=40 rows='6' placeholder='Body'  value= {{body}} oninput={{action (mut body) value='target.value' }} /></dt>
     </div>
-    <button type='submit' class='btn btn-primary'>Add</button>
+    <button type='submit' class='btn btn-primary'>Create</button>
   </form>
-</div>
-<div id='preview' class='col-md-4 border'>
-  <p>Preview</p>
-  <h3>{{title}}</h3>
-  <h4>{{markdown-to-html markdown=body}}</h4>
 </div>

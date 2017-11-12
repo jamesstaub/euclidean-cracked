@@ -8,6 +8,6 @@ export default DS.Model.extend({
     user: DS.belongsTo('user'),
     date: DS.attr('date'),
 
-    testParameter: DS.attr('number'),
+    tracks: DS.hasMany('track' ),
 
 });

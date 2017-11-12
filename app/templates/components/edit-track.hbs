@@ -1,0 +1,44 @@
+<div class="ui-controls">
+  {{ui-select
+    choices=filenames
+    onChangeValue=(action "updateFilename" track)
+    value=track.filename
+  }}
+
+  <div class="dials">
+    {{#ui-dial
+      onChangeValue=(action "updateSequence" track 'hits')
+      value=track.hits
+    }}
+    <p>hits</p>
+    {{track.hits}}
+    {{/ui-dial}}
+
+    {{#ui-dial
+      onChangeValue=(action "updateSequence" track 'steps')
+      value=track.steps
+    }}
+    <p>steps</p>
+    {{track.steps}}
+    {{/ui-dial}}
+
+    {{#ui-dial
+      onChangeValue=(action "updateSequence" track 'offset')
+      value=track.offset
+    }}
+    <p>offset</p>
+    {{track.offset}}
+    {{/ui-dial}}
+  </div>
+
+</div>
+
+<button
+  type='delete'
+  class='btn btn-danger'
+  {{action 'deleteTrack' track}}
+>
+  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</button>
+
+{{yield}}
