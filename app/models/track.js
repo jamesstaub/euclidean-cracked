@@ -9,5 +9,6 @@ export default DS.Model.extend({
   steps: DS.attr('number'),
   offset: DS.attr('number'),
 
+  sequence: DS.attr('string'),
 
 });

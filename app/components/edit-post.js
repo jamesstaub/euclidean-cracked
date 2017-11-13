@@ -11,11 +11,11 @@ export default Ember.Component.extend({
   isEditing: false,
   classNames: 'edit-post',
 
-  isAllowed: computed('model.firstObject.user.uid', 'session.currentUser.uid',{
+  isAllowed: computed('post.user.uid', 'session.currentUser.uid',{
     get() {
       const currentUser = get(this, 'session.currentUser.uid');
 
-      const creatorPromise = get(this, 'model.firstObject.user').then((creator)=>{
+      const creatorPromise = get(this, 'post.user').then((creator)=>{
         return get(creator, 'uid') === currentUser;
       });
 

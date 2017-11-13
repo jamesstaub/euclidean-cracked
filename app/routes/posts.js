@@ -2,13 +2,14 @@ import Ember from 'ember';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
 
+const { get, set, debug, Route } = Ember;
 
-const {
-  get,
-  debug
-} = Ember;
+export default Route.extend({
 
-export default Ember.Route.extend({
+  setupController(controller, model) {
+    this._super(controller, model);
+    set(this, 'controller', controller);
+  },
 
   model(param) {
     return this.store.query('post', {
@@ -93,10 +94,8 @@ export default Ember.Route.extend({
             debug(`user:  ${error}`);
             user.rollbackAttributes();
           });
-
-
       });
 
-    }
+    },
   }
 });
