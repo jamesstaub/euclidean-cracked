@@ -13,8 +13,32 @@ rebuild from scratch a prototype web drum sequencer.
 
 -  create a listview of all sequences created by users with an interface to create a super-sequence, sequencing multiple sequences together at different durations
 
+### data authorization (to do)
+users create sequence posts and can edit meta data like the name, description and audio parameters
 
-## Interface notes
+if the user authenticates anonymously, their posts could be subject to any other user editing them \
+
+users authenticated with email can control editing access, and invite other users to edit
+
+
+## Cracked, Nexus and ember
+This app uses the web audio library [cracked](https://github.com/billorcutt/i_dropped_my_phone_the_screen_cracked) for audio along with NexusUI for interface objects.
+
+A few notes on conventions I've established for using these in ember components.
+
+### Cracked
+- TODO: initialization of Cracked audio nodes could be handled in a service (global singleton in ember).
+
+When cracked objects are initialized in ember components, they are liable to create memory leaks, as ember components rerender whenever properties change.
+
+
+
+### NexusUI
+All components prefixed with `ui-` are nexus objects.
+
+The `.hbs` template must contain an element such as `<span id="{{nexusId}}"></span>` for the nexus object to select.
+
+The component must also have properties `ElementName` and `ElementOptions` for configuration, which is handled in the nexus-ui-mixin. This mixin is also where initialization and destruction of the Nexus object is handled.
 
 
 

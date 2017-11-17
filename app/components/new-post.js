@@ -9,6 +9,8 @@ export default Ember.Component.extend({
 
       set(this, 'title', '');
       set(this, 'body', '');
+
+      set(this, 'interval', 200);
     }
   }
 });

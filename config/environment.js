@@ -59,5 +59,27 @@ module.exports = function(environment) {
 
   }
 
+  ENV.audioDirectory = '/audio/Nord_Rack_2/'
+  ENV.audioFileNames = [
+    'NdbZ1.wav',
+    'Nkikd.wav',
+    'Npuh.wav',
+    'Ncow.wav',
+    'Nclab.wav',
+    'Ndist.wav',
+    'NHH2OP.wav',
+    'NHH4OP.wav',
+    'Nbliz.wav',
+    'Npee.wav',
+    'NHH1.wav',
+    'NSD4.wav',
+    'NSD3.wav',
+    'Ntom.wav',
+    'NHH3.wav',
+    'Nclik1.wav',
+    'Nlaser.wav',
+    'Nknak.wav'
+  ];
+
   return ENV;
 };

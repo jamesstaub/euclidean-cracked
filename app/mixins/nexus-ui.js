@@ -40,10 +40,16 @@ export default Ember.Mixin.create({
         if (get(this, 'value') !== v) {
           set(this, 'value', v);
         }
-
         // components using this mixin must have an action onChangeValue passed in
         get(this, 'onChangeValue')(v);
       });
+    }
+
+    if (typeof get(this, 'afterInitNexus') === 'function') {
+      // TODO: refactor this so that it is only called once
+      // is there a better way than caching nexusElement and checking if
+      // it previously existed?
+      get(this, 'afterInitNexus')(NexusElement);
     }
   },
 

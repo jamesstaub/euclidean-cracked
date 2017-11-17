@@ -12,6 +12,18 @@ module.exports = function(defaults) {
     'ember-cli-babel': {
       includePolyfill: true
     },
+
+    fingerprint: {
+      enabled: process.env.NODE_ENV !== 'development',
+      extensions: ['js', 'css', 'png', 'jpg', 'gif', 'map', 'ico', 'wav'],
+    },
+    minifyCSS: { enabled: process.env.NODE_ENV !== 'development' },
+    minifyJS: { enabled: process.env.NODE_ENV !== 'development' },
+    autoprefixer: {
+      // https://github.com/ai/browserslist#queries
+      browsers: ['> 1% in US', 'last 3 versions', 'Safari >= 8']
+    },
+
   });
 
   app.import('vendor/i_dropped_my_phone_the_screen_cracked/dist/cracked.js');

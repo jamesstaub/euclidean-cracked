@@ -1,7 +1,37 @@
+{{#audio-track-sampler
+  sequence=sequence
+  directory=directory
+  trackId=track.id
+  filename=track.filename
+  gain=track.gain
+  outputNodeSelector="#master-compressor"
+  as |sampler|
+}}
 
-{{ui-step-sequencer sequence=sequence}}
+  {{ui-step-sequencer
+    sequence=sequence
+    stepIndex=sampler.stepIndex
+  }}
+
+{{/audio-track-sampler}}
+
+
 
 <div class="ui-controls">
+
+  {{#ui-dial
+    max=1
+    step=0.01
+    size=[45,45]
+    onChangeValue=(action "updateSequenceParam" track 'gain')
+    value=track.gain
+  }}
+  <dl>
+    <dt>gain</dt>
+    <dd>{{track.gain}}</dd>
+  </dl>
+  {{/ui-dial}}
+
   {{ui-select
     choices=filenames
     onChangeValue=(action "updateFilename" track)
