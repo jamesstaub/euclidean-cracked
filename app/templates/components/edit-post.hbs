@@ -1,4 +1,4 @@
-{{#each model as |post|}}
+
   <div class='row'>
     <div class='container-fluid border'>
       <h1><img src='{{post.user.avatar}}'/>{{post.title}}</h1>
@@ -25,7 +25,7 @@
 
       <div class='container-fluid border'>
         <section>
-          {{yield post}}
+          {{yield}}
         </section>
       </div>
     {{else}}
@@ -46,5 +46,3 @@
     {{/if}}
   </div>
   <!-- {{add-comment post=post session=session store='createComment' }} -->
-
-{{/each}}

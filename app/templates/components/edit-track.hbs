@@ -1,3 +1,6 @@
+
+{{ui-step-sequencer sequence=sequence}}
+
 <div class="ui-controls">
   {{ui-select
     choices=filenames
@@ -7,31 +10,50 @@
 
   <div class="dials">
     {{#ui-dial
-      onChangeValue=(action "updateSequence" track 'hits')
+      max=16
+      step=1
+      onChangeValue=(action "updateSequenceParam" track 'hits')
       value=track.hits
     }}
-    <p>hits</p>
-    {{track.hits}}
+    <dl>
+      <dt>hits</dt>
+      <dd>{{track.hits}}</dd>
+    </dl>
     {{/ui-dial}}
 
     {{#ui-dial
-      onChangeValue=(action "updateSequence" track 'steps')
+      max=16
+      step=1
+      onChangeValue=(action "updateSequenceParam" track 'steps')
       value=track.steps
     }}
-    <p>steps</p>
-    {{track.steps}}
+      <dl>
+        <dt>steps</dt>
+        <dd>{{track.steps}}</dd>
+      </dl>
     {{/ui-dial}}
 
     {{#ui-dial
-      onChangeValue=(action "updateSequence" track 'offset')
+      max=16
+      step=1
+      onChangeValue=(action "updateSequenceParam" track 'offset')
       value=track.offset
     }}
-    <p>offset</p>
-    {{track.offset}}
+      <dl>
+        <dt>offset</dt>
+        <dd>{{track.offset}}</dd>
+      </dl>
     {{/ui-dial}}
   </div>
-
 </div>
+
+{{euclidean-sequence
+  hits=track.hits
+  steps=track.steps
+  offset=track.offset
+  onCalculateSequence=(action "setTrackSequence" track)
+}}
+
 
 <button
   type='delete'
