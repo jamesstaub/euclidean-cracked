@@ -2,8 +2,11 @@ import Ember from 'ember';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { get, set, computed } from "@ember/object";
 
+const { service } = Ember.inject;
+
 export default Ember.Component.extend(NexusMixin, {
   classNames: ['ui-step-sequencer'],
+  audioService: service(),
 
   ElementName: 'Sequencer',
 
@@ -33,28 +36,48 @@ export default Ember.Component.extend(NexusMixin, {
     }
   }),
 
-  init() {
-    this._super(...arguments);
-    // depending on the nexusui object in use,
-    // tell the nexus mixin which hook to use to initialize
-    set(this, 'initNexusOnHook', 'didUpdateAttrs');
-  },
+
+  stepIndex: computed({
+    set(key, index) {
+      // on every cracked sequencer step received,
+      // update nexusui stepper value to step-1, then call
+      // next() method to update UI
+      if (typeof index != 'undefined') {
+        let sequencer = get(this, 'NexusElement');
+
+        if (typeof sequencer.stepper.value === 'number') {
+
+          let step = (index % sequencer.stepper.max) - 2;
+
+          if (!index) {
+            step = sequencer.stepper.max - 2;
+          }
+          sequencer.stepper.value = step;
+        }
+        sequencer.next();
+      }
+      return index;
+    },
+  }),
 
   didUpdateAttrs() {
     this._super(...arguments);
-    this._nexusInit();
 
-    if (get(this, 'sequence')) {
+    let refreshOnUpdate =
+      get(this, 'sequence') !== get(this, '_sequence');
 
-      let sequencer = get(this, 'NexusElement');
-
-      sequencer.matrix.set.row(0, get(this, 'sequence'));
-
-      sequencer.on('change',(v)=> {
-        set(this, 'value', v);
-      });
-
+    if(refreshOnUpdate) {
+      this._nexusInit();
+      if (get(this, 'sequence')) {
+        let sequencer = get(this, 'NexusElement');
+          sequencer.matrix.set.row(0, get(this, 'sequence'));
+      }
     }
+    set(this, '_sequence', get(this, 'sequence'));
   },
+
+  afterInitNexus(NexusElement) {
+    NexusElement.colorize("mediumLight","#d9534f");
+  }
 
 });
