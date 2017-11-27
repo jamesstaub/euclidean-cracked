@@ -1,25 +1,29 @@
-<button type="button" id="button_fbw" class="btn" {{action "loopAction" "reset"}}>
-  {{fa-icon "fast-backward"}}
-</button>
-{{#if isPlaying}}
-  <button type="button" id="button_stop" class="btn" {{action "loopAction" "stop"}}>
-    {{fa-icon "stop"}}
-  </button>
-{{else}}
-  <button type="button" id="button_play" class="btn" {{action "loopAction" "start"}}>
-    {{fa-icon "play"}}
-  </button>
-{{/if}}
-<form {{action 'save' post on='change'}}>
+<form {{action 'save' post on='change'}} class="controls">
+  <fieldset class="transport">
+    <button type="button" id="button_fbw" class="btn" {{action "loopAction" "reset"}}>
+      {{fa-icon "fast-backward"}}
+    </button>
+    {{#if isPlaying}}
+    <button type="button" id="button_stop" class="btn" {{action "loopAction" "stop"}}>
+      {{fa-icon "stop"}}
+    </button>
+    {{else}}
+    <button type="button" id="button_play" class="btn" {{action "loopAction" "start"}}>
+      {{fa-icon "play"}}
+    </button>
+    {{/if}}
+  </fieldset>
+
   <label>
+    <small>speed {{post.interval}}ms</small>
+
     <input
-      type="range"
-      min=50
-      max=1000
-      width="300px"
-      oninput={{action (mut post.interval) value='target.value'}}
-      value="{{interval}}"
+    type="range"
+    min=50
+    max=1000
+    width="300px"
+    oninput={{action (mut post.interval) value='target.value'}}
+    value="{{interval}}"
     >
-      {{post.interval}}ms
   </label>
 </form>

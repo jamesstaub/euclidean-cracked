@@ -1,3 +1,7 @@
+.tracks {
+  width: 100%;
+}
+
 .edit-track {
   // background-color:#f6f6f6;
   border: solid 1px lightgray;
@@ -7,6 +11,7 @@
   justify-content: space-between;
   margin: 15px 0;
   padding: 15px;
+  position: relative;
 
   .data-display {
     flex: 0 1 300px;
@@ -31,7 +36,15 @@
       }
     }
   }
+
+  .delete-track {
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
 }
+
 
 .audio-track-sampler {
   flex: 1 0 100%;

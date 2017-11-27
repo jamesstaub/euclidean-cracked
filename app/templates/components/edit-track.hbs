@@ -1,3 +1,11 @@
+<button
+  type='delete'
+  class='btn btn-danger delete-track'
+  {{action 'deleteTrack' track}}
+>
+  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</button>
+
 {{#audio-track-sampler
   sequence=sequence
   directory=directory
@@ -7,7 +15,6 @@
   outputNodeSelector="#master-compressor"
   as |sampler|
 }}
-
   {{ui-step-sequencer
     sequence=sequence
     stepIndex=sampler.stepIndex
@@ -83,14 +90,5 @@
   offset=track.offset
   onCalculateSequence=(action "setTrackSequence" track)
 }}
-
-
-<button
-  type='delete'
-  class='btn btn-danger'
-  {{action 'deleteTrack' track}}
->
-  <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-</button>
 
 {{yield}}

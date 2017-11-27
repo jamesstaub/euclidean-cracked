@@ -3,8 +3,9 @@ import { get } from "@ember/object";
 import config from '../config/environment';
 
 export default Ember.Component.extend({
-  actions: {
+  classNames: ['add-track'],
 
+  actions: {
     createTrack(filename, hits, steps, offset) {
       let post = get(this, 'post');
       // mock default vals

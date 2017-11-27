@@ -3,7 +3,6 @@ import { get } from "@ember/object";
 
 export default Ember.Service.extend({
   tracks: [],
-
   bindTrackSamplers() {
     get(this, 'tracks').forEach((track) => {
       __(track.selector).unbind("step");
