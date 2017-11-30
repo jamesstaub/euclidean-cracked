@@ -8,7 +8,8 @@
 
 body {
   padding-top: 50px;
-  width: calc(100% - 55px);
+  width: calc(100% - 60px);
+  margin: 0 auto;
 }
 .main {
     padding: 40px;
@@ -26,12 +27,11 @@ body {
 }
 
 .border{
-    border-radius: 10px;
-    border: 1px solid black;
+    border-radius: 2px;
+    border: solid 1px lightgray;
+    box-shadow: 1px 1px 3px lightgray;
+
     height: 100%;
-    margin: 20px;
-    max-width: 700px;
-    padding: 20px;
     width: 100%;
 }
 

@@ -5,7 +5,7 @@ import config from '../config/environment';
 
 export default Ember.Component.extend({
 
-  classNames: ['edit-track'],
+  classNames: ['edit-track border'],
   canSave: true,
 
   filenames: config.audioFileNames,

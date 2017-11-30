@@ -1,5 +1,16 @@
 .edit-post {
   .post-meta {
+    margin: 20px 0;
+    padding: 15px;
+    h1, h2, h3 {
+      margin: 5px 0 0;
+    }
+
+  }
+  .post-date {
+    padding: 10px 0;
+  }
+  .edit-post-meta {
     display: flex;
     justify-content: space-between;
     align-items:flex-start;
