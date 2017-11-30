@@ -21,6 +21,18 @@ export default Route.extend({
   actions: {
     delete(post) {
       post.deleteRecord();
+
+      this.get('store').query('track', {
+        filter: {
+          post: post.id
+        }
+      })
+      .then((tracks)=>{
+        tracks.forEach((track)=>{
+          track.destroyRecord();
+        });
+      })
+
       post.save();
       this.transitionTo('index');
     },
