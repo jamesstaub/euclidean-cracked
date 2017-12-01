@@ -21,14 +21,6 @@
             <div class='edit-post-meta form-group'>
               <label>Title<input cols=40 rows='1' value= {{post.title}} oninput={{action (mut post.title) value='target.value'}} /></label>
               <!-- <label><textarea cols=40 rows='6'  value= {{post.body}} oninput={{action (mut post.body) value='target.value'}} /></label> -->
-              <div class="toggles">
-                <small>to do:</small>
-                <label>
-                  allow public editing
-                  <input type="checkbox" name="allow-public" value="false">
-                </label>
-                <button type="button" name="duplicate">duplicate</button>
-              </div>
 
             </div>
 

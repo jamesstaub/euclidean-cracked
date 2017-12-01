@@ -1,20 +1,23 @@
-{{#each model as |post|}}
-  {{#edit-post
-    post=post
-    session=session
-    onSavePost=(route-action 'save')
-    delete='delete'
-    createComment='createComment'
-  }}
+<div class="main">
 
-    {{audio-post-sequencer post=post}}
-
-    {{add-track
+  {{#each model as |post|}}
+    {{#edit-post
       post=post
       session=session
-      onCreateTrack=(route-action 'createTrack')
+      onSavePost=(route-action 'save')
+      delete='delete'
+      createComment='createComment'
     }}
-  {{/edit-post}}
-{{/each}}
 
-{{outlet}}
+      {{audio-post-sequencer post=post}}
+
+      {{add-track
+        post=post
+        session=session
+        onCreateTrack=(route-action 'createTrack')
+      }}
+    {{/edit-post}}
+  {{/each}}
+
+  {{outlet}}
+</div>

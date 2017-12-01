@@ -2,14 +2,16 @@ import Ember from 'ember';
 import { get, set } from "@ember/object";
 import { throttle } from "@ember/runloop";
 import config from '../config/environment';
+import { not } from "@ember/object/computed";
 
 export default Ember.Component.extend({
 
   classNames: ['edit-track border'],
-  canSave: true,
 
   filenames: config.audioFileNames,
   directory: config.audioDirectory,
+
+  canSave: true,
 
   actions: {
     updateFilename(track, filename) {
@@ -37,6 +39,10 @@ export default Ember.Component.extend({
 
     deleteTrack(track) {
       track.destroyRecord();
+    },
+
+    switchInterface(name) {
+      set(this, 'visibleInterface', name)
     }
   }
 });

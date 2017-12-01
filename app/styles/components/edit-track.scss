@@ -8,7 +8,6 @@
   // box-shadow: 1px 1px 3px lightgray;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   margin: 15px 0;
   padding: 15px;
   position: relative;
@@ -23,11 +22,11 @@
   }
 
   .ui-controls {
-    flex: 1 1 50%;
-    display: flex;
-    justify-content: flex-start;
+    flex: 1 1 auto;
+    // display: flex;
+    // justify-content: flex-start;
 
-    .dials {
+    .sequence-dials {
       display: flex;
       padding-left: 15px;
 
