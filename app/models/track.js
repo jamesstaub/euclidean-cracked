@@ -9,6 +9,8 @@ export default DS.Model.extend({
   steps: DS.attr('number'),
   offset: DS.attr('number'),
 
-  gain: DS.attr('string')
+  gain: DS.attr('string', {
+    defaultValue() { return .5 }
+  }),
 
 });

@@ -3,15 +3,22 @@ This project is in development.
 
 After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/sequencer) euclidean rhythm sequencer, the aim of this rebuild is to deal with application concerns such as authentication, and data modeling as a foundation, then to reimplement the web audio components.
 
+## to do list
+### user concurrency features
+* show current users on a given beat post
+* sidebar chat window
+* flash of color on a given track when another user has made a change.
+* option to quantize all changes until beginning of next loop (to reduce disruption of the beat)
 
-## Goals
-rebuild from scratch a prototype web drum sequencer.
+### audio processing features
+* implement a code editor for writing custom cracked audio scripts.
+  - on each track, the editor's scope will be a function that is called on each step of the sequencer, and will have access to the sequence array.
 
-- use torii and firebase to authenticate users.
-- users can save and recall drum sequences they program and view sequences made by others
-  - refactor and expand cracked.js audio signalpath for each drum track. allow configuration of filters, distortion, lfos
+  - a global level script editor will allow for other scripting outside of the sequencer events
+
 
 -  create a listview of all sequences created by users with an interface to create a super-sequence, sequencing multiple sequences together at different durations
+
 
 ### data authorization (to do)
 users create sequence posts and can edit meta data like the name, description and audio parameters

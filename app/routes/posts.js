@@ -21,6 +21,18 @@ export default Route.extend({
   actions: {
     delete(post) {
       post.deleteRecord();
+
+      this.get('store').query('track', {
+        filter: {
+          post: post.id
+        }
+      })
+      .then((tracks)=>{
+        tracks.forEach((track)=>{
+          track.destroyRecord();
+        });
+      })
+
       post.save();
       this.transitionTo('index');
     },
@@ -35,7 +47,8 @@ export default Route.extend({
     },
 
     createTrack(post, filename, hits, steps, offset) {
-
+      // TODO: instead of setting defaults here, just use
+      // defaults on the model
       let track = this.store.createRecord('track', {
         filename, hits, steps, offset,
       });

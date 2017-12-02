@@ -24,10 +24,12 @@ export default Ember.Route.extend({
 
       // TODO: get auth type here
       // allow custom username for anonymous or google auth
-      // TODO make sure display name is saving correctly
-      user = await getOrCreateUser(uid, get(this, 'session.currentUser.displayName'),
+      user = await getOrCreateUser(
+        uid,
+        get(this, 'session.currentUser.displayName'),
         get(this, 'session.currentUser.profileImageURL'),
-        this.store);
+        this.store
+      );
 
       await user.get('posts').addObject(post);
       post = await post.save();

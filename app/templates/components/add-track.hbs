@@ -1,11 +1,10 @@
-<button class='btn btn-primary' {{action 'createTrack' filename}}>add track</button>
-
+<button class='btn btn-primary' {{action 'createTrack' filename}}>add track (<span>{{post.tracks.length}}</span>)</button>
 <div class='tracks'>
-{{#each post.tracks as |track|}}
-  {{edit-track
-    track=track
-  }}
-{{else}}
-  <h4> No tracks</h4>
-{{/each}}
+  {{#each post.tracks as |track|}}
+    {{edit-track
+      track=track
+    }}
+  {{else}}
+    <h4> No tracks</h4>
+  {{/each}}
 </div>

@@ -5,11 +5,17 @@ import config from '../config/environment';
 
 export default Ember.Component.extend({
 
-  classNames: ['edit-track'],
-  canSave: true,
+  classNames: ['edit-track border'],
 
   filenames: config.audioFileNames,
   directory: config.audioDirectory,
+
+  canSave: true,
+
+  didInsertElement() {
+    this._super(...arguments);
+    this.send('switchInterface', 'sampler');
+  },
 
   actions: {
     updateFilename(track, filename) {
@@ -37,6 +43,12 @@ export default Ember.Component.extend({
 
     deleteTrack(track) {
       track.destroyRecord();
+    },
+
+    switchInterface(name) {
+      set(this, 'visibleInterface', name);
+      this.$().find('.interface-switches .btn').removeClass('active');
+      this.$(`.interface-switches .${name}`).addClass('active');
     }
   }
 });

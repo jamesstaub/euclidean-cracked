@@ -1,0 +1,9 @@
+.ui-dial, .ui-slider {
+  .value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  dl {
+    margin: 0;
+  }
+}

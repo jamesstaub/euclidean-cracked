@@ -111,6 +111,12 @@ export default Ember.Component.extend({
     });
 
     set(this, 'hasBuiltNode', false);
+
+    //remove reference from service
+    let serviceTracks = get(this, 'audioService.tracks');
+    let ref = serviceTracks.findBy('trackId', get(this, 'trackId'));
+    serviceTracks.removeObject(ref);
+
   },
 
   buildNode() {

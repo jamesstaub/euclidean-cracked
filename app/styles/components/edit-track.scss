@@ -1,12 +1,13 @@
+.tracks {
+  width: 100%;
+}
+
 .edit-track {
-  // background-color:#f6f6f6;
-  border: solid 1px lightgray;
-  box-shadow: 1px 1px 3px lightgray;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   margin: 15px 0;
   padding: 15px;
+  position: relative;
 
   .data-display {
     flex: 0 1 300px;
@@ -17,21 +18,38 @@
     padding-bottom: 10px;
   }
 
+  .gain-slider {
+    background-color: gray;
+    padding: 15px;
+    width: 60px;
+  }
+
   .ui-controls {
-    flex: 1 1 50%;
+    background-color: lightgray;
+    flex: 1 1 auto;
+    padding: 15px;
+  }
+
+  .sequence-dials,
+  .sampler-controls {
     display: flex;
-    justify-content: flex-start;
+    margin-top: 15px;
+  }
 
-    .dials {
-      display: flex;
-      padding-left: 15px;
-
-      dd {
-
-      }
+  .sequence-dials {
+    .ui-dial {
+      margin-right: 15px;
     }
   }
+
+  .delete-track {
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
 }
+
 
 .audio-track-sampler {
   flex: 1 0 100%;

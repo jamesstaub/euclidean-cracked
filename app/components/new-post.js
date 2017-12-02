@@ -2,7 +2,7 @@ import Ember from 'ember';
 import { set, get } from "@ember/object";
 
 export default Ember.Component.extend({
-  classNames: 'new',
+  classNames: 'new-post',
   actions: {
     save(title, body) {
       get(this, 'onSave')(title, body)

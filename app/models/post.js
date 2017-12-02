@@ -8,7 +8,7 @@ export default DS.Model.extend({
     user: DS.belongsTo('user'),
 
     interval: DS.attr('number'),
-    
+
     comments: DS.hasMany('comment' ),
     tracks: DS.hasMany('track'),
 

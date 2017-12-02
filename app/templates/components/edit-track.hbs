@@ -7,74 +7,82 @@
   outputNodeSelector="#master-compressor"
   as |sampler|
 }}
-
   {{ui-step-sequencer
     sequence=sequence
     stepIndex=sampler.stepIndex
   }}
-
 {{/audio-track-sampler}}
 
-
+{{#ui-slider
+  max=1
+  step=0.01
+  class='gain-slider'
+  onChangeValue=(action "updateSequenceParam" track 'gain')
+  value=track.gain
+}}
+<dl>
+  <dt>vol</dt>
+  <dd class="value">{{track.gain}}</dd>
+</dl>
+{{/ui-slider}}
 
 <div class="ui-controls">
 
-  {{#ui-dial
-    max=1
-    step=0.01
-    size=[45,45]
-    onChangeValue=(action "updateSequenceParam" track 'gain')
-    value=track.gain
-  }}
-  <dl>
-    <dt>gain</dt>
-    <dd>{{track.gain}}</dd>
-  </dl>
-  {{/ui-dial}}
-
-  {{ui-select
-    choices=filenames
-    onChangeValue=(action "updateFilename" track)
-    value=track.filename
-  }}
-
-  <div class="dials">
-    {{#ui-dial
-      max=16
-      step=1
-      onChangeValue=(action "updateSequenceParam" track 'hits')
-      value=track.hits
-    }}
-    <dl>
-      <dt>hits</dt>
-      <dd>{{track.hits}}</dd>
-    </dl>
-    {{/ui-dial}}
-
-    {{#ui-dial
-      max=16
-      step=1
-      onChangeValue=(action "updateSequenceParam" track 'steps')
-      value=track.steps
-    }}
-      <dl>
-        <dt>steps</dt>
-        <dd>{{track.steps}}</dd>
-      </dl>
-    {{/ui-dial}}
-
-    {{#ui-dial
-      max=16
-      step=1
-      onChangeValue=(action "updateSequenceParam" track 'offset')
-      value=track.offset
-    }}
-      <dl>
-        <dt>offset</dt>
-        <dd>{{track.offset}}</dd>
-      </dl>
-    {{/ui-dial}}
+  <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
+    <button {{action 'switchInterface' 'sampler'}} type="button" class="btn btn-default sampler">Sampler</button>
+    <button {{action 'switchInterface' 'rhythm'}} type="button" class="btn btn-default rhythm">Euclidean Rhythm</button>
+    <button {{action 'switchInterface' 'signal'}} type="button" class="btn btn-default signal">Signal</button>
   </div>
+
+  {{#if (eq visibleInterface 'rhythm' )}}
+    <div class="sequence-dials">
+      {{#ui-dial
+        max=16
+        step=1
+        onChangeValue=(action "updateSequenceParam" track 'hits')
+        value=track.hits
+      }}
+      <dl>
+        <dt>hits</dt>
+        <dd>{{track.hits}}</dd>
+      </dl>
+      {{/ui-dial}}
+
+      {{#ui-dial
+        max=16
+        step=1
+        onChangeValue=(action "updateSequenceParam" track 'steps')
+        value=track.steps
+      }}
+        <dl>
+          <dt>steps</dt>
+          <dd>{{track.steps}}</dd>
+        </dl>
+      {{/ui-dial}}
+
+      {{#ui-dial
+        max=16
+        step=1
+        onChangeValue=(action "updateSequenceParam" track 'offset')
+        value=track.offset
+      }}
+        <dl>
+          <dt>offset</dt>
+          <dd>{{track.offset}}</dd>
+        </dl>
+      {{/ui-dial}}
+    </div>
+  {{/if}}
+
+  {{#if (eq visibleInterface 'sampler')}}
+    <div class="sampler-controls">
+      {{ui-select
+        choices=filenames
+        onChangeValue=(action "updateFilename" track)
+        value=track.filename
+      }}
+    </div>
+  {{/if}}
 </div>
 
 {{euclidean-sequence
@@ -84,10 +92,9 @@
   onCalculateSequence=(action "setTrackSequence" track)
 }}
 
-
 <button
   type='delete'
-  class='btn btn-danger'
+  class='btn btn-danger delete-track'
   {{action 'deleteTrack' track}}
 >
   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
