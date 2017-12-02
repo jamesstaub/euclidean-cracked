@@ -3,9 +3,6 @@
 }
 
 .edit-track {
-  // background-color:#f6f6f6;
-  // border: solid 1px lightgray;
-  // box-shadow: 1px 1px 3px lightgray;
   display: flex;
   flex-wrap: wrap;
   margin: 15px 0;
@@ -21,18 +18,27 @@
     padding-bottom: 10px;
   }
 
+  .gain-slider {
+    background-color: gray;
+    padding: 15px;
+    width: 60px;
+  }
+
   .ui-controls {
+    background-color: lightgray;
     flex: 1 1 auto;
-    // display: flex;
-    // justify-content: flex-start;
+    padding: 15px;
+  }
 
-    .sequence-dials {
-      display: flex;
-      padding-left: 15px;
+  .sequence-dials,
+  .sampler-controls {
+    display: flex;
+    margin-top: 15px;
+  }
 
-      dd {
-
-      }
+  .sequence-dials {
+    .ui-dial {
+      margin-right: 15px;
     }
   }
 

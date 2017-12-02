@@ -3,7 +3,8 @@ import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { get, computed } from "@ember/object";
 
 export default Ember.Component.extend(NexusMixin, {
-  classNames: ['ui-dial'],
+  classNames: ['ui-slider'],
+
   tagName: ['span'],
 
   didInsertElement() {
@@ -16,7 +17,7 @@ export default Ember.Component.extend(NexusMixin, {
   ElementOptions: computed('max', 'step', 'value', {
     get() {
       return {
-        'size': get(this, 'size') || [20,120],
+        'size': get(this, 'size') || [20, 68],
         'mode': 'relative', // "absolute" or "relative"
         'min': 0,
         'max': get(this, 'max') || 1,

@@ -2,7 +2,6 @@ import Ember from 'ember';
 import { get, set } from "@ember/object";
 import { throttle } from "@ember/runloop";
 import config from '../config/environment';
-import { not } from "@ember/object/computed";
 
 export default Ember.Component.extend({
 
@@ -12,6 +11,11 @@ export default Ember.Component.extend({
   directory: config.audioDirectory,
 
   canSave: true,
+
+  didInsertElement() {
+    this._super(...arguments);
+    this.send('switchInterface', 'sampler');
+  },
 
   actions: {
     updateFilename(track, filename) {
@@ -42,7 +46,9 @@ export default Ember.Component.extend({
     },
 
     switchInterface(name) {
-      set(this, 'visibleInterface', name)
+      set(this, 'visibleInterface', name);
+      this.$().find('.interface-switches .btn').removeClass('active');
+      this.$(`.interface-switches .${name}`).addClass('active');
     }
   }
 });

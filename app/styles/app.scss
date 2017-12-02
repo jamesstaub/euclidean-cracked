@@ -1,6 +1,8 @@
 @import "ember-bootstrap/bootstrap";
 @import 'components/nav-bar';
 
+@import 'components/ui-dial';
+
 @import 'components/edit-post';
 @import 'components/edit-track';
 @import 'components/audio-post-sequencer';
@@ -25,6 +27,7 @@ body {
   width: calc(100% - 60px);
   margin: 0 auto;
 }
+
 
 .row {
   @include small-screen{
@@ -69,12 +72,4 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-}
-
-.ui-dial {
-  .value {
-    width: 55px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 }

@@ -1,39 +1,37 @@
+{{#audio-track-sampler
+  sequence=sequence
+  directory=directory
+  trackId=track.id
+  filename=track.filename
+  gain=track.gain
+  outputNodeSelector="#master-compressor"
+  as |sampler|
+}}
+  {{ui-step-sequencer
+    sequence=sequence
+    stepIndex=sampler.stepIndex
+  }}
+{{/audio-track-sampler}}
 
 {{#ui-slider
   max=1
   step=0.01
+  class='gain-slider'
   onChangeValue=(action "updateSequenceParam" track 'gain')
   value=track.gain
 }}
 <dl>
-  <dt>gain</dt>
-  <dd>{{track.gain}}</dd>
+  <dt>vol</dt>
+  <dd class="value">{{track.gain}}</dd>
 </dl>
 {{/ui-slider}}
 
-
 <div class="ui-controls">
 
-  {{#audio-track-sampler
-    sequence=sequence
-    directory=directory
-    trackId=track.id
-    filename=track.filename
-    gain=track.gain
-    outputNodeSelector="#master-compressor"
-    as |sampler|
-  }}
-    {{ui-step-sequencer
-      sequence=sequence
-      stepIndex=sampler.stepIndex
-    }}
-
-  {{/audio-track-sampler}}
-
-  <div class="btn-group btn-group-xs" role="group" aria-label="toggle-interface">
-    <button {{action 'switchInterface' 'rhythm'}} type="button" class="btn btn-default">Euclidean Rhythm</button>
-    <button {{action 'switchInterface' 'sampler'}} type="button" class="btn btn-default">Sampler</button>
-    <button {{action 'switchInterface' 'signal'}} type="button" class="btn btn-default">Signal</button>
+  <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
+    <button {{action 'switchInterface' 'sampler'}} type="button" class="btn btn-default sampler">Sampler</button>
+    <button {{action 'switchInterface' 'rhythm'}} type="button" class="btn btn-default rhythm">Euclidean Rhythm</button>
+    <button {{action 'switchInterface' 'signal'}} type="button" class="btn btn-default signal">Signal</button>
   </div>
 
   {{#if (eq visibleInterface 'rhythm' )}}
@@ -77,13 +75,14 @@
   {{/if}}
 
   {{#if (eq visibleInterface 'sampler')}}
-    {{ui-select
-      choices=filenames
-      onChangeValue=(action "updateFilename" track)
-      value=track.filename
-    }}
+    <div class="sampler-controls">
+      {{ui-select
+        choices=filenames
+        onChangeValue=(action "updateFilename" track)
+        value=track.filename
+      }}
+    </div>
   {{/if}}
-
 </div>
 
 {{euclidean-sequence
@@ -92,7 +91,6 @@
   offset=track.offset
   onCalculateSequence=(action "setTrackSequence" track)
 }}
-
 
 <button
   type='delete'
