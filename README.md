@@ -1,3 +1,6 @@
+
+[work in progress demo](https://euclidean-cracked.firebaseapp.com)
+
 # euclidean-cracked
 This project is in development.
 
