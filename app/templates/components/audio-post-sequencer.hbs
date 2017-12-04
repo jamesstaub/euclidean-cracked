@@ -1,4 +1,4 @@
-<form {{action 'save' post on='change'}} class="controls">
+<form class="controls">
   <fieldset class="transport">
     <button type="button" id="button_fbw" class="btn" {{action "loopAction" "reset"}}>
       {{fa-icon "fast-backward"}}
@@ -14,16 +14,19 @@
     {{/if}}
   </fieldset>
 
-  <label>
-    <small>speed {{post.interval}}ms</small>
+  <label class="interval-container">
+    <small>loop interval {{post.interval}}ms</small>
+    {{ui-slider
+      max=1000
+      min=20
+      size=intervalSliderSize
+      step=10
+      class='interval-slider'
+      onChangeValue=(action 'setLoopInterval' post)
+      value=post.interval
+    }}
 
-    <input
-    type="range"
-    min=50
-    max=1000
-    width="300px"
-    oninput={{action (mut post.interval) value='target.value'}}
-    value="{{interval}}"
-    >
   </label>
+
+  {{yield}}
 </form>

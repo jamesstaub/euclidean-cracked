@@ -8,7 +8,7 @@ export default Ember.Component.extend({
   audioService: service(),
   classNames: ['audio-track-sampler'],
   classNameBindings: [
-    'trackReady' // only used to force computed to run
+    'trackReady' // only used to force computed get() to run
   ],
 
   samplerId: computed('trackId', {
@@ -62,10 +62,11 @@ export default Ember.Component.extend({
 
   init() {
     this._super(...arguments);
+
+    // TODO: move all properties into track model
     set(this, 'isLooping', false);
     set(this, 'loopEnd', 1);
     set(this, 'speed', 1);
-    set(this, 'trackGain', .7);
 
     // dict of parameter values for each step
     // in current sequence

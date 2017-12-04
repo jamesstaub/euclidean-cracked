@@ -16,8 +16,16 @@ After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/se
 
   - a global level script editor will allow for other scripting outside of the sequencer events
 
+* add a track field `custom class` (for cracked audio nodes), so users can write macro controls
+  - eg. multiple tracks with class `bass-drum` can be selected in the code editor like so:  `__('.bass-drum').connect('reverb');`
 
--  create a listview of all sequences created by users with an interface to create a super-sequence, sequencing multiple sequences together at different durations
+
+### rhythm composition
+* implement "bars",  a system for extending a given track's rhythm beyond a single euclidean pattern
+  - ability to set the number of loops for a given bar, before advancing to the next
+  - eg. `[1, 0, 1, 0], [1, 1, 0, 0](x2), [1, 0, 1]`
+
+* ability to duplicate a track, to make iteration easier
 
 
 ### data authorization (to do)
@@ -34,21 +42,18 @@ This app uses the web audio library [cracked](https://github.com/billorcutt/i_dr
 A few notes on conventions I've established for using these in ember components.
 
 ### Cracked
-- TODO: initialization of Cracked audio nodes could be handled in a service (global singleton in ember).
-
-When cracked objects are initialized in ember components, they are liable to create memory leaks, as ember components rerender whenever properties change.
-
+- ember components prefixed with `audio-` deal with the cracked audio library.
+- the audio-service handles global state of audio nodes, to allow initialization, destruction of audio nodes and bindings throughout the app.
 
 
 ### NexusUI
-All components prefixed with `ui-` are nexus objects.
+- ember components prefixed with `ui-` are [nexus ui](nexus-js.github.io/ui/) objects.
+- all ui components inherit the nexus-ui-mixin, which generalizes some functionality for initialization and onChange events.
 
-The `.hbs` template must contain an element such as `<span id="{{nexusId}}"></span>` for the nexus object to select.
+- the `.hbs` template must contain an element such as `<span id="{{nexusId}}"></span>` for the nexus object to select.
+
 
 The component must also have properties `ElementName` and `ElementOptions` for configuration, which is handled in the nexus-ui-mixin. This mixin is also where initialization and destruction of the Nexus object is handled.
-
-
-
 
 
 ## Prerequisites
@@ -80,7 +85,3 @@ You will need the following things properly installed on your computer.
 
 * `ember build` (development)
 * `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.

@@ -13,21 +13,18 @@
   }}
 {{/audio-track-sampler}}
 
-{{#ui-slider
+{{ui-slider
   max=1
+  min=0
+  size=gainSliderSize
   step=0.01
   class='gain-slider'
   onChangeValue=(action "updateSequenceParam" track 'gain')
   value=track.gain
 }}
-<dl>
-  <dt>vol</dt>
-  <dd class="value">{{track.gain}}</dd>
-</dl>
-{{/ui-slider}}
+
 
 <div class="ui-controls">
-
   <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
     <button {{action 'switchInterface' 'sampler'}} type="button" class="btn btn-default sampler">Sampler</button>
     <button {{action 'switchInterface' 'rhythm'}} type="button" class="btn btn-default rhythm">Euclidean Rhythm</button>

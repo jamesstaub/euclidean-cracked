@@ -9,12 +9,13 @@
       createComment='createComment'
     }}
 
-      {{audio-post-sequencer post=post}}
+      {{#audio-post-sequencer post=post}}
+        <button class='btn btn-primary' type=button onclick={{route-action 'createTrack' post}}>add track (<span>{{post.tracks.length}}</span>)</button>
+      {{/audio-post-sequencer}}
 
       {{add-track
         post=post
         session=session
-        onCreateTrack=(route-action 'createTrack')
       }}
     {{/edit-post}}
   {{/each}}

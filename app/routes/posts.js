@@ -46,12 +46,10 @@ export default Route.extend({
       });
     },
 
-    createTrack(post, filename, hits, steps, offset) {
+    createTrack(post) {
       // TODO: instead of setting defaults here, just use
       // defaults on the model
-      let track = this.store.createRecord('track', {
-        filename, hits, steps, offset,
-      });
+      let track = this.store.createRecord('track');
 
       post.get('tracks').addObject(track)
 

@@ -12,6 +12,8 @@ export default Ember.Component.extend({
 
   canSave: true,
 
+  gainSliderSize: [20, 120],
+
   didInsertElement() {
     this._super(...arguments);
     this.send('switchInterface', 'sampler');

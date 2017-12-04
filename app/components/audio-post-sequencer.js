@@ -10,6 +10,8 @@ const {
 export default Ember.Component.extend({
   audioService: service(),
 
+  intervalSliderSize: [120, 20],
+
   classNames: ['audio-post-sequencer'],
   dacGain: .9,
 
@@ -44,12 +46,11 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    // currently only used to update loop tempo
-    //rename explicitly, or use to save other params?
-    save(post) {
-      __.loop(get(this, 'post.interval'));
+
+    setLoopInterval(post, interval) {
+      __.loop(interval);
       __.loop('start');
-      throttle(post, 'save', 200);
+      throttle(post, 'save', 300);
     },
 
     loopAction(action) {

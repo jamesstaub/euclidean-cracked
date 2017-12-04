@@ -1,13 +1,26 @@
 import DS from 'ember-data';
+import config from '../config/environment';
 
 export default DS.Model.extend({
 
   post: DS.belongsTo('post'),
-  filename: DS.attr('string'),
 
-  hits: DS.attr('number'),
-  steps: DS.attr('number'),
-  offset: DS.attr('number'),
+  filename: DS.attr('string', {
+    defaultValue() { return config.audioFileNames[1] }
+  }),
+
+  hits: DS.attr('number', {
+    defaultValue() { return 3 }
+  }),
+
+  steps: DS.attr('number', {
+    defaultValue() { return 8 }
+  }),
+
+  offset: DS.attr('number', {
+    defaultValue() { return 0 }
+  }),
+
 
   gain: DS.attr('string', {
     defaultValue() { return .5 }
