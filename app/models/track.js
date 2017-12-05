@@ -6,7 +6,7 @@ export default DS.Model.extend({
   post: DS.belongsTo('post'),
 
   filename: DS.attr('string', {
-    defaultValue() { return config.audioFileNames[1] }
+    defaultValue() { return config.audioFileNames[0] }
   }),
 
   hits: DS.attr('number', {

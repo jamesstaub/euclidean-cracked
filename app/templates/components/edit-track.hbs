@@ -23,7 +23,6 @@
   value=track.gain
 }}
 
-
 <div class="ui-controls">
   <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
     <button {{action 'switchInterface' 'sampler'}} type="button" class="btn btn-default sampler">Sampler</button>
@@ -79,6 +78,24 @@
         value=track.filename
       }}
     </div>
+  {{/if}}
+
+  {{#if (eq visibleInterface 'signal')}}
+
+    <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script (WIP)</p>
+    <form {{action 'submitCode' on='submit'}} class="signal-controls">
+      <textarea name="name" rows="6" cols="35" oninput={{action (mut signalCode) value='target.value'}}></textarea>
+
+        <ul class="code-info">
+          <li>
+            <small>this track's sampler node</small>
+            <code>#sampler-{{track.id}}</code>
+          </li>
+        </ul>
+
+      <button class="run-code-btn" type="submit" name="button">run</button>
+    </form>
+
   {{/if}}
 </div>
 

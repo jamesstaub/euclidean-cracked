@@ -32,9 +32,37 @@
   }
 
   .sequence-dials,
-  .sampler-controls {
+  .sampler-controls,
+  .signal-controls {
     display: flex;
     margin-top: 15px;
+  }
+
+  .signal-controls {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    max-width: 100%;
+
+    textarea {
+      flex: 1 1 auto;
+      font-family: monospace;
+    }
+    .code-info {
+      font-size: 12px;
+      flex: 1 1 auto;
+      padding-left: 15px;
+      list-style: none;
+      li {
+        padding: 5px 0;
+      }
+      small {
+        display: block;
+      }
+    }
+    .run-code-btn {
+      margin-top: 15px;
+      flex: 0 1 100px;
+    }
   }
 
   .sequence-dials {
