@@ -2,12 +2,14 @@
   <div class='container-fluid post-meta border'>
     <h1><img src='{{post.user.avatar}}'/>{{post.title}}</h1>
     <!-- <h3>{{markdown-to-html markdown=post.body}}</h3> -->
-    <h4>{{post.user.username}}</h4>
-    {{#if post.date}}
-      <div class="post-date">
-        {{moment-from-now post.date}}
-      </div>
-    {{/if}}
+    <p>
+      by {{post.user.username}}
+      {{#if post.date}}
+        <span class="post-date">
+          {{moment-from-now post.date}}
+        </span>
+      {{/if}}
+    </p>
     {{#if session.isAuthenticated}}
       {{#if isAllowed}}
         <form {{action 'save' post on='submit'}}>

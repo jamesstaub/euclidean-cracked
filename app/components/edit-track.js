@@ -12,6 +12,8 @@ export default Ember.Component.extend({
 
   canSave: true,
 
+  gainSliderSize: [20, 100],
+
   didInsertElement() {
     this._super(...arguments);
     this.send('switchInterface', 'sampler');
@@ -49,6 +51,10 @@ export default Ember.Component.extend({
       set(this, 'visibleInterface', name);
       this.$().find('.interface-switches .btn').removeClass('active');
       this.$(`.interface-switches .${name}`).addClass('active');
-    }
+    },
+
+    submitCode() {
+      eval(get(this, 'signalCode'));
+    },
   }
 });

@@ -38,7 +38,7 @@ body {
 
 .main {
   @include large-screen{
-    padding: 40px;
+    padding: 0 40px;
   }
 }
 
@@ -54,8 +54,6 @@ body {
     border-radius: 2px;
     border: solid 1px lightgray;
     box-shadow: 1px 1px 3px lightgray;
-
-    height: 100%;
     width: 100%;
 }
 

@@ -14,10 +14,10 @@ export default Ember.Component.extend(NexusMixin, {
 
   ElementName: 'Slider',
 
-  ElementOptions: computed('max', 'step', 'value', {
+  ElementOptions: computed('max', 'step', 'value', 'size',{
     get() {
       return {
-        'size': get(this, 'size') || [20, 68],
+        'size': get(this, 'size') || [20, 70],
         'mode': 'relative', // "absolute" or "relative"
         'min': 0,
         'max': get(this, 'max') || 1,
