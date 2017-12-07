@@ -5,12 +5,17 @@ export default DS.Model.extend({
     body: DS.attr('string'),
     slug: DS.attr('string'),
     date: DS.attr('date'),
-    user: DS.belongsTo('user'),
+    creator: DS.belongsTo('user'),
 
-    interval: DS.attr('number'),
+    interval: DS.attr('number', {
+      defaultValue() { return 200 }
+    }),
 
     comments: DS.hasMany('comment' ),
     tracks: DS.hasMany('track'),
+    activeUsers: DS.hasMany('user',  {
+      inverse: 'activePost'
+    }),
 
 
 });

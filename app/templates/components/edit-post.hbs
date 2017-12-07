@@ -1,9 +1,9 @@
 <div class='row'>
   <div class='container-fluid post-meta border'>
-    <h1><img src='{{post.user.avatar}}'/>{{post.title}}</h1>
+    <h1><img src='{{post.creator.avatar}}'/>{{post.title}}</h1>
     <!-- <h3>{{markdown-to-html markdown=post.body}}</h3> -->
     <p>
-      by {{post.user.username}}
+      by {{post.creator.username}}
       {{#if post.date}}
         <span class="post-date">
           {{moment-from-now post.date}}

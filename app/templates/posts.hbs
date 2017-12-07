@@ -8,7 +8,12 @@
       delete='delete'
       createComment='createComment'
     }}
-
+      <small>current users</small>
+      <ul>
+        {{#each post.activeUsers as |activeUser|}}
+          <li>{{activeUser.username}} {{activeUser.online}}</li>
+        {{/each}}
+      </ul>
       {{#audio-post-sequencer post=post}}
         <button class='btn btn-primary' type=button onclick={{route-action 'createTrack' post}}>add track (<span>{{post.tracks.length}}</span>)</button>
       {{/audio-post-sequencer}}
@@ -17,6 +22,7 @@
         post=post
         session=session
       }}
+
     {{/edit-post}}
   {{/each}}
 

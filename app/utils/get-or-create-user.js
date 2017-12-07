@@ -10,7 +10,7 @@ export default function getOrCreateUser(uid,username,avatar,store) {
                 resolve(store.createRecord('user',{
                     uid: uid,
                     username:username,
-                    avatar:avatar
+                    avatar:avatar,
                 }));// end resolve
             }// end if
             else{

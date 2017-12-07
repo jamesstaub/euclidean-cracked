@@ -22,7 +22,7 @@ export default DS.Model.extend({
   }),
 
 
-  gain: DS.attr('string', {
+  gain: DS.attr('number', {
     defaultValue() { return .5 }
   }),
 
