@@ -1,3 +1,6 @@
+@import 'variables';
+@import 'mixins';
+
 @import "ember-bootstrap/bootstrap";
 @import 'components/nav-bar';
 
@@ -6,20 +9,7 @@
 @import 'components/edit-post';
 @import 'components/edit-track';
 @import 'components/audio-post-sequencer';
-
-@import 'variables';
-
-@mixin small-screen {
-  @media (max-width: #{$mobile-breakpoint}) {
-    @content;
-  }
-}
-
-@mixin large-screen {
-  @media (min-width: #{$tablet-portrait-breakpoint}) {
-    @content;
-  }
-}
+@import 'components/post-active-users';
 
 
 body {
@@ -38,10 +28,13 @@ body {
 
 .main {
   @include large-screen{
-    padding: 0 40px;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+
   }
 }
-
 
 .new-post{
     .border {

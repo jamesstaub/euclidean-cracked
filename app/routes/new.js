@@ -12,7 +12,6 @@ export default Ember.Route.extend({
     async save(title, body) {
       let user = null;
       let slug = cleanURI(title);
-      let uid = get(this, 'session.uid');
       let date = new Date();
       let post = this.store.createRecord('post', {
         title: title,
@@ -24,10 +23,9 @@ export default Ember.Route.extend({
 
       // TODO: get auth type here
       // allow custom username for anonymous or google auth
+      // also check other options for profile image url (sizes etcs)
       user = await getOrCreateUser(
-        uid,
-        get(this, 'session.currentUser.displayName'),
-        get(this, 'session.currentUser.profileImageURL'),
+        get(this, 'session.currentUser'),
         this.store
       );
 

@@ -1,11 +1,20 @@
 .edit-post {
+  flex: 1 0 auto;
   margin: 0 auto;
   max-width: 700px;
+
   .post-meta {
     margin: 20px 0;
     padding: 15px;
     h1, h2, h3 {
-      margin: 5px 0 0;
+      margin: 5px 0 ;
+    }
+
+    .creator-meta {
+      img {
+        max-width: 60px;
+        padding-right: 15px;
+      }
     }
 
   }

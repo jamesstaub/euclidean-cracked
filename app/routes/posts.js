@@ -36,9 +36,7 @@ export default Route.extend({
     set(this, 'post', post);
 
     let user = getOrCreateUser(
-      get(this, 'session.currentUser.uid'),
-      get(this, 'session.currentUser.displayName'),
-      get(this, 'session.currentUser.profileImageURL'),
+      get(this, 'session.currentUser'),
       this.store
     );
 
@@ -119,11 +117,12 @@ export default Route.extend({
       let comment = this.store.createRecord('comment', {
         body: body
       });
-      let uid = author.get('uid');
-      user = getOrCreateUser(uid,
-        get(this, 'session.currentUser.uid'),
-        get(this, 'session.currentUser.profileImageURL'),
-        this.store);
+
+      //TODO verify use of user_id vs session uid
+      user = getOrCreateUser(
+        get(author, 'uid'),
+        this.store
+      );
 
       user.then((userData) => {
         userData.get('comments').addObject(comment);
