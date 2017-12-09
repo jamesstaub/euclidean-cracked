@@ -1,0 +1,11 @@
+<ul class="list-unstyled user-list">
+  {{#each post.activeUsers as |activeUser|}}
+    {{#if activeUser.online}}
+      <li class="user {{if activeUser.online 'online'}}">
+        <img src="{{activeUser.avatar}}" alt="{{activeUser.username}}"> {{activeUser.username}}
+      </li>
+    {{/if}}
+  {{/each}}
+</ul>
+
+{{yield}}

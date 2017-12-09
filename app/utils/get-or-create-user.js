@@ -1,21 +1,29 @@
-import Ember from 'ember';
+import { Promise } from "rsvp";
 
-const {RSVP: {Promise}} = Ember;
+export default function getOrCreateUser(currentUser, store) {
 
-export default function getOrCreateUser(uid,username,avatar,store) {
+  return new Promise((resolve)=>{
+    if (currentUser) {
+      store.query('user', {orderBy: 'uid', equalTo: currentUser.uid }).then( (records) =>{
+        if(records.get('length') === 0){
+          resolve(store.createRecord('user',{
+            uid: currentUser.uid,
+            username: currentUser.displayName,
+            avatar: currentUser.photoURL,
+          }));
+        }
+        else{
+          resolve(records.get('firstObject'));
+        }
+      });
+    } else {
+      let rand = Math.floor(Math.random() * 1000) + '';
+      // no user session
+      resolve(store.createRecord('user',{
+        username: `anonymous-${rand}`,
+        avatar: `https://api.adorable.io/avatars/100/${rand}.png`,
+      }));
+    }
+  });
 
-    return new Promise((resolve)=>{
-        store.query('user', {orderBy: 'uid', equalTo: uid }).then( (records) =>{
-            if(records.get('length') === 0){
-                resolve(store.createRecord('user',{
-                    uid: uid,
-                    username:username,
-                    avatar:avatar
-                }));// end resolve
-            }// end if
-            else{
-                resolve(records.get('firstObject'));
-            }
-        });
-    });
 }

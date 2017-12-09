@@ -1,6 +1,8 @@
 <div class="main">
 
   {{#each model as |post|}}
+    {{post-active-users post=post}}
+
     {{#edit-post
       post=post
       session=session
@@ -8,7 +10,6 @@
       delete='delete'
       createComment='createComment'
     }}
-
       {{#audio-post-sequencer post=post}}
         <button class='btn btn-primary' type=button onclick={{route-action 'createTrack' post}}>add track (<span>{{post.tracks.length}}</span>)</button>
       {{/audio-post-sequencer}}
@@ -18,6 +19,7 @@
         session=session
       }}
     {{/edit-post}}
+
   {{/each}}
 
   {{outlet}}
