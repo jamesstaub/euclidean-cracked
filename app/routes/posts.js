@@ -12,6 +12,7 @@ const {
 
 export default Route.extend({
   session: service(),
+
   model(param) {
     return this.store.query('post', {
       orderBy: 'slug',
@@ -81,6 +82,7 @@ export default Route.extend({
       post.save();
       this.transitionTo('index');
     },
+
     save(post) {
       let slug = cleanURI(post.get('title'));
 
@@ -94,7 +96,9 @@ export default Route.extend({
     createTrack(post) {
       // TODO: instead of setting defaults here, just use
       // defaults on the model
-      let track = this.store.createRecord('track');
+      let track = this.store.createRecord('track', {
+        postCreatorId: get(post, 'creator.uid'),
+      });
 
       post.get('tracks').addObject(track)
 

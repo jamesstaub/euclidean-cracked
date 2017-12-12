@@ -17,5 +17,4 @@ export default DS.Model.extend({
       inverse: 'activePost'
     }),
 
-
 });

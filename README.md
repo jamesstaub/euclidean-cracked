@@ -38,6 +38,11 @@ if the user authenticates anonymously, their posts could be subject to any other
 
 users authenticated with email can control editing access, and invite other users to edit
 
+#### permission scenarios
+* a user can create a post
+  - user can choose to show/hide post in public list
+  - if user is anonymous: the post is public, and anyone with link can edit
+  - if authenticated: use can choose to allow public editing
 
 ## Cracked, Nexus and ember
 This app uses the web audio library [cracked](https://github.com/billorcutt/i_dropped_my_phone_the_screen_cracked) for audio along with NexusUI for interface objects.

@@ -17,12 +17,7 @@ export default function getOrCreateUser(currentUser, store) {
         }
       });
     } else {
-      let rand = Math.floor(Math.random() * 1000) + '';
-      // no user session
-      resolve(store.createRecord('user',{
-        username: `anonymous-${rand}`,
-        avatar: `https://api.adorable.io/avatars/100/${rand}.png`,
-      }));
+      console.error('no current user session');
     }
   });
 

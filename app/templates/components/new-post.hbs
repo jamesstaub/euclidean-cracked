@@ -1,8 +1,21 @@
 <div class='container-fluid border'>
   <p>New Post</p>
-  <form {{action 'save' title body on='submit'}}>
+  <form {{action 'save' title publicEditable publicVisible on='submit'}}>
     <div class="form-group">
-      <dt>Title:<br> <textarea cols=40 rows='1' placeholder='Title' value= {{title}} oninput={{action (mut title) value='target.value'}} /></dt>
+      <label>
+        title:
+        <input type="text" placeholder='Title' value= {{title}} oninput={{action (mut title) value='target.value'}} />
+      </label>
+
+      <label>
+        allow anyone to edit:
+        <input type="checkbox" value= {{publicEditable}} oninput={{action (mut publicEditable) value='target.value'}} />
+      </label>
+
+      <label>
+        show in public feed:
+        <input type="checkbox" value= {{publicVisible}} oninput={{action (mut publicVisible) value='target.value'}} />
+      </label>
     </div>
     <button type='submit' class='btn btn-primary'>Create</button>
   </form>

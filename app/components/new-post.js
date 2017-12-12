@@ -4,11 +4,8 @@ import { set, get } from "@ember/object";
 export default Ember.Component.extend({
   classNames: 'new-post',
   actions: {
-    save(title, body) {
-      get(this, 'onSave')(title, body)
-
-      set(this, 'title', '');
-      set(this, 'body', '');
+    save(title, publicEditable, publicVisible) {
+      get(this, 'onSave')(title, publicEditable, publicVisible)
 
       set(this, 'interval', 200);
     }

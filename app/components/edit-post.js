@@ -27,12 +27,10 @@ export default Ember.Component.extend({
   actions: {
     save(post) {
       let sessionName = get(this, 'session.currentUser.uid');
-      if (sessionName === post.get('user.uid')) {
+
+      if (sessionName === post.get('creator.uid')) {
         set(this, 'isEditing', false);
         get(this, 'onSavePost')(post)
-          .then(()=>{
-            set(this, 'isEditing', true);
-          });
 
       } else {
         alert('Sorry not authorized');
