@@ -2,9 +2,7 @@ import Ember from 'ember';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
 
-const {
-  get,
-} = Ember;
+import { get } from "@ember/object";
 
 export default Ember.Route.extend({
 

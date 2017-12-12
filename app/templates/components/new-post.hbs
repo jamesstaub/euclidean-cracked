@@ -1,6 +1,6 @@
 <div class='container-fluid border'>
   <p>New Post</p>
-  <form {{action 'save' title publicEditable publicVisible on='submit'}}>
+  <form {{action 'save' on='submit'}}>
     <div class="form-group">
       <label>
         title:
@@ -9,12 +9,12 @@
 
       <label>
         allow anyone to edit:
-        <input type="checkbox" value= {{publicEditable}} oninput={{action (mut publicEditable) value='target.value'}} />
+        <input type="checkbox" checked={{publicEditable}} {{action (mut publicEditable) value='target.value' on='change'}} />
       </label>
 
       <label>
         show in public feed:
-        <input type="checkbox" value= {{publicVisible}} oninput={{action (mut publicVisible) value='target.value'}} />
+        <input type="checkbox" checked={{publicVisible}} {{action (mut publicVisible) value='target.value' on='change'}} />
       </label>
     </div>
     <button type='submit' class='btn btn-primary'>Create</button>

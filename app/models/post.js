@@ -11,10 +11,14 @@ export default DS.Model.extend({
       defaultValue() { return 200 }
     }),
 
-    comments: DS.hasMany('comment' ),
     tracks: DS.hasMany('track'),
+    comments: DS.hasMany('comment' ),
     activeUsers: DS.hasMany('user',  {
       inverse: 'activePost'
     }),
+
+    publicVisible: DS.attr('boolean'),
+    publicEditable: DS.attr('boolean'),
+
 
 });

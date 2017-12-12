@@ -2,16 +2,23 @@
   <div class='container-fluid post-meta border'>
     <h1>{{post.title}}</h1>
 
+
     <!-- <h3>{{markdown-to-html markdown=post.body}}</h3> -->
-    <p class="creator-meta">
+    <div class="creator-meta">
       <img src='{{post.creator.avatar}}'/>
       by {{post.creator.username}}
+
+      <div class="permissions">
+        <p>{{if post.publicVisible 'visible in public feed' 'only users with link can view'}}</p>
+        <p>{{if post.publicEditable 'anyone can edit' 'only you can edit this'}}</p>
+      </div>
+
       {{#if post.date}}
         <span class="post-date">
           {{moment-from-now post.date}}
         </span>
       {{/if}}
-    </p>
+    </div>
     {{#if session.isAuthenticated}}
       {{#if isAllowed}}
         <form {{action 'save' post on='submit'}}>

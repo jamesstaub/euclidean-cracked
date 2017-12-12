@@ -98,6 +98,7 @@ export default Route.extend({
       // defaults on the model
       let track = this.store.createRecord('track', {
         postCreatorId: get(post, 'creator.uid'),
+        publicEditable: get(post, 'publicEditable'),
       });
 
       post.get('tracks').addObject(track)
