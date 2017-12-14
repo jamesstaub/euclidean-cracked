@@ -16,7 +16,11 @@ export default Ember.Component.extend({
       const currentUser = get(this, 'session.currentUser.uid');
 
       const creatorPromise = get(this, 'post.creator').then((creator)=>{
-        return get(creator, 'uid') === currentUser;
+        if (creator) {
+          return get(creator, 'uid') === currentUser;
+        } else {
+          return false;
+        }
       });
 
       return DS.PromiseObject.create({promise: creatorPromise});

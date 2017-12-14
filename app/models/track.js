@@ -7,7 +7,7 @@ export default DS.Model.extend({
 
   // belongs on post model but used here as
   // convenience for firebase .write rules
-  postCreatorId: DS.attr('string'),
+  postCreatorUid: DS.attr('string'),
 
   // written only by same property on post
   // again, convenience for firebase auth rules

@@ -1,12 +1,13 @@
+import { Promise } from "rsvp";
 import Ember from 'ember';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
+import { once } from "@ember/runloop";
+import { get, set } from "@ember/object";
+import { debug } from "@ember/debug";
+import Route from "@ember/routing/route";
 
 const {
-  get,
-  set,
-  debug,
-  Route,
   inject: { service },
 } = Ember;
 
@@ -28,6 +29,8 @@ export default Route.extend({
     this._super(controller, model);
   },
 
+  // FIXME exit() is a private method.
+  // for some reason willTransition() does not fire
   exit() {
     this.removeUser();
   },
@@ -43,10 +46,12 @@ export default Route.extend({
 
     user.then((user) => {
       set(user, 'online', true);
+
+
       post.get('activeUsers').pushObject(user);
-      set(this, 'user', user);
-      user.save().then(()=>{
-        user.ref().child('online').onDisconnect().set(false);
+
+      user.save().then((user)=>{
+        set(this, 'session.currentUserModel', user);
         post.save();
       });
     });
@@ -54,7 +59,7 @@ export default Route.extend({
 
   removeUser() {
     let post = get(this, 'post');
-    let user = get(this, 'user');
+    let user = get(this, 'session.currentUserModel');
     get(post, 'activeUsers').then((activeUsers)=>{
       activeUsers.removeObject(user);
       post.save()
@@ -66,21 +71,36 @@ export default Route.extend({
 
   actions: {
     delete(post) {
-      post.deleteRecord();
+      let tracks = get(post, 'tracks');
 
-      this.get('store').query('track', {
-        filter: {
-          post: post.id
-        }
-      })
-      .then((tracks)=>{
-        tracks.forEach((track)=>{
-          track.destroyRecord();
-        });
+      post.destroyRecord().then(()=>{
+        tracks.forEach((t) => t.unloadRecord());
       })
 
-      post.save();
-      this.transitionTo('index');
+        // tracks.forEach((track)=>{
+        //   this.store.unloadRecord(track);
+        //   track.deleteRecord();
+        // });
+
+
+      // this.get('store').query('track', {
+      //   filter: {
+      //     post: post.id
+      //   }
+      // })
+      // .then((tracks)=>{
+      //   return tracks.map((track)=>{
+      //     get(post, 'tracks').popObject(track);
+      //     return track.destroyRecord();
+      //   });
+      // })
+      // .then((what)=>{
+      //   debugger
+      //   post.deleteRecord();
+      //   post.save();
+      //   this.transitionTo('index');
+      // });
+
     },
 
     save(post) {
@@ -97,7 +117,7 @@ export default Route.extend({
       // TODO: instead of setting defaults here, just use
       // defaults on the model
       let track = this.store.createRecord('track', {
-        postCreatorId: get(post, 'creator.uid'),
+        postCreatorUid: get(post, 'creator.uid'),
         publicEditable: get(post, 'publicEditable'),
       });
 

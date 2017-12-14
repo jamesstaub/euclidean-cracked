@@ -2,6 +2,7 @@
 import Ember from 'ember';
 const {
   get,
+  set,
   debug,
   inject: { service },
 } = Ember;
@@ -37,6 +38,7 @@ export default Ember.Route.extend({
     },
     logout() {
       get(this, 'session').close();
+      set(this, 'session.currentUserModel.online', false);
     }
   }
 });

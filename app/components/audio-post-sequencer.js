@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import { throttle } from "@ember/runloop";
 
 const { service } = Ember.inject;
 
@@ -17,9 +16,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     this.initSignalChain();
-
     __().play();
-
   },
 
   willDestroyElement() {
@@ -50,7 +47,7 @@ export default Ember.Component.extend({
     setLoopInterval(post, interval) {
       __.loop(interval);
       __.loop('start');
-      throttle(post, 'save', 300);
+      post.save();
     },
 
     loopAction(action) {

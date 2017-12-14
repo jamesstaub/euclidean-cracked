@@ -2,14 +2,14 @@
   "rules": {
     ".read": true,
     "posts": {
-      "$uid": {
-        ".write": "auth !== null"
+      "$posts": {
+        ".write": "auth.uid == data.child('creator').val() || auth.uid == newData.child('creator').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
       },
     },
 
     "tracks": {
       "$track": {
-        ".write": "auth.uid === newData.child('postCreatorId').val() || newData.child('publicEditable').val() == true"
+        ".write": "auth.uid == data.child('postCreatorUid').val() || auth.uid == newData.child('postCreatorUid').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
       }
     },
 
