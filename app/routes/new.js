@@ -2,28 +2,21 @@ import Ember from 'ember';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
 
-const {
-  get,
-} = Ember;
+import { get } from "@ember/object";
 
 export default Ember.Route.extend({
 
   actions: {
-    async save(title, body) {
+    async save(title, publicEditable, publicVisible) {
       let user = null;
       let slug = cleanURI(title);
       let date = new Date();
       let post = this.store.createRecord('post', {
-        title: title,
-        body: body,
-        author: 'test',
-        slug: slug,
-        date: date
+        title, publicEditable, publicVisible, slug, date
       });
 
       // TODO: get auth type here
       // allow custom username for anonymous or google auth
-      // also check other options for profile image url (sizes etcs)
       user = await getOrCreateUser(
         get(this, 'session.currentUser'),
         this.store

@@ -5,6 +5,14 @@ export default DS.Model.extend({
 
   post: DS.belongsTo('post'),
 
+  // belongs on post model but used here as
+  // convenience for firebase .write rules
+  postCreatorUid: DS.attr('string'),
+
+  // written only by same property on post
+  // again, convenience for firebase auth rules
+  publicEditable: DS.attr('boolean'),
+
   filename: DS.attr('string', {
     defaultValue() { return config.audioFileNames[0] }
   }),
@@ -20,7 +28,6 @@ export default DS.Model.extend({
   offset: DS.attr('number', {
     defaultValue() { return 0 }
   }),
-
 
   gain: DS.attr('number', {
     defaultValue() { return .5 }

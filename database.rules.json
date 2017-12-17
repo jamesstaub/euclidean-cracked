@@ -1,6 +1,35 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    ".read": true,
+    "posts": {
+      "$posts": {
+        ".write": "auth.uid == data.child('creator').val() || auth.uid == newData.child('creator').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
+      },
+    },
+
+    "tracks": {
+      "$track": {
+        ".write": "auth.uid == data.child('postCreatorUid').val() || auth.uid == newData.child('postCreatorUid').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
+      }
+    },
+
+    "comments": {
+      "$comment": {
+        "body": {
+          ".validate": "newData.val().length > 2"
+        },
+        ".validate": "newData.hasChildren(['body','user'])"
+      },
+      ".write": "auth !== null"
+
+    },
+    "users": {
+      "$user": {
+        ".write": "auth !== null "
+
+      }
+
+    }
+
   }
 }

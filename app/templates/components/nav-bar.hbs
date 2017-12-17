@@ -18,16 +18,21 @@
         {{/if}}
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        {{#unless session.isAuthenticated}}
-        <li><a href="#" {{action onLogin }}>Login</a></li>
+        {{#if isAnonymous }}
+          <li><a href="#" {{action onLogout }}>(anonymous) Logout</a></li>
+          <li class="avatar">
+            <img src='{{avatar}}' height='50px' width='50px'/>
+          </li>
         {{else}}
-        <li><a href="#" {{action onLogout }}>Logout</a></li>
-
-        <li class="avatar">
-          {{log session.currentUser}}
-          <img src='{{session.currentUser.photoURL}}' height='50px' width='50px'/>
-        </li>
-        {{/unless}}
+          {{#unless session.isAuthenticated}}
+            <li><a href="#" {{action onLogin }}>Login</a></li>
+          {{else}}
+            <li><a href="#" {{action onLogout }}>Logout</a></li>
+            <li class="avatar">
+              <img src='{{avatar}}' height='50px' width='50px'/>
+            </li>
+          {{/unless}}
+        {{/if}}
       </ul>
     </div>
   </div>

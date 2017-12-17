@@ -59,26 +59,26 @@ module.exports = function(environment) {
 
   }
 
-  ENV.audioDirectory = '/audio/Nord_Rack_2/'
+  ENV.audioDirectory = '/audio/TR-808-Kit-05/'
   ENV.audioFileNames = [
-    'NdbZ1.wav',
-    'Nkikd.wav',
-    'Npuh.wav',
-    'Ncow.wav',
-    'Nclab.wav',
-    'Ndist.wav',
-    'NHH2OP.wav',
-    'NHH4OP.wav',
-    'Nbliz.wav',
-    'Npee.wav',
-    'NHH1.wav',
-    'NSD4.wav',
-    'NSD3.wav',
-    'Ntom.wav',
-    'NHH3.wav',
-    'Nclik1.wav',
-    'Nlaser.wav',
-    'Nknak.wav'
+    'Bassdrum-01.wav',
+    'Bassdrum-02.wav',
+    'Bassdrum-03.wav',
+    'Bassdrum-04.wav',
+    'Bassdrum-05.wav',
+    'Cabasa.wav',
+    'Clap.wav',
+    'Claves.wav',
+    'Cowbell.wav',
+    'Crash-01.wav',
+    'Crash-02.wav',
+    'Hat Closed.wav',
+    'Hat Open.wav',
+    'Tom H.wav',
+    'Tom L.wav',
+    'Tom M.wav',
+    'Rimshot.wav',
+    'Snaredrum.wav'
   ];
 
   return ENV;

@@ -16,7 +16,11 @@ export default Ember.Component.extend({
       const currentUser = get(this, 'session.currentUser.uid');
 
       const creatorPromise = get(this, 'post.creator').then((creator)=>{
-        return get(creator, 'uid') === currentUser;
+        if (creator) {
+          return get(creator, 'uid') === currentUser;
+        } else {
+          return false;
+        }
       });
 
       return DS.PromiseObject.create({promise: creatorPromise});
@@ -27,12 +31,10 @@ export default Ember.Component.extend({
   actions: {
     save(post) {
       let sessionName = get(this, 'session.currentUser.uid');
-      if (sessionName === post.get('user.uid')) {
+
+      if (sessionName === post.get('creator.uid')) {
         set(this, 'isEditing', false);
         get(this, 'onSavePost')(post)
-          .then(()=>{
-            set(this, 'isEditing', true);
-          });
 
       } else {
         alert('Sorry not authorized');

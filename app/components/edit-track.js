@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { get, set } from "@ember/object";
-import { throttle } from "@ember/runloop";
 import config from '../config/environment';
 
 export default Ember.Component.extend({
@@ -22,7 +21,7 @@ export default Ember.Component.extend({
   actions: {
     updateFilename(track, filename) {
       track.set('filename', filename.value);
-      throttle(track, 'save', 600);
+      track.save()
     },
 
     updateSequenceParam(track, parameter, value) {

@@ -1,28 +1,43 @@
 import { Promise } from "rsvp";
 
 export default function getOrCreateUser(currentUser, store) {
+  const getAnonDefaults = function() {
+    let hash = Math.random().toString(36).substring(7);
+
+    let avatar = `https://api.adorable.io/avatars/100${hash}.png`;
+    let username = `anonymous-${hash}`;
+    return {
+      avatar,
+      username
+    }
+  }
 
   return new Promise((resolve)=>{
+    let userRecord;
+
     if (currentUser) {
       store.query('user', {orderBy: 'uid', equalTo: currentUser.uid }).then( (records) =>{
         if(records.get('length') === 0){
-          resolve(store.createRecord('user',{
+          let defaults = getAnonDefaults();
+          let avatar = currentUser.photoURL || defaults.avatar;
+          let username = currentUser.displayName || defaults.username;
+
+          userRecord = store.createRecord('user',{
             uid: currentUser.uid,
-            username: currentUser.displayName,
-            avatar: currentUser.photoURL,
-          }));
+            username: username,
+            avatar: avatar,
+          });
+
         }
         else{
-          resolve(records.get('firstObject'));
+          userRecord = records.get('firstObject')
         }
+
+        userRecord.ref().child('online').onDisconnect().set(false);
+        resolve(userRecord);
       });
     } else {
-      let rand = Math.floor(Math.random() * 1000) + '';
-      // no user session
-      resolve(store.createRecord('user',{
-        username: `anonymous-${rand}`,
-        avatar: `https://api.adorable.io/avatars/100/${rand}.png`,
-      }));
+      console.error('no current user session');
     }
   });
 

@@ -2,14 +2,16 @@
   <div class='container-fluid'>
 
     {{#each model as |post|}}
-      <div class="card">
-        <h2 class='post-title'>{{#link-to 'posts' post.slug}}{{post.title}}{{/link-to}}</h2>
+      {{#if post.publicVisible}}
+        <div class="card">
+          <h2 class='post-title'>{{#link-to 'posts' post.slug}}{{post.title}}{{/link-to}}</h2>
 
-        <section class='post excerpt'>
-          <p>{{post.body}}</p>
-          <p>{{post.creator.displayName}}</p>
-        </section>
-      </div>
+          <section class='post excerpt'>
+            <p>{{post.body}}</p>
+            <p>{{post.creator.displayName}}</p>
+          </section>
+        </div>
+      {{/if}}
     {{else}}
       There are no posts...
     {{/each}}

@@ -38,6 +38,19 @@ if the user authenticates anonymously, their posts could be subject to any other
 
 users authenticated with email can control editing access, and invite other users to edit
 
+#### permission scenarios
+* a user can create a post
+  - user can choose to show/hide post in public list
+  - if user is anonymous: the post is public, and anyone with link can edit
+  - if authenticated: use can choose to allow public editing
+
+* a user can edit modify other user's posts
+  - if the post is publicVisible && publicEditable, changes made will be saved, regardless of the user.
+  - if the post is not publicEditable, but someone other than the creator tries to edit it, allow the changes to be made. For this to work, will need to add a modified_but_not_saved flag, which prevents firebase from re-syncing data once a non-authorized user starts editing locally.
+    - alternative solution would be do create a duplicate post with, so the new user can save their changes.
+
+not sure why this doesn't work on the `$track` rule
+`".write": "auth.uid == newData.child('postCreatorUid').val() || newData.child('publicEditable').val() == true"`
 
 ## Cracked, Nexus and ember
 This app uses the web audio library [cracked](https://github.com/billorcutt/i_dropped_my_phone_the_screen_cracked) for audio along with NexusUI for interface objects.

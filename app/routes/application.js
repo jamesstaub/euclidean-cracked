@@ -2,6 +2,8 @@
 import Ember from 'ember';
 const {
   get,
+  set,
+  debug,
   inject: { service },
 } = Ember;
 
@@ -12,24 +14,31 @@ export default Ember.Route.extend({
     return get(this, 'session').fetch()
     .catch((er)=> {
       console.error(er.message);
+      return this.openSession('anonymous');
     });
   },
   model() {
     return this.store.findAll('post');
   },
+
+  openSession(provider) {
+    return get(this, 'session').open('firebase', {
+      provider
+    }).then(()=> {
+      debug(`logged in with ${provider}`);
+    })
+    .catch((er)=>{
+      console.error(er);
+    });
+  },
+
   actions: {
     login() {
-      get(this, 'session').open('firebase', {
-        provider: 'google'
-      }).then((data)=> {
-        console.log(data);
-      })
-      .catch((er)=>{
-        console.error(er);
-      });
+      this.openSession('google');
     },
     logout() {
       get(this, 'session').close();
+      set(this, 'session.currentUserModel.online', false);
     }
   }
 });

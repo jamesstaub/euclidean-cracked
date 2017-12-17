@@ -1,24 +1,24 @@
 <div class="main">
 
   {{#each model as |post|}}
-    {{post-active-users post=post}}
+      {{post-active-users post=post}}
 
-    {{#edit-post
-      post=post
-      session=session
-      onSavePost=(route-action 'save')
-      delete='delete'
-      createComment='createComment'
-    }}
-      {{#audio-post-sequencer post=post}}
-        <button class='btn btn-primary' type=button onclick={{route-action 'createTrack' post}}>add track (<span>{{post.tracks.length}}</span>)</button>
-      {{/audio-post-sequencer}}
-
-      {{add-track
+      {{#edit-post
         post=post
         session=session
+        onSavePost=(route-action 'save')
+        delete='delete'
+        createComment='createComment'
       }}
-    {{/edit-post}}
+        {{#audio-post-sequencer post=post}}
+          <button class='btn btn-primary' type=button onclick={{route-action 'createTrack' post}}>add track (<span>{{post.tracks.length}}</span>)</button>
+        {{/audio-post-sequencer}}
+
+        {{add-track
+          post=post
+          session=session
+        }}
+      {{/edit-post}}
 
   {{/each}}
 
