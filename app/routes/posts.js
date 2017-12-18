@@ -74,32 +74,10 @@ export default Route.extend({
       let tracks = get(post, 'tracks');
 
       post.destroyRecord().then(() => {
+        // TODO: how to actually delete all associated tracks?
+        // install cascade-delete?
         tracks.forEach((t) => t.unloadRecord());
       });
-
-        // tracks.forEach((track)=>{
-        //   this.store.unloadRecord(track);
-        //   track.deleteRecord();
-        // });
-
-
-      // this.get('store').query('track', {
-      //   filter: {
-      //     post: post.id
-      //   }
-      // })
-      // .then((tracks)=>{
-      //   return tracks.map((track)=>{
-      //     get(post, 'tracks').popObject(track);
-      //     return track.destroyRecord();
-      //   });
-      // })
-      // .then((what)=>{
-      //   debugger
-      //   post.deleteRecord();
-      //   post.save();
-      //   this.transitionTo('index');
-      // });
 
     },
 

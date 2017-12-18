@@ -31,7 +31,7 @@ export default Ember.Component.extend(NexusMixin, {
       values = values.slice(0, get(this, 'numberOfSliders'));
       return {
         'size': get(this, 'size') || [400, 100],
-        'min': 0,
+        'min': get(this, 'min') || 0,
         'max': get(this, 'max') || 1,
         'numberOfSliders': get(this, 'numberOfSliders') || 4,
         'step': get(this, 'step') || 0,

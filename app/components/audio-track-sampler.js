@@ -46,6 +46,13 @@ export default Ember.Component.extend({
     }
   }),
 
+  speedOnStep: computed({
+    set(key, val) {
+      __(`#${get(this, 'samplerId')}`).attr({speed: val});
+      return val;
+    }
+  }),
+
   trackReady: computed('sequence', 'filename',{
     get() {
 
@@ -73,15 +80,6 @@ export default Ember.Component.extend({
     set(this, 'isLooping', false);
     set(this, 'loopEnd', 1);
     set(this, 'speed', 1);
-
-    // dict of parameter values for each step
-    // in current sequence
-    let samplerStepParams = {
-      speed: new Array(16).fill(1),
-      loopEnd: new Array(16).fill(1),
-    };
-
-    set(this, 'samplerStepParams', samplerStepParams);
   },
 
   didReceiveAttrs() {
@@ -175,12 +173,14 @@ export default Ember.Component.extend({
 
       let serviceTracks = get(this, 'audioService.tracks');
       let trackRef = serviceTracks.findBy('trackId', get(this, 'trackId'));
+
       if (trackRef.gainStepArray) {
         set(this, 'gainOnStep', trackRef.gainStepArray[index])
       }
 
-      // let speed = get(this, 'samplerStepParams')['speed'][index];
-      // __(this).attr({speed: speed});
+      if (trackRef.speedStepArray) {
+        set(this, 'speedOnStep', trackRef.speedStepArray[index])
+      }
 
     // if(get(this, 'isLooping')){
     //     let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];

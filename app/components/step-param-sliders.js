@@ -20,6 +20,28 @@ export default Ember.Component.extend({
     }
   }),
 
+  speedStepArray: computed('track.speedStepSeq', {
+    get() {
+      return this.stringToArray('speedStepSeq');
+    },
+    set(key, value) {
+      this.setParamsAudioService(key, value);
+      this.saveArrayAsString('speedStepSeq', value);
+      return value;
+    }
+  }),
+
+  loopStepArray: computed('track.loopStepSeq', {
+    get() {
+      return this.stringToArray('loopStepSeq');
+    },
+    set(key, value) {
+      this.setParamsAudioService(key, value);
+      this.saveArrayAsString('loopStepSeq', value);
+      return value;
+    }
+  }),
+
   multisliderSize: computed('sequence', {
     get() {
       let width = (get(this, 'uiStepSize')* .85) * get(this, 'sequence.length');
@@ -27,6 +49,11 @@ export default Ember.Component.extend({
       return [width, height];
     }
   }),
+
+  didInsertElement() {
+    this._super(...arguments);
+    this.send('switchInterface', 'gain');
+  },
 
   stringToArray(stringKey) {
     let trackData = get(this, `track.${stringKey}`);
@@ -42,7 +69,7 @@ export default Ember.Component.extend({
   saveArrayAsString(stringKey, array){
     let track = get(this, 'track');
     let seqString = array.toString();
-    track.set(stringKey, seqString)
+    track.set(stringKey, seqString);
     track.save();
   },
 
@@ -58,7 +85,12 @@ export default Ember.Component.extend({
       let array = get(this, param).toArray();
       array[value.index] = value.value;
       set(this, param, array);
-    }
+    },
+    switchInterface(name) {
+      set(this, 'visibleInterface', name);
+      this.$().find('.interface-switches .btn').removeClass('active');
+      this.$(`.interface-switches .${name}`).addClass('active');
+    },
   }
 
 });
