@@ -73,9 +73,9 @@ export default Route.extend({
     delete(post) {
       let tracks = get(post, 'tracks');
 
-      post.destroyRecord().then(()=>{
+      post.destroyRecord().then(() => {
         tracks.forEach((t) => t.unloadRecord());
-      })
+      });
 
         // tracks.forEach((track)=>{
         //   this.store.unloadRecord(track);

@@ -1,0 +1,15 @@
+{{yield}}
+
+{{ui-multislider
+  size=multisliderSize
+  numberOfSliders=sequence.length
+  values=gainStepArray
+  onChangeValue=(action "updateParam" 'gainStepArray')
+}}
+
+<!-- {{ui-multislider
+  size=multisliderSize
+  numberOfSliders=sequence.length
+  values=speedStepArray
+  onChangeValue=(action "updateParam" 'speedStepArray')
+}} -->

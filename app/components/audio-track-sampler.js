@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import { get, set, computed } from "@ember/object";
-import { debug } from "@ember/debug";
 
 const { service } = Ember.inject;
 
@@ -36,6 +35,13 @@ export default Ember.Component.extend({
   gain: computed({
     set(key, val) {
       __(`#${get(this, 'gainId')}`).attr({gain: val});
+      return val;
+    }
+  }),
+
+  gainOnStep: computed({
+    set(key, val) {
+      __(`#${get(this, 'gainId')}-onstep`).attr({gain: val});
       return val;
     }
   }),
@@ -102,9 +108,13 @@ export default Ember.Component.extend({
   removeAllNodes() {
     __(`#${get(this, 'samplerId')}`).unbind("step");
 
+    // NOTE: any cracked node created in this component must be selected
+    // for tear down here, otherwise lingering nodes will break
+    // ability to select by ID
     let selectors = [
       `#${get(this, 'samplerId')}`,
       `#${get(this, 'gainId')}`,
+      `#${get(this, 'gainId')}-onstep`
     ];
 
     selectors.forEach((selector)=>{
@@ -129,6 +139,9 @@ export default Ember.Component.extend({
     })
     .gain({
       id: get(this, 'gainId'),
+    })
+    .gain({
+      id: `${get(this, 'gainId')}-onstep`,
     })
     .connect(get(this, 'outputNodeSelector'));
   },
@@ -160,13 +173,19 @@ export default Ember.Component.extend({
       __(this).stop();
       __(this).start();
 
-      let speed = get(this, 'samplerStepParams')['speed'][index];
-      __(this).attr({speed: speed});
-
-    if(get(this, 'isLooping')){
-        let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];
-        __(this).attr({loop:true, start: 0, end: loopEnd});
+      let serviceTracks = get(this, 'audioService.tracks');
+      let trackRef = serviceTracks.findBy('trackId', get(this, 'trackId'));
+      if (trackRef.gainStepArray) {
+        set(this, 'gainOnStep', trackRef.gainStepArray[index])
       }
+
+      // let speed = get(this, 'samplerStepParams')['speed'][index];
+      // __(this).attr({speed: speed});
+
+    // if(get(this, 'isLooping')){
+    //     let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];
+    //     __(this).attr({loop:true, start: 0, end: loopEnd});
+    //   }
     } else {
       if (!get(this, 'isLegato')) {
         __(this).attr({loop:false});
@@ -177,9 +196,8 @@ export default Ember.Component.extend({
 
   initializeTrackData() {
     let trackId = get(this, 'trackId');
-    debug('initialize track data', trackId);
-
     let trackData = get(this, 'audioService.tracks').findBy('trackId', trackId);
+
     if (!trackData) {
       get(this, 'audioService.tracks').push({trackId: trackId});
     }

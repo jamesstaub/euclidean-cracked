@@ -16,7 +16,7 @@ export default Ember.Component.extend(NexusMixin, {
   ElementOptions: computed('value', 'filenames', {
     get() {
       return {
-        'size': [100,30],
+        'size': [150,30],
         'options': get(this, 'choices')
       }
     }

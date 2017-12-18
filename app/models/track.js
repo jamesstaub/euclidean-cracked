@@ -33,4 +33,6 @@ export default DS.Model.extend({
     defaultValue() { return .5 }
   }),
 
+  gainStepSeq: DS.attr('string'),
+
 });
