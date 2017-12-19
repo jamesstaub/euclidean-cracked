@@ -53,6 +53,14 @@ export default Ember.Component.extend({
     }
   }),
 
+  loopEndOnStep: computed({
+    set(key, val) {
+      // __(`#${get(this, 'samplerId')}`).attr({loop:true});
+      __(`#${get(this, 'samplerId')}`).attr({loop:true, start:0, end: val});
+      return val;
+    }
+  }),
+
   trackReady: computed('sequence', 'filename',{
     get() {
 
@@ -77,9 +85,9 @@ export default Ember.Component.extend({
     this._super(...arguments);
 
     // TODO: move all properties into track model
-    set(this, 'isLooping', false);
-    set(this, 'loopEnd', 1);
-    set(this, 'speed', 1);
+    // set(this, 'isLooping', false);
+    // set(this, 'loopEnd', 1);
+    // set(this, 'speed', 1);
   },
 
   didReceiveAttrs() {
@@ -134,6 +142,9 @@ export default Ember.Component.extend({
     .sampler({
       id: get(this, 'samplerId'),
       path: get(this, 'path'),
+      // loop: true,
+      // start: 0,
+      // end: 1,
     })
     .gain({
       id: get(this, 'gainId'),
@@ -166,9 +177,8 @@ export default Ember.Component.extend({
   // callback functions to be called on each step of sequencer
   onStepCallback(index, data){
     set(this, 'stepIndex', index);
-
     if (data) {
-      __(this).stop();
+      // __(this).stop();
       __(this).start();
 
       let serviceTracks = get(this, 'audioService.tracks');
@@ -182,14 +192,21 @@ export default Ember.Component.extend({
         set(this, 'speedOnStep', trackRef.speedStepArray[index])
       }
 
+      if (trackRef.loopEndStepArray) {
+        __(this).attr({loop:true});
+        set(this, 'loopEndOnStep', trackRef.loopEndStepArray[index])
+      }
+
+
     // if(get(this, 'isLooping')){
     //     let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];
     //     __(this).attr({loop:true, start: 0, end: loopEnd});
     //   }
     } else {
-      if (!get(this, 'isLegato')) {
-        __(this).attr({loop:false});
-      }
+      __(this).stop();
+      // if (!get(this, 'isLegato')) {
+      __(this).attr({loop:false});
+      // }
     }
 
   },

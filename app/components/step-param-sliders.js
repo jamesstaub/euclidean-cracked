@@ -31,13 +31,13 @@ export default Ember.Component.extend({
     }
   }),
 
-  loopStepArray: computed('track.loopStepSeq', {
+  loopEndStepArray: computed('track.loopEndStepSeq', {
     get() {
-      return this.stringToArray('loopStepSeq');
+      return this.stringToArray('loopEndStepSeq');
     },
     set(key, value) {
       this.setParamsAudioService(key, value);
-      this.saveArrayAsString('loopStepSeq', value);
+      this.saveArrayAsString('loopEndStepSeq', value);
       return value;
     }
   }),

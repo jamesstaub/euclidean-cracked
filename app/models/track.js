@@ -35,5 +35,5 @@ export default DS.Model.extend({
 
   gainStepSeq: DS.attr('string'),
   speedStepSeq: DS.attr('string'),
-
+  loopStepArray: DS.attr('string'),
 });
