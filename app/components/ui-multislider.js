@@ -1,18 +1,31 @@
 import Ember from 'ember';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
-import { get, computed } from "@ember/object";
+import { get, set, computed } from "@ember/object";
+
+import $ from "jquery";
 
 export default Ember.Component.extend(NexusMixin, {
-  classNames: ['ui-multislider'],
 
+  classNames: ['ui-multislider'],
   tagName: ['span'],
+
+  sliderColor: '#2bb', // TODO: pass this in from main slider config
+  sliderBgColor: '#eee',
 
   didInsertElement() {
     this._super(...arguments);
     this._nexusInit();
+    this.
+    _styleInit();
   },
 
   ElementName: 'Multislider',
+
+  didReceiveAttrs() {
+    this._super(...arguments);
+    this._styleOnStep();
+  },
+
 
   defaultValues: computed({
     get() {
@@ -39,5 +52,42 @@ export default Ember.Component.extend(NexusMixin, {
       }
     }
   }),
+
+  _styleInit() {
+    // lookup rect elements by color match(not ideal)
+    let fgColor = get(this,'sliderColor');
+
+    let $rectElements = this.$(`#${get(this, 'nexusId')}`)
+      .find(`rect[fill='${fgColor}']`);
+
+    set(this, '$rectElements', $rectElements);
+
+    this.applyStyle()
+  },
+
+  _styleOnStep() {
+
+    let $rectElements = get(this, '$rectElements');
+    let index = get(this, 'stepIndex');
+
+    if ($rectElements && index) {
+      this.applyStyle()
+      this.$($rectElements[index - 1]).attr('stroke', 'red');
+    }
+  },
+
+  applyStyle() {
+    let $rectElements = get(this, '$rectElements');
+    let sequence = get(this, 'sequence');
+    let bgColor = get(this,'sliderBgColor');
+    let fgColor = get(this,'sliderColor');
+
+    $rectElements.each(function(idx) {
+      let stroke = sequence[idx] ? bgColor : fgColor;
+      let fill = sequence[idx] ? fgColor : bgColor;
+      $(this).attr('stroke', stroke);
+      $(this).attr('fill', fill);
+    });
+  }
 
 });

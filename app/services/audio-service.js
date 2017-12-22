@@ -16,6 +16,11 @@ export default Ember.Service.extend({
     });
   },
 
+  onLoopStep(trackCallback) {
+    trackCallback();
+    get(this, 'onLoopStepCallback')();
+  },
+
   startLoop(interval) {
     this.bindTrackSamplers();
     __.loop(interval);

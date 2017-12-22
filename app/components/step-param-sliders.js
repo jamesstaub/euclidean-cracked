@@ -86,6 +86,7 @@ export default Ember.Component.extend({
       array[value.index] = value.value;
       set(this, param, array);
     },
+
     switchInterface(name) {
       set(this, 'visibleInterface', name);
       this.$().find('.interface-switches .btn').removeClass('active');

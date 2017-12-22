@@ -1,8 +1,6 @@
-import { Promise } from "rsvp";
 import Ember from 'ember';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
-import { once } from "@ember/runloop";
 import { get, set } from "@ember/object";
 import { debug } from "@ember/debug";
 import Route from "@ember/routing/route";
