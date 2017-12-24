@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import { helper } from '@ember/component/helper';
 
 export function excerpt(params) {
   return params[0].substring(0,15)+'...';
 }
 
-export default Ember.Helper.helper(excerpt);  
+export default helper(excerpt);  

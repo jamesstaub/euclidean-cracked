@@ -1,13 +1,11 @@
 // app/features/application/route.js
-import Ember from 'ember';
-const {
-  get,
-  set,
-  debug,
-  inject: { service },
-} = Ember;
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend({
+import { set, get } from '@ember/object';
+import { debug } from '@ember/debug';
+import { inject as service } from '@ember/service';
+
+export default Route.extend({
   session: service(),
 
   beforeModel() {

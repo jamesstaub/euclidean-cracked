@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 
 import { computed, get, set } from "@ember/object";
 import { next } from "@ember/runloop";
 
-export default Ember.Mixin.create({
+export default Mixin.create({
   nexusId: computed('elementId', {
     get() {
       // strip 'ember' out of component id and use as

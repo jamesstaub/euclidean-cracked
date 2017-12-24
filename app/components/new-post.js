@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import { set, get } from "@ember/object";
 import { equal } from "@ember/object/computed";
-const { service } = Ember.inject;
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: 'new-post',
   session: service(),
   

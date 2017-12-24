@@ -73,7 +73,7 @@
   }
 
   .sequence-dials,
-  .signal-controls {
+  .function-editor {
     display: flex;
     margin-top: 15px;
   }
@@ -86,30 +86,38 @@
     }
   }
 
-  .signal-controls {
+  .function-editor {
+    margin: 15px 0;
+    max-width: 100%;
     align-items: flex-start;
     flex-wrap: wrap;
-    max-width: 100%;
 
-    textarea {
-      flex: 1 1 50%;
-      font-family: monospace;
+    fieldset {
+
+      textarea {
+        flex: 1 1 100%;
+        font-family: monospace;
+        max-width: 100%;
+      }
     }
-    .code-info {
-      font-size: 12px;
-      flex: 1 1 50%;
+
+    .run-code-btn, .disable-code-btn {
+      margin: 15px 15px 0 0;
+      flex: 0 1 100px;
+    }
+  }
+  .code-info {
+    font-size: 12px;
+    flex: 1 1 50%;
+    ul {
       padding-left: 15px;
       list-style: none;
       li {
         padding: 5px 0;
       }
-      small {
-        display: block;
-      }
     }
-    .run-code-btn {
-      margin-top: 15px;
-      flex: 0 1 100px;
+    small {
+      display: block;
     }
   }
 

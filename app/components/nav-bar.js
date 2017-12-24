@@ -1,11 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import { set, computed, get } from "@ember/object";
 
-const {
-  inject: { service },
-} = Ember;
-
-export default Ember.Component.extend({
+export default Component.extend({
   isCollapsed: true,
 
   session: service(),

@@ -1,10 +1,9 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { get, set, computed } from "@ember/object";
 
-const { service } = Ember.inject;
-
-export default Ember.Component.extend(NexusMixin, {
+export default Component.extend(NexusMixin, {
   classNames: ['ui-step-sequencer'],
   audioService: service(),
 

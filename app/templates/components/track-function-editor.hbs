@@ -1,0 +1,55 @@
+{{yield}}
+<form {{action 'submitCode' sampler on='submit'}} class="function-editor">
+  <fieldset>
+    <legend>
+      <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
+      <p>script will be called on each step of the step sequencer.</p>
+    </legend>
+    <textarea name="name" rows="6" cols="50" value={{track.function}} oninput={{action (mut customFunctionString) value='target.value'}}></textarea>
+  </fieldset>
+  <button class="btn btn-primary run-code-btn" type="submit" name="button">save and run</button>
+  <button class="btn btn-info disable-code-btn" type="button" {{action "disableCode"}}>disable</button>
+  {{isDisabled}}
+</form>
+
+<div class="code-info">
+  <strong>available variables:</strong>
+  <ul>
+    <li>
+      <code>index</code>
+      <small>[int] current step of the sequence</small>
+    </li>
+    <li>
+      <code>data</code>
+      <small>[boolean] true if there is a hit on this step.</small>
+    </li>
+    <li>
+      <code>array</code>
+      <small>[array] the rhythm sequence for this track</small>
+    </li>
+    <li>
+      <code>this.sampler</code>
+      <small>[string] id selector for this track's sampler node</small>
+    </li>
+    <li>
+      <code>this.gain</code>
+      <small>[string] id selector for this track's gain node</small>
+    </li>
+    <li>
+      <p>to access the available audio nodes on this track use the selector as an argument to the cracked object</p>
+      <code>__(this.sampler)</code>
+    </li>
+    <li>
+      <p>modify sampler speed every other step</p>
+      <p>(this will overwrite values entered with step sliders)</p>
+      <pre><code>
+        if (index % 2) {
+          __(this.sampler).attr(speed: .5);
+        }
+      </code></pre>
+    </li>
+  </ul>
+
+  <p><strong>note:</strong> this code will be called repeatedly, so creating new objects or audio nodes is not recommended.</p>
+  <p>instead, use the global code editor (coming soon) (which is only called once on initialization) to create audio nodes, or other objects. you can then access and modify those nodes with this code. </p>
+</div>

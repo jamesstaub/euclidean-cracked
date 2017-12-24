@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import { get, set } from "@ember/object";
 import config from '../config/environment';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   classNames: ['edit-track border'],
 
@@ -54,8 +54,5 @@ export default Ember.Component.extend({
       this.$(`.interface-switches .${name}`).addClass('active');
     },
 
-    submitCode() {
-      eval(get(this, 'signalCode'));
-    },
   }
 });
