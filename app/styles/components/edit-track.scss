@@ -92,12 +92,12 @@
     max-width: 100%;
 
     textarea {
-      flex: 1 1 auto;
+      flex: 1 1 50%;
       font-family: monospace;
     }
     .code-info {
       font-size: 12px;
-      flex: 1 1 auto;
+      flex: 1 1 50%;
       padding-left: 15px;
       list-style: none;
       li {

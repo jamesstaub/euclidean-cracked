@@ -12,12 +12,11 @@
     {{#audio-track-sampler
       sequence=sequence
       directory=directory
-      trackId=track.id
-      filename=track.filename
-      gain=track.gain
+      track=track
       outputNodeSelector="#master-compressor"
       as |sampler|
     }}
+
       {{ui-step-sequencer
         sequence=sequence
         stepIndex=sampler.stepIndex
@@ -37,11 +36,8 @@
             value=track.filename
           }}
         </div>
-        <button
-          type='delete'
-          class='btn btn-danger delete-track'
-          {{action 'deleteTrack' track}}
-        >
+        <button type='delete' class='btn btn-danger delete-track'
+          {{action 'deleteTrack' track}} >
           ✕
         </button>
       </div>

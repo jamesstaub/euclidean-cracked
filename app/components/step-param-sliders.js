@@ -1,46 +1,18 @@
 import Ember from 'ember';
+import SequenceHelper from  'euclidean-cracked/mixins/sequence-helper';
 import { get, set, computed } from "@ember/object";
+import { alias } from "@ember/object/computed";
+
 const { service } = Ember.inject;
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(SequenceHelper,{
   classNames: ['step-param-sliders'],
   audioService: service(),
 
   gainStepDefault: Array.from(new Array(16), ()=> .5),
   // speedStepSeq: Array.from(new Array(16), ()=> .5).toString(),
 
-  gainStepArray: computed('track.gainStepSeq', {
-    get() {
-      return this.stringToArray('gainStepSeq');
-    },
-    set(key, value) {
-      this.setParamsAudioService(key, value);
-      this.saveArrayAsString('gainStepSeq', value);
-      return value;
-    }
-  }),
-
-  speedStepArray: computed('track.speedStepSeq', {
-    get() {
-      return this.stringToArray('speedStepSeq');
-    },
-    set(key, value) {
-      this.setParamsAudioService(key, value);
-      this.saveArrayAsString('speedStepSeq', value);
-      return value;
-    }
-  }),
-
-  loopEndStepArray: computed('track.loopEndStepSeq', {
-    get() {
-      return this.stringToArray('loopEndStepSeq');
-    },
-    set(key, value) {
-      this.setParamsAudioService(key, value);
-      this.saveArrayAsString('loopEndStepSeq', value);
-      return value;
-    }
-  }),
+  gainStepSeq: alias('track.gainStepSeq'),
 
   multisliderSize: computed('sequence', {
     get() {
@@ -53,31 +25,6 @@ export default Ember.Component.extend({
   didInsertElement() {
     this._super(...arguments);
     this.send('switchInterface', 'gain');
-  },
-
-  stringToArray(stringKey) {
-    let trackData = get(this, `track.${stringKey}`);
-    if (trackData){
-      return get(this, `track.${stringKey}`)
-      .split(',')
-      .map((str)=> parseFloat(str))
-    } else {
-      return get(this, 'gainStepDefault');
-    }
-  },
-
-  saveArrayAsString(stringKey, array){
-    let track = get(this, 'track');
-    let seqString = array.toString();
-    track.set(stringKey, seqString);
-    track.save();
-  },
-
-  setParamsAudioService(paramKey, stepArray) {
-    let serviceTracks = get(this, 'audioService.tracks');
-    let trackRef = serviceTracks.findBy('trackId', get(this, 'track.id'));
-
-    set(trackRef, paramKey, stepArray);
   },
 
   actions: {
