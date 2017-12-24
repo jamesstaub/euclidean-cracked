@@ -1,67 +1,66 @@
-<div class='row'>
-  <div class='container-fluid post-meta border'>
-    <h1>{{post.title}}</h1>
 
+<div class='container-fluid post-meta border'>
+  <h1>{{post.title}}</h1>
 
-    <!-- <h3>{{markdown-to-html markdown=post.body}}</h3> -->
+  <!-- <h3>{{markdown-to-html markdown=post.body}}</h3> -->
 
-    <div class="creator-meta">
-      by {{post.creator.username}}
+  <div class="creator-meta">
+    by {{post.creator.username}}
 
-      {{#if post.date}}
-        <p class="post-date">
-          created {{moment-from-now post.date}}
-        </p>
-      {{/if}}
-    </div>
-
-    {{#if session.isAuthenticated}}
-      {{#if isAllowed}}
-        <form {{action 'save' post on='submit'}}>
-          {{#unless isEditing}}
-            <button type='submit' class='btn btn-primary'
-                {{action 'edit' }}>Edit
-            </button>
-          {{/unless}}
-          {{#if isEditing}}
-            <legend>edit post</legend>
-            <div class='edit-post-meta form-group'>
-              <!-- TODO: de-duplicate this code with new-post.hbs -->
-              <label>Title <input cols=40 rows='1' value= {{post.title}} oninput={{action (mut post.title) value='target.value'}} /></label>
-              <!-- <label><textarea cols=40 rows='6'  value= {{post.body}} oninput={{action (mut post.body) value='target.value'}} /></label> -->
-              <label>
-                allow anyone to edit:
-                <input type="checkbox" checked={{post.publicEditable}} {{action (mut post.publicEditable) value='target.value' on='change'}} />
-              </label>
-
-              <label>
-                show in public feed:
-                <input type="checkbox" checked={{post.publicVisible}} {{action (mut post.publicVisible) value='target.value' on='change'}} />
-              </label>
-            </div>
-
-            <div class="permissions">
-              <p>{{if post.publicVisible 'visible in public feed' 'only users with link can view'}}</p>
-              <p>{{if post.publicEditable 'anyone can edit' 'only you can edit this'}}</p>
-            </div>
-
-            <button type='submit' class='btn btn-primary'>Save</button>
-            <button type='delete' class='btn btn-danger' {{action 'delete' post}}>
-              Delete
-            </button>
-          {{/if}}
-        </form>
-
-
-      {{/if}}
+    {{#if post.date}}
+      <p class="post-date">
+        created {{moment-from-now post.date}}
+      </p>
     {{/if}}
   </div>
 
-  <div class='container-fluid border'>
-    <section>
-      {{yield}}
-    </section>
-  </div>
+  {{#if session.isAuthenticated}}
+    {{#if isAllowed}}
+      <form {{action 'save' post on='submit'}}>
+        {{#unless isEditing}}
+          <button type='submit' class='btn btn-primary'
+              {{action 'edit' }}>Edit
+          </button>
+        {{/unless}}
+        {{#if isEditing}}
+          <legend>edit post</legend>
+          <div class='edit-post-meta form-group'>
+            <!-- TODO: de-duplicate this code with new-post.hbs -->
+            <label>Title <input cols=40 rows='1' value= {{post.title}} oninput={{action (mut post.title) value='target.value'}} /></label>
+            <!-- <label><textarea cols=40 rows='6'  value= {{post.body}} oninput={{action (mut post.body) value='target.value'}} /></label> -->
+            <label>
+              allow anyone to edit:
+              <input type="checkbox" checked={{post.publicEditable}} {{action (mut post.publicEditable) value='target.value' on='change'}} />
+            </label>
 
+            <label>
+              show in public feed:
+              <input type="checkbox" checked={{post.publicVisible}} {{action (mut post.publicVisible) value='target.value' on='change'}} />
+            </label>
+          </div>
+
+          <div class="permissions">
+            <p>{{if post.publicVisible 'visible in public feed' 'only users with link can view'}}</p>
+            <p>{{if post.publicEditable 'anyone can edit' 'only you can edit this'}}</p>
+          </div>
+
+          <button type='submit' class='btn btn-primary'>Save</button>
+          <button type='delete' class='btn btn-danger' {{action 'delete' post}}>
+            Delete
+          </button>
+        {{/if}}
+      </form>
+
+
+    {{/if}}
+  {{/if}}
 </div>
+
+<div class='container-fluid border'>
+  <section>
+    {{yield}}
+  </section>
+</div>
+
+
 <!-- {{add-comment post=post session=session store='createComment' }} -->

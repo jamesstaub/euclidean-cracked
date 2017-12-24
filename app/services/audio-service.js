@@ -3,6 +3,7 @@ import { get } from "@ember/object";
 
 export default Ember.Service.extend({
   tracks: [],
+
   bindTrackSamplers() {
     get(this, 'tracks').forEach((track) => {
       __(track.selector).unbind("step");
@@ -13,6 +14,11 @@ export default Ember.Service.extend({
           track.sequence //passing in array value at position
         );
     });
+  },
+
+  onLoopStep(trackCallback) {
+    trackCallback();
+    get(this, 'onLoopStepCallback')();
   },
 
   startLoop(interval) {

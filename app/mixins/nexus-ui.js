@@ -21,7 +21,6 @@ export default Ember.Mixin.create({
     }
   },
 
-
   _nexusInit() {
     if (get(this, 'NexusElement')) {
       get(this, 'NexusElement').destroy();
@@ -30,7 +29,6 @@ export default Ember.Mixin.create({
     // components that use this mixin must set ElementName and ElementOptions
     let ElementOptions = get(this, 'ElementOptions');
     let ElementName = get(this, 'ElementName');
-
     let NexusElement =  new Nexus[ElementName](`#${get(this, 'nexusId')}`, ElementOptions);
 
     set(this, 'NexusElement', NexusElement);

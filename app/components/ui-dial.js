@@ -16,7 +16,7 @@ export default Ember.Component.extend(NexusMixin, {
   ElementOptions: computed('max', 'step', 'value', {
     get() {
       return {
-        'size': get(this, 'size') || [30,30],
+        'size': get(this, 'size') || [50,50],
         'interaction': 'vertical', // "radial", "vertical", or "horizontal"
         'mode': 'relative', // "absolute" or "relative"
         'min': 0,

@@ -1,0 +1,41 @@
+{{yield}}
+<div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
+  <button {{action 'switchInterface' 'gain'}} type="button" class="btn btn-default gain active">volume</button>
+  <button {{action 'switchInterface' 'speed'}} type="button" class="btn btn-default speed">speed</button>
+  <button {{action 'switchInterface' 'loopEnd'}} type="button" class="btn btn-default loopEnd">loop length</button>
+</div>
+
+{{#if (eq visibleInterface 'gain')}}
+  {{ui-multislider
+    stepIndex=stepIndex
+    sequence=sequence
+    size=multisliderSize
+    numberOfSliders=sequence.length
+    values=gainStepArray
+    onChangeValue=(action "updateParam" 'gainStepArray')
+  }}
+{{/if}}
+
+{{#if (eq visibleInterface 'speed')}}
+
+  {{ui-multislider
+    stepIndex=stepIndex
+    sequence=sequence
+    size=multisliderSize
+    numberOfSliders=sequence.length
+    values=speedStepArray
+    max=3
+    onChangeValue=(action "updateParam" 'speedStepArray')
+  }}
+{{/if}}
+
+{{#if (eq visibleInterface 'loopEnd')}}
+  {{ui-multislider
+    stepIndex=stepIndex
+    sequence=sequence
+    size=multisliderSize
+    numberOfSliders=sequence.length
+    values=loopEndStepSeq
+    onChangeValue=(action "updateParam" 'loopEndStepArray')
+  }}
+{{/if}}

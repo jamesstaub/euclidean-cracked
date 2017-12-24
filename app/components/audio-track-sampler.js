@@ -1,15 +1,19 @@
 import Ember from 'ember';
+import SequenceHelper from  'euclidean-cracked/mixins/sequence-helper';
 import { get, set, computed } from "@ember/object";
-import { debug } from "@ember/debug";
+import { alias } from "@ember/object/computed";
 
 const { service } = Ember.inject;
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(SequenceHelper, {
   audioService: service(),
   classNames: ['audio-track-sampler'],
   classNameBindings: [
     'trackReady' // only used to force computed get() to run
   ],
+
+  trackId: alias('track.id'),
+  filename: alias('track.filename'),
 
   samplerId: computed('trackId', {
     get() {
@@ -28,14 +32,36 @@ export default Ember.Component.extend({
       // TODO: how to set new filename without rebuilding node?
       return `${get(this, 'directory')}${get(this, 'filename')}`;
     },
-    set(key, val) {
-      return val;
-    },
   }),
 
-  gain: computed({
+  gain: computed('track.gain', {
+    get() {
+      return get(this, 'track.gain');
+    },
     set(key, val) {
       __(`#${get(this, 'gainId')}`).attr({gain: val});
+      return val;
+    }
+  }),
+
+  gainOnStep: computed({
+    set(key, val) {
+      __(`#${get(this, 'gainId')}-onstep`).attr({gain: val});
+      return val;
+    }
+  }),
+
+  speedOnStep: computed({
+    set(key, val) {
+      __(`#${get(this, 'samplerId')}`).attr({speed: val});
+      return val;
+    }
+  }),
+
+  loopEndOnStep: computed({
+    set(key, val) {
+      // __(`#${get(this, 'samplerId')}`).attr({loop:true});
+      __(`#${get(this, 'samplerId')}`).attr({loop:true, start:0, end: val});
       return val;
     }
   }),
@@ -62,20 +88,7 @@ export default Ember.Component.extend({
 
   init() {
     this._super(...arguments);
-
-    // TODO: move all properties into track model
-    set(this, 'isLooping', false);
-    set(this, 'loopEnd', 1);
-    set(this, 'speed', 1);
-
-    // dict of parameter values for each step
-    // in current sequence
-    let samplerStepParams = {
-      speed: new Array(16).fill(1),
-      loopEnd: new Array(16).fill(1),
-    };
-
-    set(this, 'samplerStepParams', samplerStepParams);
+    // set(this, 'isLooping', false);/
   },
 
   didReceiveAttrs() {
@@ -102,9 +115,13 @@ export default Ember.Component.extend({
   removeAllNodes() {
     __(`#${get(this, 'samplerId')}`).unbind("step");
 
+    // NOTE: any cracked node created in this component must be selected
+    // for tear down here, otherwise lingering nodes will break
+    // ability to select by ID
     let selectors = [
       `#${get(this, 'samplerId')}`,
       `#${get(this, 'gainId')}`,
+      `#${get(this, 'gainId')}-onstep`
     ];
 
     selectors.forEach((selector)=>{
@@ -117,7 +134,6 @@ export default Ember.Component.extend({
     let serviceTracks = get(this, 'audioService.tracks');
     let ref = serviceTracks.findBy('trackId', get(this, 'trackId'));
     serviceTracks.removeObject(ref);
-
   },
 
   buildNode() {
@@ -130,67 +146,98 @@ export default Ember.Component.extend({
     .gain({
       id: get(this, 'gainId'),
     })
+    .gain({
+      id: `${get(this, 'gainId')}-onstep`,
+    })
     .connect(get(this, 'outputNodeSelector'));
-  },
-
-  bindStep() {
-    this.initializeTrackData();
-
-    let trackId = get(this, 'trackId');
-
-    let trackData = get(this, 'audioService.tracks').findBy('trackId', trackId);
-
-    let selector  =`#${get(this,'samplerId')}`;
-    let callback = get(this, 'onStepCallback').bind(this);
-    let sequence = get(this,'sequence');
-
-    set(trackData, 'selector', selector);
-    set(trackData, 'callback', callback);
-    set(trackData, 'sequence', sequence);
-
-    get(this, 'audioService').bindTrackSamplers();
-
   },
 
   // callback functions to be called on each step of sequencer
   onStepCallback(index, data){
     set(this, 'stepIndex', index);
-
     if (data) {
-      __(this).stop();
+      // __(this).stop();
       __(this).start();
 
-      let speed = get(this, 'samplerStepParams')['speed'][index];
-      __(this).attr({speed: speed});
+      let serviceTracks = get(this, 'audioService.tracks');
+      let trackRef = serviceTracks.findBy('trackId', get(this, 'trackId'));
 
-    if(get(this, 'isLooping')){
-        let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];
-        __(this).attr({loop:true, start: 0, end: loopEnd});
+      if (trackRef.gainStepArray) {
+        set(this, 'gainOnStep', trackRef.gainStepArray[index])
       }
+
+      if (trackRef.speedStepArray) {
+        set(this, 'speedOnStep', trackRef.speedStepArray[index])
+      }
+
+      if (trackRef.loopEndStepArray) {
+        __(this).attr({loop:true});
+        set(this, 'loopEndOnStep', trackRef.loopEndStepArray[index])
+      }
+    // if(get(this, 'isLooping')){
+    //     let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];
+    //     __(this).attr({loop:true, start: 0, end: loopEnd});
+    //   }
     } else {
-      if (!get(this, 'isLegato')) {
-        __(this).attr({loop:false});
-      }
+      __(this).stop();
+      // if (!get(this, 'isLegato')) {
+      __(this).attr({loop:false});
+      // }
     }
-
   },
 
   initializeTrackData() {
     let trackId = get(this, 'trackId');
-    debug('initialize track data', trackId);
+    let serviceTrackRef = get(this, 'audioService.tracks').findBy('trackId', trackId);
 
-    let trackData = get(this, 'audioService.tracks').findBy('trackId', trackId);
-    if (!trackData) {
-      get(this, 'audioService.tracks').push({trackId: trackId});
+    if (!serviceTrackRef) {
+      serviceTrackRef = {trackId: trackId}
+      serviceTrackRef = this.applySequenceData(serviceTrackRef);
+      get(this, 'audioService.tracks').push(serviceTrackRef);
+    } else {
+      this.applySequenceData(serviceTrackRef);
     }
   },
 
+  applySequenceData(serviceTrackRef){
+    // serialize and apply stringified parameter sequences
+    // to global service track reference
+    let sequenceArrayKeys = [
+      'gainStepArray',
+      'speedStepArray',
+      'loopEndStepArray',
+    ];
+
+    sequenceArrayKeys.forEach((key)=>{
+      set(serviceTrackRef, key, get(this, key));
+    });
+
+    return serviceTrackRef;
+  },
+
+  setGlobalTrackData() {
+    let trackId = get(this, 'trackId');
+
+    //access global data for this track on audio service
+    let serviceTrackRef = get(this, 'audioService.tracks').findBy('trackId', trackId);
+
+    let selector  =`#${get(this,'samplerId')}`;
+    let callback = get(this, 'onStepCallback').bind(this);
+    let sequence = get(this,'sequence');
+
+    // set sampler selector, onStep call back and rhythm sequence
+    set(serviceTrackRef, 'selector', selector);
+    set(serviceTrackRef, 'callback', callback);
+    set(serviceTrackRef, 'sequence', sequence);
+  },
 
   initializeSampler() {
     if (get(this, 'sequence')) {
       this.removeAllNodes();
       this.buildNode();
-      this.bindStep();
+      this.initializeTrackData();
+      this.setGlobalTrackData();
+      get(this, 'audioService').bindTrackSamplers();
     }
   },
 

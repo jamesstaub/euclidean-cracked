@@ -4,10 +4,10 @@
 
 .edit-track {
   display: flex;
-  flex-wrap: wrap;
   align-content: flex-start;
   margin: 15px 0;
   position: relative;
+  width: 100%;
 
   .data-display {
     flex: 0 1 300px;
@@ -17,6 +17,8 @@
     background-color: darkgray;
     border-top: solid 1px darkgray;
     flex: 1 0 100%;
+    margin: -15px -15px 15px;
+    overflow: scroll;
     padding: 15px;
   }
 
@@ -29,13 +31,59 @@
     background-color: lightgray;
     flex: 1 1 auto;
     padding: 15px;
+    width: calc(100% - 55px);
+
+    .interface-row {
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      @include small-screen{
+        flex-direction: column-reverse;
+        .file-select {
+          margin-bottom: 15px;
+        }
+      }
+    }
+    .file-select {
+      flex: 1 1 auto;
+      margin: 0 30px 0 15px;
+    }
+    .interface-switches {
+      display: flex;
+      flex: 1 1 auto;
+      margin: 0 15px;
+    }
+    .delete-track {
+      border-radius: 50%;
+      flex: 0 0 auto;
+      font-size: 10px;
+      margin-right: 15px;
+      padding: 5px 8px;
+      width: 30px;
+
+      @include small-screen{
+        font-size: 14px;
+        height: 32px;
+        position: absolute;
+        right: 0;
+        top: 75px;
+        width: 32px;
+      }
+    }
   }
 
   .sequence-dials,
-  .sampler-controls,
   .signal-controls {
     display: flex;
     margin-top: 15px;
+  }
+
+  .step-param-sliders {
+    margin: 15px 0;
+
+    .interface-switches {
+      margin: 5px 0;
+    }
   }
 
   .signal-controls {
@@ -44,12 +92,12 @@
     max-width: 100%;
 
     textarea {
-      flex: 1 1 auto;
+      flex: 1 1 50%;
       font-family: monospace;
     }
     .code-info {
       font-size: 12px;
-      flex: 1 1 auto;
+      flex: 1 1 50%;
       padding-left: 15px;
       list-style: none;
       li {
@@ -71,15 +119,9 @@
     }
   }
 
-  .delete-track {
-    position: absolute;
-    top: 75px;
-    right: 15px;
-    padding: 5px 10px;
-  }
 }
 
 
 .audio-track-sampler {
-  flex: 1 0 100%;
+
 }

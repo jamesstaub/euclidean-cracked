@@ -61,6 +61,9 @@ A few notes on conventions I've established for using these in ember components.
 - ember components prefixed with `audio-` deal with the cracked audio library.
 - the audio-service handles global state of audio nodes, to allow initialization, destruction of audio nodes and bindings throughout the app.
 
+#### parameter sequences
+-  stringified arrays saved on the track model, and loaded into the serviceTrackRef on initialization and track update. this allows the track to update various parameters on each step of the sequence. 
+  - the sequence helper mixin generalizes some functions + computed properties for getting/setting parameter sequences between the track model, interface components and the global service
 
 ### NexusUI
 - ember components prefixed with `ui-` are [nexus ui](nexus-js.github.io/ui/) objects.

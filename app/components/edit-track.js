@@ -10,12 +10,14 @@ export default Ember.Component.extend({
   directory: config.audioDirectory,
 
   canSave: true,
+  uiStepSize: 40, //todo
 
   gainSliderSize: [20, 100],
 
+
   didInsertElement() {
     this._super(...arguments);
-    this.send('switchInterface', 'sampler');
+    this.send('switchInterface', 'rhythm');
   },
 
   actions: {

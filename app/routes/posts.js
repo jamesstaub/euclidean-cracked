@@ -1,8 +1,6 @@
-import { Promise } from "rsvp";
 import Ember from 'ember';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
-import { once } from "@ember/runloop";
 import { get, set } from "@ember/object";
 import { debug } from "@ember/debug";
 import Route from "@ember/routing/route";
@@ -73,33 +71,11 @@ export default Route.extend({
     delete(post) {
       let tracks = get(post, 'tracks');
 
-      post.destroyRecord().then(()=>{
+      post.destroyRecord().then(() => {
+        // TODO: how to actually delete all associated tracks?
+        // install cascade-delete?
         tracks.forEach((t) => t.unloadRecord());
-      })
-
-        // tracks.forEach((track)=>{
-        //   this.store.unloadRecord(track);
-        //   track.deleteRecord();
-        // });
-
-
-      // this.get('store').query('track', {
-      //   filter: {
-      //     post: post.id
-      //   }
-      // })
-      // .then((tracks)=>{
-      //   return tracks.map((track)=>{
-      //     get(post, 'tracks').popObject(track);
-      //     return track.destroyRecord();
-      //   });
-      // })
-      // .then((what)=>{
-      //   debugger
-      //   post.deleteRecord();
-      //   post.save();
-      //   this.transitionTo('index');
-      // });
+      });
 
     },
 
