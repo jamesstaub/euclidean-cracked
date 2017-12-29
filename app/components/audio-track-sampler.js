@@ -14,6 +14,17 @@ export default Component.extend(SequenceHelper, {
     'trackReady' // only used to force computed get() to run
   ],
 
+  customFunctionScope: computed('samplerId', 'gainId', 'lowpassId', {
+    get() {
+      //variables available for user defined track functions
+      return {
+        sampler: `#${get(this, 'samplerId')}`,
+        gain: `#${get(this, 'gainId')}-onstep`,
+        lowpass: `#${get(this, 'lowpassId')}`,
+      }
+    }
+  }),
+
   trackId: alias('track.id'),
   filename: alias('track.filename'),
 
@@ -26,6 +37,12 @@ export default Component.extend(SequenceHelper, {
   gainId: computed('samplerId', {
     get() {
       return `${get(this, 'samplerId')}-gain`;
+    },
+  }),
+
+  lowpassId: computed('samplerId', {
+    get() {
+      return `${get(this, 'samplerId')}-lowpass`;
     },
   }),
 
@@ -130,12 +147,13 @@ export default Component.extend(SequenceHelper, {
     // NOTE: any cracked node created in this component must be selected
     // for tear down here, otherwise lingering nodes will break
     // ability to select by ID
-    let selectors = [
-      `#${get(this, 'samplerId')}`,
-      `#${get(this, 'gainId')}`,
-      `#${get(this, 'gainId')}-onstep`
-    ];
-
+    // let selectors = [
+    //   `#${get(this, 'samplerId')}`,
+    //   `#${get(this, 'gainId')}`,
+    //   `#${get(this, 'lowpassId')}`,
+    //   `#${get(this, 'gainId')}-onstep`
+    // ];
+    let selectors = [`.${get(this, 'trackId')}-node`]
     selectors.forEach((selector)=>{
       __(selector).remove();
     });
@@ -154,12 +172,23 @@ export default Component.extend(SequenceHelper, {
     .sampler({
       id: get(this, 'samplerId'),
       path: get(this, 'path'),
+      class: `${get(this, 'trackId')}-node`,
     })
+    .lowpass(
+      {
+        id: get(this, 'lowpassId'),
+        frequency: 10000,
+        q:0,
+        class: `${get(this, 'trackId')}-node`,
+      }
+    )
     .gain({
       id: get(this, 'gainId'),
+      class: `${get(this, 'trackId')}-node`,
     })
     .gain({
       id: `${get(this, 'gainId')}-onstep`,
+      class: `${get(this, 'trackId')}-node`,
     })
     .connect(get(this, 'outputNodeSelector'));
   },
@@ -236,12 +265,8 @@ export default Component.extend(SequenceHelper, {
     let customFunction = get(this, 'track.function');
 
     if(customFunction) {
-      let scope = {
-        sampler: `#${get(this, 'samplerId')}`,
-        gain: `#${get(this, 'gainId')}-onstep`,
-      }
-
-      get(this, 'audioService').applyTrackFunction(serviceTrackRef, customFunction, scope);
+      let scope = get(this, 'customFunctionScope');
+      get(this, 'audioService').applyTrackFunction(serviceTrackRef, customFunction, scope );
     }
 
     // set sampler selector, onStep call back and rhythm sequence

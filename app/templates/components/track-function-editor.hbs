@@ -7,9 +7,14 @@
     </legend>
     <textarea name="name" rows="6" cols="50" value={{track.function}} oninput={{action (mut customFunctionString) value='target.value'}}></textarea>
   </fieldset>
-  <button class="btn btn-primary run-code-btn" type="submit" name="button">save and run</button>
-  <button class="btn btn-info disable-code-btn" type="button" {{action "disableCode"}}>disable</button>
-  {{isDisabled}}
+  <div class="buttons">
+    <button class="btn btn-primary run-code-btn" type="submit" name="button">{{if functionIsLoaded 'update function' 'apply function'}}</button>
+    {{#if functionIsLoaded}}
+      <button class="btn btn-warning disable-code-btn" type="button" {{action "disableCode"}}>disable function</button>
+    {{else}}
+      <span>not currently active</span>
+    {{/if}}
+  </div>
 </form>
 
 <div class="code-info">
@@ -44,7 +49,7 @@
       <p>(this will overwrite values entered with step sliders)</p>
       <pre><code>
         if (index % 2) {
-          __(this.sampler).attr(speed: .5);
+          __(this.sampler).attr({speed: .5});
         }
       </code></pre>
     </li>
