@@ -9,10 +9,14 @@
   }}
 
   <div class="ui-controls">
+
     {{#audio-track-sampler
       sequence=sequence
       directory=directory
       track=track
+      gain=track.gain
+      isLooping=track.isLooping
+      filename=track.filename
       outputNodeSelector="#master-compressor"
       as |sampler|
     }}
@@ -25,7 +29,7 @@
       <div class="row interface-row">
         <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
           <button {{action 'switchInterface' 'rhythm'}} type="button" class="btn btn-default rhythm">Euclidean Rhythm</button>
-          <button {{action 'switchInterface' 'steps'}} type="button" class="btn btn-default steps">Steps</button>
+          <button {{action 'switchInterface' 'steps'}} type="button" class="btn btn-default steps">Step Automation</button>
           <button {{action 'switchInterface' 'function'}} type="button" class="btn btn-default function">Function</button>
         </div>
 

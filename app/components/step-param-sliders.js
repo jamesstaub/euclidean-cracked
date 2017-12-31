@@ -34,6 +34,12 @@ export default Ember.Component.extend(SequenceHelper,{
       set(this, param, array);
     },
 
+    toggleIsLooping(evt) {
+
+      this.track.set('isLooping', evt.target.checked);
+      this.track.save();
+    },
+
     switchInterface(name) {
       set(this, 'visibleInterface', name);
       this.$().find('.interface-switches .btn').removeClass('active');

@@ -83,6 +83,10 @@
 
     .interface-switches {
       margin: 5px 0;
+
+      .toggle-loop {
+        padding-left: 15px; 
+      }
     }
   }
 
@@ -93,12 +97,15 @@
     flex-wrap: wrap;
 
     fieldset {
-
       textarea {
         flex: 1 1 100%;
         font-family: monospace;
         max-width: 100%;
       }
+    }
+
+    legend {
+      font-size: 14px;
     }
 
     .run-code-btn, .disable-code-btn {

@@ -26,7 +26,6 @@ export default Component.extend(SequenceHelper, {
   }),
 
   trackId: alias('track.id'),
-  filename: alias('track.filename'),
 
   samplerId: computed('trackId', {
     get() {
@@ -53,10 +52,7 @@ export default Component.extend(SequenceHelper, {
     },
   }),
 
-  gain: computed('track.gain', {
-    get() {
-      return get(this, 'track.gain');
-    },
+  gain: computed({
     set(key, val) {
       __(`#${get(this, 'gainId')}`).attr({gain: val});
       return val;
@@ -80,7 +76,7 @@ export default Component.extend(SequenceHelper, {
   loopEndOnStep: computed({
     set(key, val) {
       // __(`#${get(this, 'samplerId')}`).attr({loop:true});
-      __(`#${get(this, 'samplerId')}`).attr({loop:true, start:0, end: val});
+      __(`#${get(this, 'samplerId')}`).attr({ start:0, end: val});
       return val;
     }
   }),
@@ -185,6 +181,7 @@ export default Component.extend(SequenceHelper, {
     .gain({
       id: get(this, 'gainId'),
       class: `${get(this, 'trackId')}-node`,
+      gain: get(this, 'gain'),
     })
     .gain({
       id: `${get(this, 'gainId')}-onstep`,
@@ -192,6 +189,7 @@ export default Component.extend(SequenceHelper, {
     })
     .connect(get(this, 'outputNodeSelector'));
   },
+
 
   // callback functions to be called on each step of sequencer
   onStepCallback(index, data, array){
@@ -202,8 +200,10 @@ export default Component.extend(SequenceHelper, {
     let trackRef = serviceTracks.findBy('trackId', get(this, 'trackId'));
 
     if (data) {
-      // __(this).stop();
+      __(this).stop();
       __(this).start();
+
+      __(this).attr({ loop: get(this, 'isLooping') });
 
       if (trackRef.gainStepArray) {
         set(this, 'gainOnStep', trackRef.gainStepArray[index])
@@ -214,17 +214,13 @@ export default Component.extend(SequenceHelper, {
       }
 
       if (trackRef.loopEndStepArray) {
-        __(this).attr({loop:true});
         set(this, 'loopEndOnStep', trackRef.loopEndStepArray[index])
       }
-    // if(get(this, 'isLooping')){
-    //     let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];
-    //     __(this).attr({loop:true, start: 0, end: loopEnd});
-    //   }
+
     } else {
       __(this).stop();
       // if (!get(this, 'isLegato')) {
-      __(this).attr({loop:false});
+      // __(this).attr({loop:false});
       // }
     }
 

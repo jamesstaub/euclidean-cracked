@@ -8,14 +8,16 @@ After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/se
 
 ## to do list
 ### user concurrency features
-* show current users on a given beat post
+
 * sidebar chat window
 * flash of color on a given track when another user has made a change.
+  - centralize all track.save() calls to call a single route-action so, then trigger visual feedback any track data is saved
+
 * option to quantize all changes until beginning of next loop (to reduce disruption of the beat)
+  - currently, the loop restarts any time a parameter is changed, with many active users, this could be disruptive to the beat
 
 ### audio processing features
 * implement a code editor for writing custom cracked audio scripts.
-  - on each track, the editor's scope will be a function that is called on each step of the sequencer, and will have access to the sequence array.
 
   - a global level script editor will allow for other scripting outside of the sequencer events
 
@@ -31,10 +33,10 @@ After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/se
 * ability to duplicate a track, to make iteration easier
 
 
-### data authorization (to do)
+### data authorization (in progress)
 users create sequence posts and can edit meta data like the name, description and audio parameters
 
-if the user authenticates anonymously, their posts could be subject to any other user editing them \
+if the user authenticates anonymously, their posts could be subject to any other user editing them
 
 users authenticated with email can control editing access, and invite other users to edit
 
@@ -61,7 +63,7 @@ A few notes on conventions I've established for using these in ember components.
 - ember components prefixed with `audio-` deal with the cracked audio library.
 - the audio-service handles global state of audio nodes, to allow initialization, destruction of audio nodes and bindings throughout the app.
 
-#### parameter sequences
+#### track automation (aka parameter sequences)
 -  stringified arrays saved on the track model, and loaded into the serviceTrackRef on initialization and track update. this allows the track to update various parameters on each step of the sequence.
   - the sequence helper mixin generalizes some functions + computed properties for getting/setting parameter sequences between the track model, interface components and the global service
 

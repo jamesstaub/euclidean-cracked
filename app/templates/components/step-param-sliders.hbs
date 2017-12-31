@@ -1,8 +1,11 @@
 {{yield}}
 <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
   <button {{action 'switchInterface' 'gain'}} type="button" class="btn btn-default gain active">volume</button>
-  <button {{action 'switchInterface' 'speed'}} type="button" class="btn btn-default speed">speed</button>
+  <button {{action 'switchInterface' 'speed'}} type="button" class="btn btn-default speed">playback speed</button>
   <button {{action 'switchInterface' 'loopEnd'}} type="button" class="btn btn-default loopEnd">loop length</button>
+  <label class="toggle-loop">
+    loop {{input type='checkbox' checked=track.isLooping click=(action 'toggleIsLooping')}}
+  </label>
 </div>
 
 {{#if (eq visibleInterface 'gain')}}
@@ -15,6 +18,7 @@
     onChangeValue=(action "updateParam" 'gainStepArray')
   }}
 {{/if}}
+
 
 {{#if (eq visibleInterface 'speed')}}
 
