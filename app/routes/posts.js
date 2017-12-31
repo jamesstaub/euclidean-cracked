@@ -1,13 +1,11 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
+
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
+
 import { get, set } from "@ember/object";
 import { debug } from "@ember/debug";
 import Route from "@ember/routing/route";
-
-const {
-  inject: { service },
-} = Ember;
 
 export default Route.extend({
   session: service(),

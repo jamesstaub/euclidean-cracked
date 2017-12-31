@@ -1,10 +1,10 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 import cleanURI from '../utils/clean';
 import getOrCreateUser from '../utils/get-or-create-user';
 
 import { get } from "@ember/object";
 
-export default Ember.Route.extend({
+export default Route.extend({
 
   actions: {
     async save(title, publicEditable, publicVisible) {

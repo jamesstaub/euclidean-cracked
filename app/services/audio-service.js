@@ -1,8 +1,17 @@
-import Ember from 'ember';
-import { get } from "@ember/object";
+import Service from '@ember/service';
+import { get, set } from "@ember/object";
 
-export default Ember.Service.extend({
+export default Service.extend({
   tracks: [],
+
+  findOrCreateTrackRef(trackId) {
+    let trackRef = get(this, 'tracks').findBy('trackId', trackId);
+    if (!trackRef) {
+      trackRef = {trackId: trackId}
+      get(this, 'tracks').push(trackRef);
+    }
+    return trackRef;
+  },
 
   bindTrackSamplers() {
     get(this, 'tracks').forEach((track) => {
@@ -33,5 +42,14 @@ export default Ember.Service.extend({
     this.bindTrackSamplers();
     __.loop(interval);
     __.loop('start');
+  },
+
+  applyTrackFunction(serviceTrackRef, functionString, scope) {
+    try {
+      let onStep = new Function('index','data', 'array', functionString).bind(scope);
+      set(serviceTrackRef, 'customFunction', onStep);
+    } catch (e) {
+      alert('problem with function', e);
+    }
   }
 });

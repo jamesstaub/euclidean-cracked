@@ -26,7 +26,7 @@
           <legend>edit post</legend>
           <div class='edit-post-meta form-group'>
             <!-- TODO: de-duplicate this code with new-post.hbs -->
-            <label>Title <input cols=40 rows='1' value= {{post.title}} oninput={{action (mut post.title) value='target.value'}} /></label>
+            <label>Title <input cols=40 rows='1' value={{post.title}} oninput={{action (mut post.title) value='target.value'}} /></label>
             <!-- <label><textarea cols=40 rows='6'  value= {{post.body}} oninput={{action (mut post.body) value='target.value'}} /></label> -->
             <label>
               allow anyone to edit:

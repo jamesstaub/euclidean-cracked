@@ -1,7 +1,7 @@
 // import firebase from 'firebase';
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
 import FirebaseAdapter from 'emberfire/adapters/firebase';
 
 export default FirebaseAdapter.extend({
-  firebase: Ember.inject.service(),
+  firebase: service(),
 });

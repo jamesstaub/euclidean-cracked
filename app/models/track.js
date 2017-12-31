@@ -13,6 +13,8 @@ export default DS.Model.extend({
   // again, convenience for firebase auth rules
   publicEditable: DS.attr('boolean'),
 
+  isLooping: DS.attr('boolean'),
+
   filename: DS.attr('string', {
     defaultValue() { return config.audioFileNames[0] }
   }),
@@ -36,4 +38,6 @@ export default DS.Model.extend({
   gainStepSeq: DS.attr('string'),
   speedStepSeq: DS.attr('string'),
   loopStepArray: DS.attr('string'),
+
+  function: DS.attr('string'),
 });

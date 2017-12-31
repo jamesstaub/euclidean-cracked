@@ -1,8 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { get, computed } from "@ember/object";
 
-export default Ember.Component.extend(NexusMixin, {
+export default Component.extend(NexusMixin, {
   classNames: ['ui-select'],
   tagName: ['span'],
 

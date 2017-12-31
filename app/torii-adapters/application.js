@@ -1,7 +1,7 @@
-import Ember from 'ember';
+import { inject as service } from '@ember/service';
 
 import ToriiFirebaseAdapter from 'emberfire/torii-adapters/firebase';
 
 export default ToriiFirebaseAdapter.extend({
-  firebase: Ember.inject.service(),
+  firebase: service(),
 });

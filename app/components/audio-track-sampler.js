@@ -1,19 +1,31 @@
-import Ember from 'ember';
 import SequenceHelper from  'euclidean-cracked/mixins/sequence-helper';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+
 import { get, set, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
 
-const { service } = Ember.inject;
+export default Component.extend(SequenceHelper, {
 
-export default Ember.Component.extend(SequenceHelper, {
   audioService: service(),
+
   classNames: ['audio-track-sampler'],
   classNameBindings: [
     'trackReady' // only used to force computed get() to run
   ],
 
+  customFunctionScope: computed('samplerId', 'gainId', 'lowpassId', {
+    get() {
+      //variables available for user defined track functions
+      return {
+        sampler: `#${get(this, 'samplerId')}`,
+        gain: `#${get(this, 'gainId')}-onstep`,
+        lowpass: `#${get(this, 'lowpassId')}`,
+      }
+    }
+  }),
+
   trackId: alias('track.id'),
-  filename: alias('track.filename'),
 
   samplerId: computed('trackId', {
     get() {
@@ -27,6 +39,12 @@ export default Ember.Component.extend(SequenceHelper, {
     },
   }),
 
+  lowpassId: computed('samplerId', {
+    get() {
+      return `${get(this, 'samplerId')}-lowpass`;
+    },
+  }),
+
   path: computed('directory', 'filename', {
     get() {
       // TODO: how to set new filename without rebuilding node?
@@ -34,10 +52,7 @@ export default Ember.Component.extend(SequenceHelper, {
     },
   }),
 
-  gain: computed('track.gain', {
-    get() {
-      return get(this, 'track.gain');
-    },
+  gain: computed({
     set(key, val) {
       __(`#${get(this, 'gainId')}`).attr({gain: val});
       return val;
@@ -61,7 +76,7 @@ export default Ember.Component.extend(SequenceHelper, {
   loopEndOnStep: computed({
     set(key, val) {
       // __(`#${get(this, 'samplerId')}`).attr({loop:true});
-      __(`#${get(this, 'samplerId')}`).attr({loop:true, start:0, end: val});
+      __(`#${get(this, 'samplerId')}`).attr({ start:0, end: val});
       return val;
     }
   }),
@@ -112,18 +127,29 @@ export default Ember.Component.extend(SequenceHelper, {
     this.removeAllNodes();
   },
 
+  initializeSampler() {
+    if (get(this, 'sequence')) {
+      this.removeAllNodes();
+      this.buildNode();
+      this.setSequenceParams();
+      this.setSamplerData();
+      get(this, 'audioService').bindTrackSamplers();
+    }
+  },
+
   removeAllNodes() {
     __(`#${get(this, 'samplerId')}`).unbind("step");
 
     // NOTE: any cracked node created in this component must be selected
     // for tear down here, otherwise lingering nodes will break
     // ability to select by ID
-    let selectors = [
-      `#${get(this, 'samplerId')}`,
-      `#${get(this, 'gainId')}`,
-      `#${get(this, 'gainId')}-onstep`
-    ];
-
+    // let selectors = [
+    //   `#${get(this, 'samplerId')}`,
+    //   `#${get(this, 'gainId')}`,
+    //   `#${get(this, 'lowpassId')}`,
+    //   `#${get(this, 'gainId')}-onstep`
+    // ];
+    let selectors = [`.${get(this, 'trackId')}-node`]
     selectors.forEach((selector)=>{
       __(selector).remove();
     });
@@ -142,25 +168,42 @@ export default Ember.Component.extend(SequenceHelper, {
     .sampler({
       id: get(this, 'samplerId'),
       path: get(this, 'path'),
+      class: `${get(this, 'trackId')}-node`,
     })
+    .lowpass(
+      {
+        id: get(this, 'lowpassId'),
+        frequency: 10000,
+        q:0,
+        class: `${get(this, 'trackId')}-node`,
+      }
+    )
     .gain({
       id: get(this, 'gainId'),
+      class: `${get(this, 'trackId')}-node`,
+      gain: get(this, 'gain'),
     })
     .gain({
       id: `${get(this, 'gainId')}-onstep`,
+      class: `${get(this, 'trackId')}-node`,
     })
     .connect(get(this, 'outputNodeSelector'));
   },
 
+
   // callback functions to be called on each step of sequencer
-  onStepCallback(index, data){
+  onStepCallback(index, data, array){
     set(this, 'stepIndex', index);
+    let serviceTracks = get(this, 'audioService.tracks');
+    // TODO: refactor this so findBy is not called on every step
+    // also: find a clearer way of distinguishing between track model and service track reference
+    let trackRef = serviceTracks.findBy('trackId', get(this, 'trackId'));
+
     if (data) {
-      // __(this).stop();
+      __(this).stop();
       __(this).start();
 
-      let serviceTracks = get(this, 'audioService.tracks');
-      let trackRef = serviceTracks.findBy('trackId', get(this, 'trackId'));
+      __(this).attr({ loop: get(this, 'isLooping') });
 
       if (trackRef.gainStepArray) {
         set(this, 'gainOnStep', trackRef.gainStepArray[index])
@@ -171,37 +214,27 @@ export default Ember.Component.extend(SequenceHelper, {
       }
 
       if (trackRef.loopEndStepArray) {
-        __(this).attr({loop:true});
         set(this, 'loopEndOnStep', trackRef.loopEndStepArray[index])
       }
-    // if(get(this, 'isLooping')){
-    //     let loopEnd = get(this, 'samplerStepParams')['loopEnd'][index];
-    //     __(this).attr({loop:true, start: 0, end: loopEnd});
-    //   }
+
     } else {
       __(this).stop();
       // if (!get(this, 'isLegato')) {
-      __(this).attr({loop:false});
+      // __(this).attr({loop:false});
       // }
     }
-  },
 
-  initializeTrackData() {
-    let trackId = get(this, 'trackId');
-    let serviceTrackRef = get(this, 'audioService.tracks').findBy('trackId', trackId);
-
-    if (!serviceTrackRef) {
-      serviceTrackRef = {trackId: trackId}
-      serviceTrackRef = this.applySequenceData(serviceTrackRef);
-      get(this, 'audioService.tracks').push(serviceTrackRef);
-    } else {
-      this.applySequenceData(serviceTrackRef);
+    if (trackRef.customFunction) {
+      trackRef.customFunction(index, data, array);
     }
   },
 
-  applySequenceData(serviceTrackRef){
-    // serialize and apply stringified parameter sequences
-    // to global service track reference
+  setSequenceParams(){
+    // apply sequence data from track model to global service track reference
+    let trackId = get(this, 'trackId');
+    let serviceTrackRef = get(this, 'audioService')
+      .findOrCreateTrackRef(trackId);
+
     let sequenceArrayKeys = [
       'gainStepArray',
       'speedStepArray',
@@ -215,30 +248,27 @@ export default Ember.Component.extend(SequenceHelper, {
     return serviceTrackRef;
   },
 
-  setGlobalTrackData() {
+  setSamplerData() {
     let trackId = get(this, 'trackId');
 
-    //access global data for this track on audio service
-    let serviceTrackRef = get(this, 'audioService.tracks').findBy('trackId', trackId);
+    let serviceTrackRef = get(this, 'audioService')
+      .findOrCreateTrackRef(trackId);
 
     let selector  =`#${get(this,'samplerId')}`;
     let callback = get(this, 'onStepCallback').bind(this);
     let sequence = get(this,'sequence');
 
+    let customFunction = get(this, 'track.function');
+
+    if(customFunction) {
+      let scope = get(this, 'customFunctionScope');
+      get(this, 'audioService').applyTrackFunction(serviceTrackRef, customFunction, scope );
+    }
+
     // set sampler selector, onStep call back and rhythm sequence
     set(serviceTrackRef, 'selector', selector);
     set(serviceTrackRef, 'callback', callback);
     set(serviceTrackRef, 'sequence', sequence);
-  },
-
-  initializeSampler() {
-    if (get(this, 'sequence')) {
-      this.removeAllNodes();
-      this.buildNode();
-      this.initializeTrackData();
-      this.setGlobalTrackData();
-      get(this, 'audioService').bindTrackSamplers();
-    }
   },
 
 });

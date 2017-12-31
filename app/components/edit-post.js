@@ -1,13 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed, set, get } from '@ember/object';
 import DS from 'ember-data';
 
-const {
-  get,
-  set,
-  computed,
-} = Ember;
-
-export default Ember.Component.extend({
+export default Component.extend({
   isEditing: false,
   classNames: 'edit-post',
 
