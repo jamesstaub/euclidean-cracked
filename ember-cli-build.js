@@ -24,6 +24,12 @@ module.exports = function(defaults) {
       browsers: ['> 1% in US', 'last 3 versions', 'Safari >= 8']
     },
 
+    ace: {
+      themes: ['ambiance', 'chaos'],
+      modes: ['javascript'],
+      workers: ['javascript']
+    }
+
   });
 
   app.import('vendor/i_dropped_my_phone_the_screen_cracked/dist/cracked.js');

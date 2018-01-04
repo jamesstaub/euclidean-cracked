@@ -14,23 +14,58 @@ export default Component.extend({
 
   functionIsLoaded: bool('serviceTrackRef.customFunction'),
 
+  function: computed('track.function', {
+    get() {
+      return get(this, 'track.function') || '';
+    }
+  }),
+
+  //when the track's function property is different than
+  // the function runnign on the audio service
+  hasUnloadedCode: computed('function', 'loadedFunctionString',{
+    get() {
+      let editorFunction = get(this, 'function');
+      let loadedFunction = get(this, 'loadedFunctionString');
+      return loadedFunction != editorFunction;
+    },
+    set(key, value) {
+      return value;
+    }
+  }),
+
+  showDiscardBtn: not('hasUnloadedCode'),
+
   actions: {
+
+    onUpdateEditor(content) {
+      set(this, 'trackFunctionString', content);
+      this.track.set('function', content);
+      this.track.save();
+    },
+
     submitCode(audioTrackSampler) {
       let scope = get(audioTrackSampler, 'customFunctionScope');
 
-      let customFunctionString = get(this, 'customFunctionString');
+      let trackFunctionString = get(this, 'trackFunctionString');
       let serviceTrackRef = get(this, 'serviceTrackRef');
 
-      if (customFunctionString) {
-        this.track.set('function', customFunctionString);
-        this.track.save().then(()=> {
-          get(this, 'audioService').applyTrackFunction(serviceTrackRef, customFunctionString, scope);
-          set(this, 'isDisabled', false);
-        });
+      if (trackFunctionString) {
+        get(this, 'audioService').applyTrackFunction(serviceTrackRef, trackFunctionString, scope);
+        set(this, 'loadedFunctionString', trackFunctionString)
+        set(this, 'isDisabled', false);
       }
     },
 
-    disableCode() {
+    discardChanges() {
+      // revert the saved data to the function that is currently loaded
+      let loadedFunction = get(this, 'loadedFunctionString');
+      this.track.set('function', loadedFunction);
+      this.track.save().then(()=>{
+        set(this, 'hasUnloadedCode', false);
+      });
+    },
+
+    disableFunction() {
       set(get(this, 'serviceTrackRef'), 'customFunction', null);
       set(this, 'isDisabled', true);
     }

@@ -85,16 +85,16 @@
       margin: 5px 0;
 
       .toggle-loop {
-        padding-left: 15px; 
+        padding-left: 15px;
       }
     }
   }
 
   .function-editor {
+    flex-direction: column;
+    flex-wrap: wrap;
     margin: 15px 0;
     max-width: 100%;
-    align-items: flex-start;
-    flex-wrap: wrap;
 
     fieldset {
       textarea {

@@ -1,18 +1,24 @@
 {{yield}}
 <form {{action 'submitCode' sampler on='submit'}} class="function-editor">
-  <fieldset>
     <legend>
       <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
       <p>script will be called on each step of the step sequencer.</p>
     </legend>
-    <textarea name="name" rows="6" cols="50" value={{track.function}} oninput={{action (mut customFunctionString) value='target.value'}}></textarea>
-  </fieldset>
+
+    {{ember-ace
+      lines=20
+      value=function
+      mode="ace/mode/javascript"
+      theme="ace/theme/ambiance"
+      update=(action 'onUpdateEditor')}}
+
   <div class="buttons">
-    <button class="btn btn-primary run-code-btn" type="submit" name="button">{{if functionIsLoaded 'update function' 'apply function'}}</button>
+    <button class="btn btn-primary run-code-btn" type="submit" name="button">{{if functionIsLoaded 'update' 'apply'}}</button>
     {{#if functionIsLoaded}}
-      <button class="btn btn-warning disable-code-btn" type="button" {{action "disableCode"}}>disable function</button>
+      <button class="btn disable-code-btn" type="button" {{action "disableFunction"}}>disable </button>
+      <button class="btn disable-code-btn" disabled={{showDiscardBtn}} type="button" {{action "discardChanges"}}>revert changes</button>
     {{else}}
-      <span>not currently active</span>
+      <!-- <span>not currently active</span> -->
     {{/if}}
   </div>
 </form>

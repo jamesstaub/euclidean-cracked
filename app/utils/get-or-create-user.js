@@ -1,4 +1,5 @@
 import { Promise } from "rsvp";
+import { debug } from "@ember/debug";
 
 export default function getOrCreateUser(currentUser, store) {
   const getAnonDefaults = function() {
@@ -37,7 +38,7 @@ export default function getOrCreateUser(currentUser, store) {
         resolve(userRecord);
       });
     } else {
-      console.error('no current user session');
+      debug('no current user session');
     }
   });
 
