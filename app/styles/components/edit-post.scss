@@ -16,10 +16,7 @@
     }
 
     .creator-meta {
-      img {
-        max-width: 60px;
-        padding-right: 15px;
-      }
+
     }
 
   }
@@ -28,6 +25,7 @@
   }
   .edit-post-meta {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items:flex-start;
     width: 100%;

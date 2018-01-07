@@ -1,0 +1,15 @@
+{{#if visible}}
+  <div class="card border">
+    <div class="card-body">
+      <h2 class="card-title post-title">
+        <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
+        {{#link-to 'posts' post.slug}}{{post.title}}{{/link-to}}
+      </h2>
+      <p class="card-text">{{post.body}}</p>
+      <p class="card-text">created by {{post.creator.username}}</p>
+    </div>
+  </div>
+
+{{/if}}
+
+{{yield}}
