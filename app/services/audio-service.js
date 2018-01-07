@@ -48,6 +48,8 @@ export default Service.extend({
     try {
       let onStep = new Function('index','data', 'array', functionString).bind(scope);
       set(serviceTrackRef, 'customFunction', onStep);
+      //TODO validation
+      // warning about __.play()
     } catch (e) {
       alert('problem with function', e);
     }

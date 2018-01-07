@@ -5,22 +5,21 @@
       <p>script will be called on each step of the step sequencer.</p>
     </legend>
 
+    <div class="buttons">
+      <button class="btn btn-primary run-code-btn" type="submit" name="button">{{if functionIsLoaded 'update' 'apply'}}</button>
+      {{#if functionIsLoaded}}
+        <button class="btn disable-code-btn" type="button" {{action "disableFunction"}}>disable </button>
+        <button class="btn disable-code-btn" disabled={{showDiscardBtn}} type="button" {{action "discardChanges"}}>revert changes</button>
+      {{else}}
+        <!-- <span>not currently active</span> -->
+      {{/if}}
+    </div>
     {{ember-ace
       lines=20
       value=function
       mode="ace/mode/javascript"
       theme="ace/theme/ambiance"
       update=(action 'onUpdateEditor')}}
-
-  <div class="buttons">
-    <button class="btn btn-primary run-code-btn" type="submit" name="button">{{if functionIsLoaded 'update' 'apply'}}</button>
-    {{#if functionIsLoaded}}
-      <button class="btn disable-code-btn" type="button" {{action "disableFunction"}}>disable </button>
-      <button class="btn disable-code-btn" disabled={{showDiscardBtn}} type="button" {{action "discardChanges"}}>revert changes</button>
-    {{else}}
-      <!-- <span>not currently active</span> -->
-    {{/if}}
-  </div>
 </form>
 
 <div class="code-info">
