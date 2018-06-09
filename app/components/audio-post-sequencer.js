@@ -47,6 +47,7 @@ export default Component.extend({
     },
 
     loopAction(action) {
+
       let audio = get(this, 'audioService');
       let interval = get(this, 'post.interval');
 
