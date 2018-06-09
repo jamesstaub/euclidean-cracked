@@ -1,1 +1,9 @@
 {{yield this}}
+{{#if initializeSampler.isRunning}}
+  <small>
+    changes will apply in:
+    <strong>
+      {{stepsUntilStart}}
+    </strong>
+  </small>
+{{/if}}
