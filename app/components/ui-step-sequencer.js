@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
-import { get, set, computed } from "@ember/object";
+import { get, set, computed } from '@ember/object';
 
 export default Component.extend(NexusMixin, {
   classNames: ['ui-step-sequencer'],
@@ -15,11 +15,11 @@ export default Component.extend(NexusMixin, {
       // (or nexus mixin)
 
       return {
-        'size': [get(this, 'width'), 30],
-        'mode': 'toggle',
-        'rows': 1,
-        'columns': get(this, 'length'),
-      }
+        size: [get(this, 'width'), 30],
+        mode: 'toggle',
+        rows: 1,
+        columns: get(this, 'length')
+      };
     }
   }),
 
@@ -35,7 +35,6 @@ export default Component.extend(NexusMixin, {
     }
   }),
 
-
   stepIndex: computed({
     set(key, index) {
       // on every cracked sequencer step received,
@@ -45,8 +44,7 @@ export default Component.extend(NexusMixin, {
         let sequencer = get(this, 'NexusElement');
 
         if (typeof sequencer.stepper.value === 'number') {
-
-          let step = (index % sequencer.stepper.max) - 2;
+          let step = index % sequencer.stepper.max - 2;
 
           if (!index) {
             step = sequencer.stepper.max - 2;
@@ -56,27 +54,25 @@ export default Component.extend(NexusMixin, {
         sequencer.next();
       }
       return index;
-    },
+    }
   }),
 
   didUpdateAttrs() {
     this._super(...arguments);
 
-    let refreshOnUpdate =
-      get(this, 'sequence') !== get(this, '_sequence');
+    let refreshOnUpdate = get(this, 'sequence') !== get(this, '_sequence');
 
-    if(refreshOnUpdate) {
+    if (refreshOnUpdate) {
       this._nexusInit();
       if (get(this, 'sequence')) {
         let sequencer = get(this, 'NexusElement');
-          sequencer.matrix.set.row(0, get(this, 'sequence'));
+        sequencer.matrix.set.row(0, get(this, 'sequence'));
       }
     }
     set(this, '_sequence', get(this, 'sequence'));
   },
 
   afterInitNexus(NexusElement) {
-    NexusElement.colorize("mediumLight","#d9534f");
+    NexusElement.colorize('mediumLight', '#d9534f');
   }
-
 });

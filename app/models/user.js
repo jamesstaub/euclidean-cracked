@@ -12,5 +12,5 @@ export default DS.Model.extend({
   comments: DS.hasMany('comment'),
 
   online: DS.attr('boolean'),
-  activePost: DS.belongsTo('post'),
+  activePost: DS.belongsTo('post')
 });

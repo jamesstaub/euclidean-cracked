@@ -4,7 +4,7 @@ import { get, computed } from "@ember/object";
 
 export default Component.extend(NexusMixin, {
   classNames: ['ui-select'],
-  tagName: ['span'],
+  tagName: 'span',
 
   didInsertElement() {
     this._super(...arguments);

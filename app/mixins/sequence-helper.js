@@ -1,6 +1,5 @@
-import Ember from 'ember';
-import { get, set, computed } from "@ember/object";
-
+import { get, set, computed } from '@ember/object';
+import Mixin from '@ember/object/mixin';
 function arraySequenceComputed(stringKey) {
   // reusable computed property template
   // to serialize stringified sequence array to/from store
@@ -13,27 +12,35 @@ function arraySequenceComputed(stringKey) {
       this.saveArrayAsString(stringKey, value);
       return value;
     }
-  }
+  };
 }
 
-export default Ember.Mixin.create({
-
-  gainStepArray: computed('track.gainStepSeq', arraySequenceComputed('gainStepSeq')),
-  speedStepArray: computed('track.speedStepSeq', arraySequenceComputed('speedStepSeq')),
-  loopEndStepArray: computed('track.loopEndStepSeq', arraySequenceComputed('loopEndStepSeq')),
+export default Mixin.create({
+  gainStepArray: computed(
+    'track.gainStepSeq',
+    arraySequenceComputed('gainStepSeq')
+  ),
+  speedStepArray: computed(
+    'track.speedStepSeq',
+    arraySequenceComputed('speedStepSeq')
+  ),
+  loopEndStepArray: computed(
+    'track.loopEndStepSeq',
+    arraySequenceComputed('loopEndStepSeq')
+  ),
 
   stringToArray(stringKey) {
     let trackData = get(this, `track.${stringKey}`);
-    if (trackData){
+    if (trackData) {
       return get(this, `track.${stringKey}`)
-      .split(',')
-      .map((str)=> parseFloat(str))
+        .split(',')
+        .map(str => parseFloat(str));
     } else {
       return get(this, 'gainStepDefault');
     }
   },
 
-  saveArrayAsString(stringKey, array){
+  saveArrayAsString(stringKey, array) {
     let track = get(this, 'track');
     let seqString = array.toString();
     track.set(stringKey, seqString);
@@ -45,6 +52,5 @@ export default Ember.Mixin.create({
     let trackRef = serviceTracks.findBy('trackId', get(this, 'track.id'));
 
     set(trackRef, paramKey, stepArray);
-  },
-
+  }
 });

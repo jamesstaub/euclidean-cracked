@@ -1,14 +1,17 @@
 import Component from '@ember/component';
-import { get } from '@ember/object';
+import { get, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
   audioService: service(),
 
-  intervalSliderSize: [120, 20],
-
   classNames: ['audio-post-sequencer'],
   dacGain: 0.9,
+
+  init() {
+    this._super(...arguments);
+    set(this, 'intervalSliderSize', [120, 20]);
+  },
 
   didInsertElement() {
     this.initSignalChain();

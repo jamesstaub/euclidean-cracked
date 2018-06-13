@@ -7,7 +7,7 @@ import $ from "jquery";
 export default Ember.Component.extend(NexusMixin, {
 
   classNames: ['ui-multislider'],
-  tagName: ['span'],
+  tagName: 'span',
 
   sliderColor: '#2bb', // TODO: pass this in from main slider config
   sliderBgColor: '#eee',

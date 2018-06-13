@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { get, set } from "@ember/object";
+import { get, set } from '@ember/object';
 
 export default Service.extend({
   tracks: [],
@@ -7,21 +7,21 @@ export default Service.extend({
   findOrCreateTrackRef(trackId) {
     let trackRef = get(this, 'tracks').findBy('trackId', trackId);
     if (!trackRef) {
-      trackRef = {trackId: trackId}
+      trackRef = { trackId: trackId };
       get(this, 'tracks').push(trackRef);
     }
     return trackRef;
   },
 
   bindTrackSamplers() {
-    get(this, 'tracks').forEach((track) => {
-      __(track.selector).unbind("step");
+    get(this, 'tracks').forEach(track => {
+      __(track.selector).unbind('step');
 
-      __(track.selector)
-        .bind("step", //on every crack sequencer step
-          track.callback, //call this function (bound to component scope)
-          track.sequence //passing in array value at position
-        );
+      __(track.selector).bind(
+        'step', // on every crack sequencer step
+        track.callback, // call this function (bound to component scope)
+        track.sequence // passing in array value at position
+      );
     });
   },
 
@@ -36,7 +36,7 @@ export default Service.extend({
     __.loop('start');
   },
 
-  resetLoop(interval){
+  resetLoop(interval) {
     __.loop('stop');
     __.loop('reset');
     this.bindTrackSamplers();
@@ -46,9 +46,11 @@ export default Service.extend({
 
   applyTrackFunction(serviceTrackRef, functionString, scope) {
     try {
-      let onStep = new Function('index','data', 'array', functionString).bind(scope);
+      let onStep = new Function('index', 'data', 'array', functionString).bind(
+        scope
+      );
       set(serviceTrackRef, 'customFunction', onStep);
-      //TODO validation
+      // TODO validation
       // warning about __.play()
     } catch (e) {
       alert('problem with function', e);

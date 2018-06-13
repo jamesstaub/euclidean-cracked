@@ -9,25 +9,28 @@ export default Route.extend({
   session: service(),
 
   beforeModel() {
-    return get(this, 'session').fetch()
-    .catch((er)=> {
-      console.error(er.message);
-      return this.openSession('anonymous');
-    });
+    return get(this, 'session')
+      .fetch()
+      .catch(er => {
+        debug(er);
+        return this.openSession('anonymous');
+      });
   },
   model() {
     return this.store.findAll('post');
   },
 
   openSession(provider) {
-    return get(this, 'session').open('firebase', {
-      provider
-    }).then(()=> {
-      debug(`logged in with ${provider}`);
-    })
-    .catch((er)=>{
-      console.error(er);
-    });
+    return get(this, 'session')
+      .open('firebase', {
+        provider
+      })
+      .then(() => {
+        debug(`logged in with ${provider}`);
+      })
+      .catch(er => {
+        debug(er);
+      });
   },
 
   actions: {
