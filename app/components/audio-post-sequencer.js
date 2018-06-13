@@ -8,7 +8,7 @@ export default Component.extend({
   intervalSliderSize: [120, 20],
 
   classNames: ['audio-post-sequencer'],
-  dacGain: .9,
+  dacGain: 0.9,
 
   didInsertElement() {
     this.initSignalChain();
@@ -16,38 +16,39 @@ export default Component.extend({
   },
 
   willDestroyElement() {
-    __.loop("stop");
+    __.loop('stop');
     this.disconnectAll();
   },
 
   disconnectAll() {
     // remove all existing cracked audio nodes
-    __("*").unbind("step");
-    __("*").remove();
+    __('*').unbind('step');
+    __('*').remove();
   },
 
   initSignalChain() {
-    this.disconnectAll()
+    this.disconnectAll();
     // create a compressor -> DAC node for other nodes to connect to
     __()
-    .compressor({
-      release:.1,
-      id: 'master-compressor',
-      class:`post-${get(this, 'post.id')}`,
-    })
-    .dac(get(this, 'dacGain'));
+      .compressor({
+        release: 0.1,
+        id: 'master-compressor',
+        class: `post-${get(this, 'post.id')}`
+      })
+      .dac(get(this, 'dacGain'));
   },
 
   actions: {
-
     setLoopInterval(post, interval) {
       __.loop(interval);
       __.loop('start');
-      post.save();
+
+      if (!this.readOnly) {
+        post.save();
+      }
     },
 
     loopAction(action) {
-
       let audio = get(this, 'audioService');
       let interval = get(this, 'post.interval');
 
@@ -58,14 +59,12 @@ export default Component.extend({
           break;
         case 'reset':
           audio.resetLoop(interval);
-          break
+          break;
         case 'stop':
           this.toggleProperty('isPlaying');
           __.loop(action);
-          break
+          break;
       }
-
     }
-  },
-
+  }
 });

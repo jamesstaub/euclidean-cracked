@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import E from 'euclidean-cracked/utils/euclidean';
-import { get, set } from "@ember/object";
-import { next } from "@ember/runloop";
+import { get, set } from '@ember/object';
+import { next } from '@ember/runloop';
 
 Array.prototype.rotate = (function() {
   // save references to array functions to make lookup faster
@@ -13,7 +13,7 @@ Array.prototype.rotate = (function() {
     count = count >> 0; // convert to int
 
     // convert count to value in range [0, len)
-    count = ((count % len) + len) % len;
+    count = (count % len + len) % len;
 
     // use splice.call() instead of this.splice() to make function generic
     push.apply(this, splice.call(this, 0, count));
@@ -28,12 +28,10 @@ export default Component.extend({
     this._super(...arguments);
     let hasHits = typeof get(this, 'hits') !== 'undefined';
     let hasSteps = typeof get(this, 'steps') !== 'undefined';
-
     if (hasHits && hasSteps) {
-
-    // use next instead of fixing double update that occurs
-    // when hits exceeds steps. kind of a hack
-      next(()=>{
+      // use next instead of fixing double update that occurs
+      // when hits exceeds steps. kind of a hack
+      next(() => {
         this.calculateSequence();
       });
     }
@@ -45,19 +43,21 @@ export default Component.extend({
 
   calculateSequence() {
     let [hits, steps] = this._sortParameters(
-      get(this, 'hits'), get(this, 'steps')
+      get(this, 'hits'),
+      get(this, 'steps')
     );
-
-    let seq = E(hits, steps)
-      .rotate(get(this, 'offset'));
+    let seq = E(hits, steps).rotate(get(this, 'offset'));
 
     set(this, 'sequence', seq);
-    get(this, 'onCalculateSequence')(seq);
+
+    if (this.onCalculateSequence) {
+      this.onCalculateSequence(seq);
+    }
   },
 
   _sortParameters(hits, steps) {
-    //for euclidean algorithm hits must always be lower than steps
-    let params = [hits, steps].sort((a, b)=>{
+    // for euclidean algorithm hits must always be lower than steps
+    let params = [hits, steps].sort((a, b) => {
       // method to sort by value, not alpha
       return a - b;
     });

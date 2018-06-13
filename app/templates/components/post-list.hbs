@@ -1,0 +1,35 @@
+<div class='row index-wrapper'>
+  <div class='container-fluid'>
+    {{#each posts as |post|}}
+      {{index-post-item post=post}}
+      <button type="button" class="btn" {{action "setCurrentPost" post}}>
+        {{fa-icon "play"}}
+      </button>
+    {{else}}
+      There are no posts...
+    {{/each}}
+  </div>
+</div>
+
+{{audio-post-sequencer post=currentPost readOnly=true}}
+
+{{#each currentPost.tracks as |track|}}
+  {{#euclidean-sequence
+    hits=track.hits
+    steps=track.steps
+    offset=track.offset
+    as |sequence|
+  }}
+
+    {{audio-track-sampler
+      sequence=sequence
+      directory=directory
+      track=track
+      gain=track.gain
+      isLooping=track.isLooping
+      filename=track.filename
+      outputNodeSelector="#master-compressor"
+    }}
+
+  {{/euclidean-sequence}}
+{{/each}}

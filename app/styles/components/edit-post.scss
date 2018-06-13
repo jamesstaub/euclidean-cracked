@@ -5,10 +5,19 @@
   min-width: 100%;
 
   .post-meta {
+    display: flex;
+    justify-content: space-between;
     margin: 20px 0;
     padding: 15px;
-    h1, h2, h3 {
-      margin: 5px 0 ;
+
+    &-title {
+      flex: 1 1 auto;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 5px 0;
     }
 
     .permissions {
@@ -16,9 +25,7 @@
     }
 
     .creator-meta {
-
     }
-
   }
   .post-date {
     padding: 10px 0;
@@ -27,7 +34,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items:flex-start;
+    align-items: flex-start;
     width: 100%;
   }
 }

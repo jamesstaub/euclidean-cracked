@@ -1,19 +1,21 @@
-
 <div class='container-fluid post-meta border'>
-  <h1>{{post.title}}</h1>
 
-  <h3>{{markdown-to-html markdown=post.body}}</h3>
+  <div class="post-meta-title">
+    <h1>{{post.title}}</h1>
 
-  <div class="creator-meta">
-    <p>
-      {{#if post.date}}
-      <span class="post-date">
-        created {{moment-from-now post.date}}
-      </span>
-      {{/if}}
-      by <strong>{{post.creator.username}}</strong>
-    </p>
-    {{post-active-users post=post}}
+    <h3>{{markdown-to-html markdown=post.body}}</h3>
+
+    <div class="creator-meta">
+      <p>
+        {{#if post.date}}
+        <span class="post-date">
+          created {{moment-from-now post.date}}
+        </span>
+        {{/if}}
+        by <strong>{{post.creator.username}}</strong>
+      </p>
+      {{post-active-users post=post}}
+    </div>
   </div>
 
   {{#if session.isAuthenticated}}
