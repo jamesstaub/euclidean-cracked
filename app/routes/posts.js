@@ -17,7 +17,12 @@ export default Route.extend({
     });
   },
 
+  didInsertElement() {
+    this._super(...arguments);
+  },
+
   afterModel(model) {
+    set(this, 'posts', model);
     this.addPostActiveUser(model);
   },
 
@@ -25,14 +30,8 @@ export default Route.extend({
     this._super(controller, model);
   },
 
-  // FIXME exit() is a private method.
-  // for some reason willTransition() does not fire
-  exit() {
-    this.removeUser();
-  },
-
-  addPostActiveUser(model) {
-    let post = model.get('firstObject');
+  addPostActiveUser() {
+    let post = get(this, 'posts.firstObject');
     set(this, 'post', post);
 
     let user = getOrCreateUser(get(this, 'session.currentUser'), this.store);
@@ -61,6 +60,16 @@ export default Route.extend({
   },
 
   actions: {
+    willTransition(transition) {
+      if (!confirm('Are you sure you want to abandon progress?')) {
+        transition.abort();
+      } else {
+        // Bubble the `willTransition` action so that
+        // parent routes can decide whether or not to abort.
+        this.removeUser();
+        return true;
+      }
+    },
     delete(post) {
       let tracks = get(post, 'tracks');
 
