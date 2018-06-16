@@ -1,8 +1,8 @@
 <form class="controls">
   <fieldset class="transport">
-    <button type="button" id="button_fbw" class="btn" {{action "loopAction" "reset"}}>
+    {{!-- <button type="button" id="button_fbw" class="btn" {{action "loopAction" "reset"}}>
       {{fa-icon "fast-backward"}}
-    </button>
+    </button> --}}
     {{#if isPlaying}}
     <button type="button" id="button_stop" class="btn" {{action "loopAction" "stop"}}>
       {{fa-icon "stop"}}

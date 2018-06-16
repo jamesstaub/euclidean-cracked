@@ -1,6 +1,6 @@
 import Component from '@ember/component';
-import { get } from "@ember/object";
-import { computed } from "@ember/object";
+import { get } from '@ember/object';
+import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
@@ -13,9 +13,9 @@ export default Component.extend({
       let creator = get(this, 'post.creator.uid');
       let currentUser = get(this, 'session.currentUser.uid');
 
-      let permission = get(this, 'post.publicVisible')
+      let permission = get(this, 'post.publicVisible');
 
       return permission || creator === currentUser;
     }
-  }),
+  })
 });

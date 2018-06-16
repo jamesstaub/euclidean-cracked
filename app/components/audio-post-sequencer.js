@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { get, set } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 
 export default Component.extend({
   audioService: service(),
@@ -17,6 +18,13 @@ export default Component.extend({
     this.initSignalChain();
     __().play();
   },
+
+  post: computed({
+    set(key, val) {
+      this.sendAction('loopAction', 'start');
+      return val;
+    }
+  }),
 
   willDestroyElement() {
     __.loop('stop');

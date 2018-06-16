@@ -1,18 +1,5 @@
 <div class='row index-wrapper'>
-  <div class='container-fluid'>
-    {{#each posts as |post|}}
-      {{index-post-item post=post}}
-      <button type="button" class="btn" {{action "setCurrentPost" post}}>
-        {{fa-icon "play"}}
-      </button>
-    {{else}}
-      There are no posts...
-    {{/each}}
-  </div>
-</div>
-
 {{audio-post-sequencer post=currentPost readOnly=true}}
-
 {{#each currentPost.tracks as |track|}}
   {{#euclidean-sequence
     hits=track.hits
@@ -33,3 +20,18 @@
 
   {{/euclidean-sequence}}
 {{/each}}
+</div>
+
+<div class='row index-wrapper'>
+  <div class='container-fluid row'>
+    {{#each posts as |post|}}
+      {{#index-post-item post=post}}
+        <button type="button" class="btn play-btn" {{action "setCurrentPost" post}}>
+          {{fa-icon "play"}}
+        </button>
+      {{/index-post-item}}
+    {{else}}
+      There are no posts...
+    {{/each}}
+  </div>
+</div>
