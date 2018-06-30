@@ -46,10 +46,13 @@ export default Service.extend({
 
   applyTrackFunction(serviceTrackRef, functionString, scope) {
     try {
-      let onStep = new Function('index', 'data', 'array', functionString).bind(
-        scope
-      );
-      set(serviceTrackRef, 'customFunction', onStep);
+      let onStepFunction = new Function(
+        'index',
+        'data',
+        'array',
+        functionString
+      ).bind(scope);
+      set(serviceTrackRef, 'customFunction', onStepFunction);
       // TODO validation
       // warning about __.play()
     } catch (e) {

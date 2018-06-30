@@ -37,7 +37,7 @@
       flex-wrap: wrap;
       justify-content: space-between;
 
-      @include small-screen{
+      @include small-screen {
         flex-direction: column-reverse;
         .file-select {
           margin-bottom: 15px;
@@ -61,7 +61,7 @@
       padding: 5px 8px;
       width: 30px;
 
-      @include small-screen{
+      @include small-screen {
         font-size: 14px;
         height: 32px;
         position: absolute;
@@ -90,29 +90,6 @@
     }
   }
 
-  .function-editor {
-    flex-direction: column;
-    flex-wrap: wrap;
-    margin: 15px 0;
-    max-width: 100%;
-
-    fieldset {
-      textarea {
-        flex: 1 1 100%;
-        font-family: monospace;
-        max-width: 100%;
-      }
-    }
-
-    legend {
-      font-size: 14px;
-    }
-
-    .run-code-btn, .disable-code-btn {
-      margin: 15px 15px 0 0;
-      flex: 0 1 100px;
-    }
-  }
   .code-info {
     font-size: 12px;
     flex: 1 1 50%;
@@ -133,10 +110,7 @@
       margin-right: 15px;
     }
   }
-
 }
 
-
 .audio-track-sampler {
-
 }

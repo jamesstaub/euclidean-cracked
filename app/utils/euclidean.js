@@ -1,3 +1,5 @@
+/* eslint complexity: ["error", 8]*/
+
 // This module created by https://github.com/mkontogiannis/euclidean-rhythms
 
 /**

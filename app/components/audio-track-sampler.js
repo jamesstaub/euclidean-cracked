@@ -48,6 +48,7 @@ export default Component.extend(SequenceHelper, {
     }
   }),
 
+  // control the track gain with the ui slider
   gain: computed({
     set(key, val) {
       __(`#${get(this, 'gainId')}`).attr({ gain: val });
@@ -55,6 +56,7 @@ export default Component.extend(SequenceHelper, {
     }
   }),
 
+  // control the gain of a given step with ui multislider
   gainOnStep: computed({
     set(key, val) {
       __(`#${get(this, 'gainId')}-onstep`).attr({ gain: val });
