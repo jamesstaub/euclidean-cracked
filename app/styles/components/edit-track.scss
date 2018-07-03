@@ -27,7 +27,23 @@
     padding: 15px;
   }
 
-  .ui-controls {
+  .track-interface-switches {
+    left: 13px;
+    position: absolute;
+    top: 130px;
+    width: 50px;
+
+    .circle-btn {
+      background-color: darkgray;
+      border-radius: 50%;
+      display: block;
+      height: 24px;
+      margin-bottom: 5px;
+      width: 24px;
+    }
+  }
+
+  .inner-ui-controls {
     background-color: lightgray;
     flex: 1 1 auto;
     padding: 15px;
@@ -48,11 +64,7 @@
       flex: 1 1 auto;
       margin: 0 30px 0 15px;
     }
-    .interface-switches {
-      display: flex;
-      flex: 1 1 auto;
-      margin: 0 15px;
-    }
+
     .delete-track {
       border-radius: 50%;
       flex: 0 0 auto;

@@ -8,9 +8,28 @@
     value=track.gain
   }}
 
+  <div class="btn-group-vertical track-interface-switches" role="group" aria-label="toggle-interface">
+    <button {{action 'switchInterface' 'rhythm'}}
+      class="circle-btn btn-xs rhythm"
+      type="button">
+       {{bs-tooltip  placement="right" title="Euclidean Rhythm Sequence"}}
+      E
+    </button>
+    <button {{action 'switchInterface' 'steps'}}
+      class="circle-btn btn-xs steps"
+      type="button">
+       {{bs-tooltip  placement="right" title="Automation controls"}}
+      A
+    </button>
+    <button {{action 'switchInterface' 'function'}}
+      class="circle-btn btn-xs function"
+      type="button">
+       {{bs-tooltip placement="right"  title="Function editor"}}
+      F
+    </button>
+  </div>
 
-  <div class="ui-controls">
-
+  <div class="inner-ui-controls">
     {{#audio-track-sampler
       sequence=sequence
       directory=directory
@@ -28,11 +47,6 @@
       }}
 
       <div class="row interface-row">
-        <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
-          <button {{action 'switchInterface' 'rhythm'}} type="button" class="btn btn-default rhythm">Euclidean Rhythm</button>
-          <button {{action 'switchInterface' 'steps'}} type="button" class="btn btn-default steps">Step Automation</button>
-          <button {{action 'switchInterface' 'function'}} type="button" class="btn btn-default function">Function</button>
-        </div>
 
         <div class="file-select">
           {{ui-select
