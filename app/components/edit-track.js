@@ -1,18 +1,26 @@
 import Component from '@ember/component';
 import { get, set } from '@ember/object';
 import config from '../config/environment';
+import { computed } from '@ember/object';
 
 export default Component.extend({
   classNames: ['edit-track border'],
 
   filenames: config.audioFileNames,
   // FIXME: rethink filenames
-  directory: config.audioDirectory,
 
   canSave: true,
   uiStepSize: 40, // todo
 
   gainSliderSize: [20, 100],
+
+  sampleFolder: computed('config.audioDirectory', {
+    get() {
+      fetch(config.SAMPLE_DIRECTORY).then(directory => {
+        debugger;
+      });
+    }
+  }),
 
   didInsertElement() {
     this._super(...arguments);

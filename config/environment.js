@@ -24,12 +24,12 @@ module.exports = function(environment) {
     },
 
     firebase: {
-      apiKey: "AIzaSyAESGR-rqetWMWsOxCHjZHPvtgfs-UQ9L0",
-      authDomain: "euclidean-cracked.firebaseapp.com",
-      databaseURL: "https://euclidean-cracked.firebaseio.com",
-      projectId: "euclidean-cracked",
-      storageBucket: "",
-      messagingSenderId: "13537402201"
+      apiKey: 'AIzaSyAESGR-rqetWMWsOxCHjZHPvtgfs-UQ9L0',
+      authDomain: 'euclidean-cracked.firebaseapp.com',
+      databaseURL: 'https://euclidean-cracked.firebaseio.com',
+      projectId: 'euclidean-cracked',
+      storageBucket: '',
+      messagingSenderId: '13537402201'
     },
     torii: {
       sessionServiceName: 'session'
@@ -42,6 +42,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.APP.SAMPLE_DIRECTORY = 'http://localhost:8000/filepaths.txt';
   }
 
   if (environment === 'test') {
@@ -56,10 +57,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
   }
 
-  ENV.audioDirectory = '/audio/TR-808-Kit-05/'
+  ENV.audioDirectory = '/audio/TR-808-Kit-05/';
   ENV.audioFileNames = [
     'Bassdrum-01.wav',
     'Bassdrum-02.wav',
