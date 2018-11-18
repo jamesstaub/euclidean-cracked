@@ -1,25 +1,26 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('ui-dial', 'Integration | Component | ui dial', {
-  integration: true
-});
+module('Integration | Component | ui dial', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+    await render(hbs`{{ui-dial}}`);
 
-  this.render(hbs`{{ui-dial}}`);
+    assert.dom('*').hasText('');
 
-  assert.equal(this.$().text().trim(), '');
+    // Template block usage:
+    await render(hbs`
+      {{#ui-dial}}
+        template block text
+      {{/ui-dial}}
+    `);
 
-  // Template block usage:
-  this.render(hbs`
-    {{#ui-dial}}
-      template block text
-    {{/ui-dial}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+    assert.dom('*').hasText('template block text');
+  });
 });

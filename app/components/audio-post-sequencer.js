@@ -1,66 +1,53 @@
 import Component from '@ember/component';
-import { get, set } from '@ember/object';
+import { get } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
 
 export default Component.extend({
   audioService: service(),
 
-  classNames: ['audio-post-sequencer'],
-  dacGain: 0.9,
+  intervalSliderSize: [120, 20],
 
-  init() {
-    this._super(...arguments);
-    set(this, 'intervalSliderSize', [120, 20]);
-  },
+  classNames: ['audio-post-sequencer'],
+  dacGain: .9,
 
   didInsertElement() {
     this.initSignalChain();
     __().play();
   },
 
-  post: computed({
-    set(key, val) {
-      this.sendAction('loopAction', 'start');
-      return val;
-    }
-  }),
-
   willDestroyElement() {
-    __.loop('stop');
+    __.loop("stop");
     this.disconnectAll();
   },
 
   disconnectAll() {
     // remove all existing cracked audio nodes
-    __('*').unbind('step');
-    __('*').remove();
+    __("*").unbind("step");
+    __("*").remove();
   },
 
   initSignalChain() {
     this.disconnectAll();
     // create a compressor -> DAC node for other nodes to connect to
     __()
-      .compressor({
-        release: 0.1,
-        id: 'master-compressor',
-        class: `post-${get(this, 'post.id')}`
-      })
-      .dac(get(this, 'dacGain'));
+    .compressor({
+      release:.1,
+      id: 'master-compressor',
+      class:`post-${get(this, 'post.id')}`,
+    })
+    .dac(this.dacGain);
   },
 
   actions: {
+
     setLoopInterval(post, interval) {
       __.loop(interval);
       __.loop('start');
-
-      if (!this.readOnly) {
-        post.save();
-      }
+      post.save();
     },
 
     loopAction(action) {
-      let audio = get(this, 'audioService');
+      let audio = this.audioService;
       let interval = get(this, 'post.interval');
 
       switch (action) {
@@ -77,5 +64,6 @@ export default Component.extend({
           break;
       }
     }
-  }
+  },
+
 });

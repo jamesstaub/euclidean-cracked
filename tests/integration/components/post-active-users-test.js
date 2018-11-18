@@ -1,38 +1,26 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent(
-  'post-active-users',
-  'Integration | Component | post active users',
-  {
-    integration: true
-  }
-);
+module('Integration | Component | post active users', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
 
-  this.render(hbs`{{post-active-users}}`);
+    await render(hbs`{{post-active-users}}`);
 
-  assert.equal(
-    this.$()
-      .text()
-      .trim(),
-    ''
-  );
+    assert.dom('*').hasText('');
 
-  // Template block usage:
-  this.render(hbs`
-    {{#post-active-users}}
-      template block text
-    {{/post-active-users}}
-  `);
+    // Template block usage:
+    await render(hbs`
+      {{#post-active-users}}
+        template block text
+      {{/post-active-users}}
+    `);
 
-  assert.equal(
-    this.$()
-      .text()
-      .trim(),
-    'template block text'
-  );
+    assert.dom('*').hasText('template block text');
+  });
 });

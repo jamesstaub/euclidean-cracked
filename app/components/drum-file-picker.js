@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { set, computed } from "@ember/object";
 import { log } from 'handlebars';
 
-
 export default Component.extend({
   init() {
     this._super(...arguments);
@@ -28,7 +27,7 @@ export default Component.extend({
         img,
         type,
         choices,
-      }
+      };
     }
   }),
 
@@ -45,7 +44,6 @@ export default Component.extend({
         set(this, "file", newPath);
         console.log('filepath', newPath);
       }
-
     }
   }
 });

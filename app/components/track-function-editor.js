@@ -1,19 +1,14 @@
 import Component from '@ember/component';
-import { computed, get, set } from '@ember/object';
+import { computed, get, set } from "@ember/object";
 import { inject as service } from '@ember/service';
-import { bool, not } from '@ember/object/computed';
-import examples from 'euclidean-cracked/utils/example-functions';
+import { bool, not } from "@ember/object/computed";
 
 export default Component.extend({
-  classNames: ['track-function-editor'],
-
   audioService: service(),
 
   serviceTrackRef: computed('audioService.tracks.@each.trackId', {
     get() {
-      return get(this, 'audioService').findOrCreateTrackRef(
-        get(this, 'track.id')
-      );
+      return get(this, 'audioService').findOrCreateTrackRef(get(this, 'track.id'));
     }
   }),
 
@@ -27,24 +22,23 @@ export default Component.extend({
 
   // when the track's function property is different than
   // the function runnign on the audio service
-  hasUnloadedCode: computed('editorContent', 'loadedFunctionString', {
+  hasUnloadedCode: computed('function', 'loadedFunctionString',{
     get() {
-      let editorContent = get(this, 'editorContent');
+      let editorFunction = get(this, 'function');
       let loadedFunction = get(this, 'loadedFunctionString');
-      return loadedFunction != editorContent;
+      return loadedFunction != editorFunction;
+    },
+    set(key, value) {
+      return value;
     }
   }),
 
-  editorClean: not('hasUnloadedCode'),
-
-  init() {
-    this._super(...arguments);
-    // set(this, 'hasUnloadedCode', false);
-  },
+  showDiscardBtn: not('hasUnloadedCode'),
 
   actions: {
+
     onUpdateEditor(content) {
-      set(this, 'editorContent', content);
+      set(this, 'trackFunctionString', content);
       this.track.set('function', content);
       this.track.save();
     },
@@ -52,16 +46,13 @@ export default Component.extend({
     submitCode(audioTrackSampler) {
       let scope = get(audioTrackSampler, 'customFunctionScope');
 
-      let editorContent = get(this, 'editorContent');
+      let trackFunctionString = get(this, 'trackFunctionString');
       let serviceTrackRef = get(this, 'serviceTrackRef');
 
-      if (editorContent) {
-        get(this, 'audioService').applyTrackFunction(
-          serviceTrackRef,
-          editorContent,
-          scope
-        );
-        set(this, 'loadedFunctionString', editorContent);
+      if (trackFunctionString) {
+        get(this, 'audioService').applyTrackFunction(serviceTrackRef, trackFunctionString, scope);
+        set(this, 'loadedFunctionString', trackFunctionString);
+        set(this, 'isDisabled', false);
       }
     },
 
@@ -69,23 +60,14 @@ export default Component.extend({
       // revert the saved data to the function that is currently loaded
       let loadedFunction = get(this, 'loadedFunctionString');
       this.track.set('function', loadedFunction);
-      this.track.save().then(() => {
+      this.track.save().then(()=>{
         set(this, 'hasUnloadedCode', false);
       });
     },
 
     disableFunction() {
       set(get(this, 'serviceTrackRef'), 'customFunction', null);
-      set(this, 'hasUnloadedCode', true);
-    },
-
-    injectExample(name) {
-      // inject a code example selected from dropdown
-      let selectedExample = examples(name);
-      let existingContent = this.editorContent || '';
-      let combined = existingContent.concat(selectedExample);
-      set(this, 'editorContent', combined);
-      this.track.set('function', combined);
+      set(this, 'isDisabled', true);
     }
   }
 });

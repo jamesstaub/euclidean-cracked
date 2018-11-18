@@ -11,7 +11,7 @@ export default Component.extend({
   avatar: computed('session.currentUserModel.avatar', {
     get() {
       let sessionPhoto = get(this, 'session.currentUser.photoURL');
-      let userModelAvatar = get(this, 'session.currentUserModel.avatar')
+      let userModelAvatar = get(this, 'session.currentUserModel.avatar');
       return userModelAvatar || sessionPhoto;
     }
   }),
@@ -32,7 +32,7 @@ export default Component.extend({
         set(this, 'isCollapsed', true);
       }, 100);
       return true;
-    })
+    });
   },
 
   willDestroyElement() {

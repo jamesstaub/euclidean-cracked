@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import config from '../config/environment';
 
 export default DS.Model.extend({
+
   post: DS.belongsTo('post'),
 
   // belongs on post model but used here as
@@ -16,37 +17,37 @@ export default DS.Model.extend({
 
   filename: DS.attr('string', {
     defaultValue() {
-      return config.audioFileNames[0];
-    }
+ return config.audioFileNames[0]; 
+}
   }),
 
   hits: DS.attr('number', {
     defaultValue() {
-      return 3;
-    }
+ return 3; 
+}
   }),
 
   steps: DS.attr('number', {
     defaultValue() {
-      return 8;
-    }
+ return 8; 
+}
   }),
 
   offset: DS.attr('number', {
     defaultValue() {
-      return 0;
-    }
+ return 0; 
+}
   }),
 
   gain: DS.attr('number', {
     defaultValue() {
-      return 0.5;
-    }
+ return .5; 
+}
   }),
 
   gainStepSeq: DS.attr('string'),
   speedStepSeq: DS.attr('string'),
   loopStepArray: DS.attr('string'),
 
-  function: DS.attr('string')
+  function: DS.attr('string'),
 });

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Ember from 'ember';
 import Component from '@ember/component';
 import SequenceHelper from 'euclidean-cracked/mixins/sequence-helper';
@@ -7,6 +8,15 @@ import { alias } from '@ember/object/computed';
 const { service } = Ember.inject;
 
 export default Component.extend(SequenceHelper, {
+=======
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
+import SequenceHelper from  'euclidean-cracked/mixins/sequence-helper';
+import { get, set, computed } from "@ember/object";
+import { alias } from "@ember/object/computed";
+
+export default Component.extend(SequenceHelper,{
+>>>>>>> codemods after ember update
   classNames: ['step-param-sliders'],
   audioService: service(),
 
@@ -17,7 +27,11 @@ export default Component.extend(SequenceHelper, {
 
   multisliderSize: computed('sequence', {
     get() {
+<<<<<<< HEAD
       let width = get(this, 'uiStepSize') * 0.85 * get(this, 'sequence.length');
+=======
+      let width = (this.uiStepSize* .85) * get(this, 'sequence.length');
+>>>>>>> codemods after ember update
       let height = 100;
       return [width, height];
     }

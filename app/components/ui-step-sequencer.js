@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
-import { get, set, computed } from '@ember/object';
+import { get, set, computed } from "@ember/object";
 
 export default Component.extend(NexusMixin, {
   classNames: ['ui-step-sequencer'],
@@ -15,10 +15,10 @@ export default Component.extend(NexusMixin, {
       // (or nexus mixin)
 
       return {
-        size: [get(this, 'width'), 30],
-        mode: 'toggle',
-        rows: 1,
-        columns: get(this, 'length')
+        'size': [this.width, 30],
+        'mode': 'toggle',
+        'rows': 1,
+        'columns': this.length,
       };
     }
   }),
@@ -31,7 +31,7 @@ export default Component.extend(NexusMixin, {
 
   width: computed('length', {
     get() {
-      return get(this, 'length') * 34.1;
+      return this.length * 34.1;
     }
   }),
 
@@ -41,10 +41,10 @@ export default Component.extend(NexusMixin, {
       // update nexusui stepper value to step-1, then call
       // next() method to update UI
       if (typeof index != 'undefined') {
-        let sequencer = get(this, 'NexusElement');
+        let sequencer = this.NexusElement;
 
         if (typeof sequencer.stepper.value === 'number') {
-          let step = index % sequencer.stepper.max - 2;
+          let step = (index % sequencer.stepper.max) - 2;
 
           if (!index) {
             step = sequencer.stepper.max - 2;
@@ -54,25 +54,27 @@ export default Component.extend(NexusMixin, {
         sequencer.next();
       }
       return index;
-    }
+    },
   }),
 
   didUpdateAttrs() {
     this._super(...arguments);
 
-    let refreshOnUpdate = get(this, 'sequence') !== get(this, '_sequence');
+    let refreshOnUpdate =
+      this.sequence !== this._sequence;
 
-    if (refreshOnUpdate) {
+    if(refreshOnUpdate) {
       this._nexusInit();
-      if (get(this, 'sequence')) {
-        let sequencer = get(this, 'NexusElement');
-        sequencer.matrix.set.row(0, get(this, 'sequence'));
+      if (this.sequence) {
+        let sequencer = this.NexusElement;
+          sequencer.matrix.set.row(0, this.sequence);
       }
     }
-    set(this, '_sequence', get(this, 'sequence'));
+    set(this, '_sequence', this.sequence);
   },
 
   afterInitNexus(NexusElement) {
-    NexusElement.colorize('mediumLight', '#d9534f');
+    NexusElement.colorize("mediumLight","#d9534f");
   }
+
 });

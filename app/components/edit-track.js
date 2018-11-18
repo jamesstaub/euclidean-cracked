@@ -1,26 +1,18 @@
 import Component from '@ember/component';
-import { get, set } from '@ember/object';
+import { get, set } from "@ember/object";
 import config from '../config/environment';
-import { computed } from '@ember/object';
 
 export default Component.extend({
+
   classNames: ['edit-track border'],
 
   filenames: config.audioFileNames,
-  // FIXME: rethink filenames
+  directory: config.audioDirectory,
 
   canSave: true,
   uiStepSize: 40, // todo
 
   gainSliderSize: [20, 100],
-
-  sampleFolder: computed('config.audioDirectory', {
-    get() {
-      fetch(config.SAMPLE_DIRECTORY).then(directory => {
-        debugger;
-      });
-    }
-  }),
 
   didInsertElement() {
     this._super(...arguments);
@@ -38,16 +30,16 @@ export default Component.extend({
       // if server roundtrip causes UI problems
       track.set(parameter, value);
 
-      if (get(this, 'canSave')) {
+      if (this.canSave) {
         let onSave = track.save();
-        onSave.then(() => {
+        onSave.then(()=>{
           set(this, 'canSave', true);
         });
         set(this, 'canSave', false);
       }
     },
 
-    setTrackSequence(track, sequence) {
+    setTrackSequence(track, sequence){
       set(this, 'sequence', sequence);
     },
 
@@ -57,10 +49,9 @@ export default Component.extend({
 
     switchInterface(name) {
       set(this, 'visibleInterface', name);
-      this.$()
-        .find('.interface-switches .btn')
-        .removeClass('active');
+      this.$().find('.interface-switches .btn').removeClass('active');
       this.$(`.interface-switches .${name}`).addClass('active');
-    }
+    },
+
   }
 });

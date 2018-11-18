@@ -17,8 +17,8 @@ export default Component.extend(NexusMixin, {
     get() {
       return {
         'size': [150,30],
-        'options': get(this, 'choices')
-      }
+        'options': this.choices
+      };
     }
   }),
 
