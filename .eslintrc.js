@@ -10,8 +10,13 @@ module.exports = {
     ecmaVersion: 2017,
     sourceType: 'module'
   },
-  plugins: ['ember'],
-  extends: ['eslint:recommended', 'plugin:ember/recommended'],
+  plugins: [
+    'ember'
+  ],
+  extends: [
+    'eslint:recommended',
+    'plugin:ember/recommended'
+  ],
   env: {
     browser: true
   },
@@ -59,8 +64,11 @@ module.exports = {
   overrides: [
     {
       files: [
+        '.eslintrc.js',
+        '.template-lintrc.js',
         'ember-cli-build.js',
         'testem.js',
+        'blueprints/*/index.js',
         'config/**/*.js',
         'lib/*/index.js'
       ],
