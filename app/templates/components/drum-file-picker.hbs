@@ -1,0 +1,15 @@
+{{currentPath}}
+
+{{!-- {{ui-select
+  choices=choices
+  value=track.filename
+  onChangeValue=(action "updateFilename" track)
+}} --}}
+
+<select name="audio-file-picker" {{action 'onSelect' selectConfig.type on='change'}} >
+  {{#each selectConfig.choices as |choice|}}
+    <option value="{{choice}}">{{choice}}</option>
+  {{/each}}
+</select>
+
+<img src="{{selectConfig.img}}" alt=""> 

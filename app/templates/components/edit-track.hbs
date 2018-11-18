@@ -46,14 +46,19 @@
         stepIndex=sampler.stepIndex
       }}
 
+<<<<<<< HEAD
+=======
+      {{drum-file-picker track=track updateFilename=(action "updateFilename")}}
+
+>>>>>>> adds file picker for drum api
       <div class="row interface-row">
         {{sampleFolder}}
         <div class="file-select">
-          {{ui-select
+          {{!-- {{ui-select
             choices=filenames
             onChangeValue=(action "updateFilename" track)
             value=track.filename
-          }}
+          }} --}}
         </div>
         <button type='delete' class='btn btn-danger delete-track'
           {{action 'deleteTrack' track}} >
