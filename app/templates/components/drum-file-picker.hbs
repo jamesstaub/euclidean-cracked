@@ -2,14 +2,20 @@
 
 {{!-- {{ui-select
   choices=choices
-  value=track.filename
-  onChangeValue=(action "updateFilename" track)
+  value='currentPath'
+  onChangeValue=(action "onSelect" track)
 }} --}}
 
-<select name="audio-file-picker" {{action 'onSelect' selectConfig.type on='change'}} >
-  {{#each selectConfig.choices as |choice|}}
+{{#if showBackButton}}
+  <button {{action 'back'}} >
+    <i class="fa fa-angle-left"></i>
+  </button>
+{{/if}}
+
+<select name="audio-file-picker" onchange={{action "onSelect" value="target.value"}} >
+  {{#each choices as |choice|}}
     <option value="{{choice}}">{{choice}}</option>
   {{/each}}
-</select>
+</select> 
 
-<img src="{{selectConfig.img}}" alt=""> 
+<img src="{{img}}" alt=""> 

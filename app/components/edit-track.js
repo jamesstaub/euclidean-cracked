@@ -5,10 +5,6 @@ import config from '../config/environment';
 export default Component.extend({
 
   classNames: ['edit-track border'],
-
-  filenames: config.audioFileNames,
-  directory: config.audioDirectory,
-
   canSave: true,
   uiStepSize: 40, // todo
 
