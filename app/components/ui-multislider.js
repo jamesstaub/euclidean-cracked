@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
-import { get, set, computed } from "@ember/object";
+import { set, computed } from "@ember/object";
 
 import $ from "jquery";
 

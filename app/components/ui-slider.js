@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
-import { get, computed } from '@ember/object';
+import { computed } from '@ember/object';
 
 export default Component.extend(NexusMixin, {
   classNames: ['ui-slider'],
@@ -17,21 +17,12 @@ export default Component.extend(NexusMixin, {
   ElementOptions: computed('max', 'step', 'value', 'size', {
     get() {
       return {
-<<<<<<< HEAD
-        size: get(this, 'size') || [20, 70],
-        mode: 'relative', // "absolute" or "relative"
-        min: 0,
-        max: get(this, 'max') || 1,
-        step: get(this, 'step') || 0,
-        value: get(this, 'value')
-=======
         'size': this.size || [20, 70],
         'mode': 'relative', // "absolute" or "relative"
         'min': 0,
         'max': this.max || 1,
         'step': this.step || 0,
         'value': this.value
->>>>>>> codemods after ember update
       };
     }
   })

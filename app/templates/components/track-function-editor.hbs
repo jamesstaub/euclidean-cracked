@@ -1,61 +1,98 @@
 {{yield}}
-
-  <form {{action 'submitCode' sampler on='submit'}} class="function-editor">
-    {{!-- <legend>
+<form class="function-editor" {{action "submitCode" sampler on="submit"}}>
+  {{! <legend>
       <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
       <p>script will be called on each step of the step sequencer.</p>
-    </legend> --}}
-
-    <div class="function-controls">
-
-      <div class="load-buttons">
-        <button class="btn btn-xs btn-primary run-code-btn" disabled={{editorClean}} type="submit" name="button">
-          {{#if editorClean}}
+    </legend> }}
+  <div class="function-controls">
+    <div class="load-buttons">
+      <button
+        class="btn btn-xs btn-primary run-code-btn"
+        disabled={{editorClean}}
+        type="submit"
+        name="button"
+      >
+        {{#if editorClean}}
           up to date
-          {{else}}
-          {{if functionIsLoaded 'update' 'load'}}
-          {{/if}}
-        </button>
-
-        {{#if functionIsLoaded}}
-        <button class="btn btn-xs disable-code-btn" type="button" {{action "disableFunction"}}>disable </button>
-        <button class="btn btn-xs disable-code-btn" disabled={{editorClean}} type="button" {{action "discardChanges"}}>revert changes</button>
-
         {{else}}
-        <span>function not loaded</span>
+          {{if functionIsLoaded "update" "load"}}
         {{/if}}
-      </div>
-
-      {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
-        {{#dd.button class="btn-xs"}}Examples <span class="caret"></span>{{/dd.button}}
-        {{#dd.menu as |menu|}}
-          {{#menu.item}} <span class="dropdown-header">Tutorial</span> {{/menu.item}}
-          {{#menu.item}}
-            <a class="dropdown-item" {{action 'injectExample' 'sequencerVariables'}}>sequencer variables</a>
-          {{/menu.item}}
-          {{#menu.item}}
-            <a class="dropdown-item" {{action 'injectExample' 'audioNodes'}}>audio nodes</a>
-          {{/menu.item}}
-          {{menu.divider}}
-          {{#menu.item}} <span class="dropdown-header">Examples</span> {{/menu.item}}
-          {{#menu.item}}
-            <a class="dropdown-item" {{action 'injectExample' 'filterSweep'}}>filter sweep</a>
-          {{/menu.item}}
-        {{/dd.menu}}
-      {{/bs-dropdown}}
+      </button>
+      {{#if functionIsLoaded}}
+        <button
+          class="btn btn-xs disable-code-btn"
+          type="button"
+          {{action "disableFunction"}}
+        >
+          disable
+        </button>
+        <button
+          class="btn btn-xs disable-code-btn"
+          disabled={{editorClean}}
+          type="button"
+          {{action "discardChanges"}}
+        >
+          revert changes
+        </button>
+      {{else}}
+        <span>
+          function not loaded
+        </span>
+      {{/if}}
     </div>
-
-    {{ember-ace
-      lines=20
-      value=function
-      mode="ace/mode/javascript"
-      theme="ace/theme/ambiance"
-      update=(action 'onUpdateEditor')}}
-
-  </form>
-
-
+    {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
+      {{#dd.button class="btn-xs"}}
+        Examples<span class="caret"></span>
+      {{/dd.button}}
+      {{#dd.menu as |menu|}}
+        {{#menu.item}}
+          <span class="dropdown-header">
+            Tutorial
+          </span>
+        {{/menu.item}}
+        {{#menu.item}}
+          <a
+            class="dropdown-item"
+            {{action "injectExample" "sequencerVariables"}}
+          >
+            sequencer variables
+          </a>
+        {{/menu.item}}
+        {{#menu.item}}
+          <a class="dropdown-item" {{action "injectExample" "audioNodes"}}>
+            audio nodes
+          </a>
+        {{/menu.item}}
+        {{menu.divider}}
+        {{#menu.item}}
+          <span class="dropdown-header">
+            Examples
+          </span>
+        {{/menu.item}}
+        {{#menu.item}}
+          <a class="dropdown-item" {{action "injectExample" "filterSweep"}}>
+            filter sweep
+          </a>
+        {{/menu.item}}
+      {{/dd.menu}}
+    {{/bs-dropdown}}
+  </div>
+  {{ember-ace
+    lines=20
+    value=function
+    mode="ace/mode/javascript"
+    theme="ace/theme/ambiance"
+    update=(action "onUpdateEditor")
+  }}
+</form>
 <div class="code-info">
-  <p><strong>note:</strong> this code will be called repeatedly, so creating new objects or audio nodes is not recommended.</p>
-  <p>instead, use the global code editor (coming soon) (which is only called once on initialization) to create audio nodes, or other objects. you can then access and modify those nodes with this code. </p>
+  <p>
+    <strong>
+      note:
+    </strong>
+    this code will be called repeatedly, so creating new objects or audio nodes is not recommended.
+  </p>
+  <p>
+    instead, use the global code editor (coming soon) (which is only called once on initialization) to create audio nodes, or other objects. you can then access and modify those nodes with this code.
+  </p>
 </div>

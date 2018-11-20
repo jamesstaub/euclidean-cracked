@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import { get, set } from "@ember/object";
+import { set } from "@ember/object";
 
 export default Service.extend({
   tracks: [],
@@ -46,7 +46,13 @@ export default Service.extend({
 
   applyTrackFunction(serviceTrackRef, functionString, scope) {
     try {
-      let onStep = new Function('index','data', 'array', functionString).bind(scope);
+      let onStep = new Function(
+        'index',
+        'data', 
+        'array', 
+        functionString
+      ).bind(scope);
+
       set(serviceTrackRef, 'customFunction', onStep);
       // TODO validation
       // warning about __.play()

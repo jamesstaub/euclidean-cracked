@@ -1,42 +1,36 @@
 import Component from '@ember/component';
-import { get, set } from "@ember/object";
-import config from '../config/environment';
+import { set } from "@ember/object";
+import { task, waitForProperty } from 'ember-concurrency';
 
 export default Component.extend({
-
-  classNames: ['edit-track border'],
-  canSave: true,
+  classNames: ["edit-track border"],
   uiStepSize: 40, // todo
-
   gainSliderSize: [20, 100],
 
   didInsertElement() {
     this._super(...arguments);
-    this.send('switchInterface', 'rhythm');
+    this.send("switchInterface", "rhythm");
   },
+
+  saveTrack: task(function*(track) {
+    yield track.save();
+  }).keepLatest(),
 
   actions: {
     updateFilename(track, filename) {
-      track.set('filename', filename.value);
-      track.save();
+      track.set("filename", filename.value);
+      this.saveTrack.perform(track);
     },
 
     updateSequenceParam(track, parameter, value) {
       // NOTE: try using store.push to instantly update the UI
       // if server roundtrip causes UI problems
       track.set(parameter, value);
-
-      if (this.canSave) {
-        let onSave = track.save();
-        onSave.then(()=>{
-          set(this, 'canSave', true);
-        });
-        set(this, 'canSave', false);
-      }
+      this.saveTrack.perform(track);
     },
 
-    setTrackSequence(track, sequence){
-      set(this, 'sequence', sequence);
+    setTrackSequence(track, sequence) {
+      set(this, "sequence", sequence);
     },
 
     deleteTrack(track) {
@@ -44,10 +38,11 @@ export default Component.extend({
     },
 
     switchInterface(name) {
-      set(this, 'visibleInterface', name);
-      this.$().find('.interface-switches .btn').removeClass('active');
-      this.$(`.interface-switches .${name}`).addClass('active');
-    },
-
+      set(this, "visibleInterface", name);
+      this.$()
+        .find(".interface-switches .btn")
+        .removeClass("active");
+      this.$(`.interface-switches .${name}`).addClass("active");
+    }
   }
 });

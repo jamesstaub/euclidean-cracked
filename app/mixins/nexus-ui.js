@@ -38,7 +38,8 @@ export default Mixin.create({
         if (get(this, 'value') !== v) {
           set(this, 'value', v);
         }
-        // components using this mixin must have an action onChangeValue passed in
+        // components using this mixin must 
+        // have an action onChangeValue passed in
         get(this, 'onChangeValue')(v);
       });
     }

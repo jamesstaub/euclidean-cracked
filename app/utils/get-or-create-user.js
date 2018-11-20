@@ -17,7 +17,10 @@ export default function getOrCreateUser(currentUser, store) {
     let userRecord;
 
     if (currentUser) {
-      store.query('user', {orderBy: 'uid', equalTo: currentUser.uid }).then( (records) =>{
+      store.query('user', {
+        orderBy: 'uid',
+        equalTo: currentUser.uid 
+      }).then( (records) => {
         if(records.get('length') === 0){
           let defaults = getAnonDefaults();
           let avatar = currentUser.photoURL || defaults.avatar;

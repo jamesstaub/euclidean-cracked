@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { set,  } from "@ember/object";
+import { set  } from "@ember/object";
 import { reads, bool } from '@ember/object/computed';
 
 export default Component.extend({
@@ -33,7 +33,6 @@ export default Component.extend({
       const choices = audio.length ? audio : dirs;
  
       if(dirs.length === 1) {
-        
         if(requestParentDir) {
           path = this._getParentPath(path);
         } else {
@@ -48,7 +47,6 @@ export default Component.extend({
         type: type,
         choices: choices
       };
-      
 
       set(this, 'results', results);
       return results;
@@ -62,13 +60,13 @@ export default Component.extend({
         set(this, 'currentPath', newPath);
         this.updateSelectOptions(newPath);
       } else if (this.type === 'audio'){
-        this.track.set('filename', newPath)
-        this.track.save();
+        this.track.set('filename', newPath);
+        this.saveTrack.perform(this.track);
       }
     },
 
     back() {
-      let newPath = this._getParentPath(this.currentPath)
+      let newPath = this._getParentPath(this.currentPath);
       this.updateSelectOptions(newPath, true);
     }
   },
