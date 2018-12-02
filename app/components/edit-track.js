@@ -17,8 +17,8 @@ export default Component.extend({
   }).keepLatest(),
 
   actions: {
-    updateFilename(track, filename) {
-      track.set('filename', filename.value);
+    updateFilepath(track, filepath) {
+      track.set('filepath', filepath.value);
       this.saveTrack.perform(track);
     },
 

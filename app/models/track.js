@@ -14,7 +14,7 @@ export default DS.Model.extend({
 
   isLooping: DS.attr('boolean'),
 
-  filename: DS.attr('string', {
+  filepath: DS.attr('string', {
     // TODO request file server api
     // labelled categories for random kick, snare, hat etc
     // defaultValue() {

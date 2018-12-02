@@ -15,11 +15,9 @@ export default Component.extend({
   didReceiveAttrs() {
     this._super(...arguments);
     let path = '';
-    if (this.track && this.track.filename) {
-      console.log('init dirs from track');
-      this.initDirectoryFromTrack(this.track.filename);
+    if (this.track && this.track.filepath) {
+      this.initDirectoryFromTrack(this.track.filepath);
     } else {
-      console.log('update dirs');
       this.updateDirectories(path);
     }
   },
@@ -39,8 +37,8 @@ export default Component.extend({
     return content;
   },
 
-  async initDirectoryFromTrack(filename) {
-    let path = filename.split('/')
+  async initDirectoryFromTrack(filepath) {
+    let path = filepath.split('/')
     path.pop();
     let response = await this.fetchDirectory(path.join('/'));
     if (response.ancestor_tree) {
@@ -54,32 +52,16 @@ export default Component.extend({
   async updateDirectories(pathToFetch) {
     set(this, 'currentPath', pathToFetch);
     let response = await this.fetchDirectory(pathToFetch);
-
-      let directory = this.parseResponse(response);
-      // clear any child directories when clicking back higher up the tree
-      const pathDepth = directory.path
-        .split('/')
-        .filter(s => s.length).length;
-      while (this.directories.length > pathDepth) {
-        this.directories.pop();
-      }
-
-      this.directories.pushObject(directory);
-
+    let directory = this.parseResponse(response);
+    // clear any child directories when clicking back higher up the tree
+    const pathDepth = directory.path
+      .split('/')
+      .filter(s => s.length).length;
+    while (this.directories.length > pathDepth) {
+      this.directories.pop();
+    }
+    this.directories.pushObject(directory);
   },
-
-
-  // async updateDirectoriesFromFilename(filename) {
-  //   const pathDepth = filename.split('/').filter(s => s.length).length;
-  //   // todo rerwite as task
-  //   while (pathDepth > this.directories.length) {
-  //     let pathToFetch = this.directories.length ? this.directories.lastObject.path : '';
-  //     console.log('dir', pathToFetch);
-  //     let directory = await this.fetchDirectory(pathToFetch);
-  //     this.directories.pushObject(directory);
-  //   }
-    
-  // },
 
   actions: {
     onSelect(directory, choice) {
@@ -90,7 +72,7 @@ export default Component.extend({
         set(this, 'currentPath', newPath);
         this.updateDirectories(newPath);
       } else if (type === 'audio') {
-        this.track.set('filename', newPath);
+        this.track.set('filepath', newPath);
         this.saveTrack.perform(this.track);
       }
     },

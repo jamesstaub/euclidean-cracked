@@ -41,9 +41,9 @@ export default Component.extend(SequenceHelper, {
     }
   }),
 
-  path: computed('directory', 'filename', {
+  path: computed('directory', 'filepath', {
     get() {
-      return `http://localhost:8080/static${this.filename}`;
+      return `http://localhost:8080/static${this.filepath}`;
     }
   }),
 
@@ -95,15 +95,15 @@ export default Component.extend(SequenceHelper, {
     this._super(...arguments);
     // cache and compare properties that require
     // a refresh of sampler nodes on update
-    // ie [sequence, filename, ...
+    // ie [sequence, filepath, ...
     let refreshOnUpdate =
-      this.sequence !== this._sequence || this.filename !== this._filename;
+      this.sequence !== this._sequence || this.filepath !== this._filepath;
 
     if (refreshOnUpdate) {
       this.initializeSampler.perform();
     }
     set(this, '_sequence', this.sequence);
-    set(this, '_filename', this.filename);
+    set(this, '_filepath', this.filepath);
   },
 
   willDestroy() {
@@ -117,7 +117,7 @@ export default Component.extend(SequenceHelper, {
       s => typeof s !== 'undefined'
     );
 
-    yield waitForProperty(this, 'filename');
+    yield waitForProperty(this, 'filepath');
 
     if (typeof this.stepIndex === 'undefined') {
       set(this, 'stepIndex', 0);
@@ -158,7 +158,7 @@ export default Component.extend(SequenceHelper, {
     serviceTracks.removeObject(ref);
   },
 
-  // TODO: how to set new filename without rebuilding node?
+  // TODO: how to set new filepath without rebuilding node?
   buildNode() {
     set(this, 'hasBuiltNode', true);
     __()

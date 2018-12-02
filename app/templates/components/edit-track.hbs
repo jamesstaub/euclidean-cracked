@@ -49,7 +49,7 @@
     track=track
     gain=track.gain
     isLooping=track.isLooping
-    filename=track.filename
+    filepath=track.filepath
     outputNodeSelector="#master-compressor" as |sampler|
   }}
     {{ui-step-sequencer sequence=sequence stepIndex=sampler.stepIndex}}
@@ -67,7 +67,7 @@
       {{drum-file-picker
         track=track
         saveTrack=saveTrack
-        updateFilename=(action "updateFilename")
+        updateFilepath=(action "updateFilepath")
       }}
     {{/if}}
     {{#if (eq visibleInterface "steps")}}
