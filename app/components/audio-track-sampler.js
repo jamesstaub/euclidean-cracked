@@ -8,9 +8,9 @@ import { alias } from '@ember/object/computed';
 export default Component.extend(SequenceHelper, {
   audioService: service(),
 
-  classNames: ["audio-track-sampler"],
+  classNames: ['audio-track-sampler'],
 
-  customFunctionScope: computed("samplerId", "gainId", "lowpassId", {
+  customFunctionScope: computed('samplerId', 'gainId', 'lowpassId', {
     get() {
       // variables available for user defined track functions
       return {
@@ -21,29 +21,29 @@ export default Component.extend(SequenceHelper, {
     }
   }),
 
-  trackId: alias("track.id"),
+  trackId: alias('track.id'),
 
-  samplerId: computed("trackId", {
+  samplerId: computed('trackId', {
     get() {
       return `sampler-${this.trackId}`;
     }
   }),
 
-  gainId: computed("samplerId", {
+  gainId: computed('samplerId', {
     get() {
       return `${this.samplerId}-gain`;
     }
   }),
 
-  lowpassId: computed("samplerId", {
+  lowpassId: computed('samplerId', {
     get() {
       return `${this.samplerId}-lowpass`;
     }
   }),
 
-  path: computed("directory", "filename", {
+  path: computed('directory', 'filename', {
     get() {
-      return `http://localhost:8080/static/${this.filename}`;
+      return `http://localhost:8080/static${this.filename}`;
     }
   }),
 
@@ -78,7 +78,7 @@ export default Component.extend(SequenceHelper, {
     }
   }),
 
-  stepsUntilStart: computed("sequence.length", "stepIndex", {
+  stepsUntilStart: computed('sequence.length', 'stepIndex', {
     get() {
       if (this.sequence) {
         return this.sequence.length - this.stepIndex;
@@ -102,8 +102,8 @@ export default Component.extend(SequenceHelper, {
     if (refreshOnUpdate) {
       this.initializeSampler.perform();
     }
-    set(this, "_sequence", this.sequence);
-    set(this, "_filename", this.filename);
+    set(this, '_sequence', this.sequence);
+    set(this, '_filename', this.filename);
   },
 
   willDestroy() {
@@ -113,16 +113,16 @@ export default Component.extend(SequenceHelper, {
   initializeSampler: task(function*() {
     let sequence = yield waitForProperty(
       this,
-      "sequence",
-      s => typeof s !== "undefined"
+      'sequence',
+      s => typeof s !== 'undefined'
     );
 
-    yield waitForProperty(this, "filename", f => typeof f !== "undefined");
+    yield waitForProperty(this, 'filename');
 
-    if (typeof this.stepIndex === "undefined") {
-      set(this, "stepIndex", 0);
+    if (typeof this.stepIndex === 'undefined') {
+      set(this, 'stepIndex', 0);
     }
-    yield waitForProperty(this, "stepIndex", 0);
+    yield waitForProperty(this, 'stepIndex', 0);
 
     if (sequence.length) {
       this.removeAllNodes();
@@ -134,7 +134,7 @@ export default Component.extend(SequenceHelper, {
   }).drop(),
 
   removeAllNodes() {
-    __(`#${this.samplerId}`).unbind("step");
+    __(`#${this.samplerId}`).unbind('step');
 
     // NOTE: any cracked node created in this component must be selected
     // for tear down here, otherwise lingering nodes will break
@@ -150,17 +150,17 @@ export default Component.extend(SequenceHelper, {
       __(selector).remove();
     });
 
-    set(this, "hasBuiltNode", false);
+    set(this, 'hasBuiltNode', false);
 
     // remove reference from service
-    let serviceTracks = get(this, "audioService.tracks");
-    let ref = serviceTracks.findBy("trackId", this.trackId);
+    let serviceTracks = get(this, 'audioService.tracks');
+    let ref = serviceTracks.findBy('trackId', this.trackId);
     serviceTracks.removeObject(ref);
   },
 
   // TODO: how to set new filename without rebuilding node?
   buildNode() {
-    set(this, "hasBuiltNode", true);
+    set(this, 'hasBuiltNode', true);
     __()
       .sampler({
         id: this.samplerId,
@@ -187,11 +187,11 @@ export default Component.extend(SequenceHelper, {
 
   // callback functions to be called on each step of sequencer
   onStepCallback(index, data, array) {
-    set(this, "stepIndex", index);
-    let serviceTracks = get(this, "audioService.tracks");
+    set(this, 'stepIndex', index);
+    let serviceTracks = get(this, 'audioService.tracks');
     // TODO: refactor this so findBy is not called on every step
     // also: find a clearer way of distinguishing between track model and service track reference
-    let trackRef = serviceTracks.findBy("trackId", this.trackId);
+    let trackRef = serviceTracks.findBy('trackId', this.trackId);
 
     if (data) {
       __(this).stop();
@@ -200,15 +200,15 @@ export default Component.extend(SequenceHelper, {
       __(this).attr({ loop: this.isLooping });
 
       if (trackRef.gainStepArray) {
-        set(this, "gainOnStep", trackRef.gainStepArray[index]);
+        set(this, 'gainOnStep', trackRef.gainStepArray[index]);
       }
 
       if (trackRef.speedStepArray) {
-        set(this, "speedOnStep", trackRef.speedStepArray[index]);
+        set(this, 'speedOnStep', trackRef.speedStepArray[index]);
       }
 
       if (trackRef.loopEndStepArray) {
-        set(this, "loopEndOnStep", trackRef.loopEndStepArray[index]);
+        set(this, 'loopEndOnStep', trackRef.loopEndStepArray[index]);
       }
     } else {
       __(this).stop();
@@ -228,9 +228,9 @@ export default Component.extend(SequenceHelper, {
     let serviceTrackRef = this.audioService.findOrCreateTrackRef(trackId);
 
     let sequenceArrayKeys = [
-      "gainStepArray",
-      "speedStepArray",
-      "loopEndStepArray"
+      'gainStepArray',
+      'speedStepArray',
+      'loopEndStepArray'
     ];
 
     sequenceArrayKeys.forEach(key => {
@@ -249,7 +249,7 @@ export default Component.extend(SequenceHelper, {
     let callback = this.onStepCallback.bind(this);
     let sequence = this.sequence;
 
-    let customFunction = get(this, "track.function");
+    let customFunction = get(this, 'track.function');
 
     if (customFunction) {
       let scope = this.customFunctionScope;
@@ -261,8 +261,8 @@ export default Component.extend(SequenceHelper, {
     }
 
     // set sampler selector, onStep callback and rhythm sequence
-    set(serviceTrackRef, "selector", selector);
-    set(serviceTrackRef, "callback", callback);
-    set(serviceTrackRef, "sequence", sequence);
+    set(serviceTrackRef, 'selector', selector);
+    set(serviceTrackRef, 'callback', callback);
+    set(serviceTrackRef, 'sequence', sequence);
   }
 });

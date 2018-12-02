@@ -1,15 +1,15 @@
 import Component from '@ember/component';
-import { set } from "@ember/object";
+import { set } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
 
 export default Component.extend({
-  classNames: ["edit-track border"],
+  classNames: ['edit-track border'],
   uiStepSize: 40, // todo
   gainSliderSize: [20, 100],
 
   didInsertElement() {
     this._super(...arguments);
-    this.send("switchInterface", "rhythm");
+    this.send('switchInterface', 'rhythm');
   },
 
   saveTrack: task(function*(track) {
@@ -18,7 +18,7 @@ export default Component.extend({
 
   actions: {
     updateFilename(track, filename) {
-      track.set("filename", filename.value);
+      track.set('filename', filename.value);
       this.saveTrack.perform(track);
     },
 
@@ -30,7 +30,7 @@ export default Component.extend({
     },
 
     setTrackSequence(track, sequence) {
-      set(this, "sequence", sequence);
+      set(this, 'sequence', sequence);
     },
 
     deleteTrack(track) {
@@ -38,11 +38,11 @@ export default Component.extend({
     },
 
     switchInterface(name) {
-      set(this, "visibleInterface", name);
+      set(this, 'visibleInterface', name);
       this.$()
-        .find(".interface-switches .btn")
-        .removeClass("active");
-      this.$(`.interface-switches .${name}`).addClass("active");
+        .find('.interface-switches .btn')
+        .removeClass('active');
+      this.$(`.interface-switches .${name}`).addClass('active');
     }
   }
 });

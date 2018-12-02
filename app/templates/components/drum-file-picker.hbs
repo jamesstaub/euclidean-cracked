@@ -1,22 +1,22 @@
 {{currentPath}}
-{{!-- {{ui-select
-  choices=choices
-  value='currentPath'
-  onChangeValue=(action "onSelect" track)
-}} --}}
-{{#if showBackButton}}
-  <button {{action "back"}}>
-    <i class="fa fa-angle-left"></i>
-  </button>
-{{/if}}
-<select
-  name="audio-file-picker"
-  onchange={{action "onSelect" value="target.value"}}
->
-  {{#each choices as |choice|}}
-    <option value="{{choice}}">
-      {{choice}}
-    </option>
+
+<div class="drum-file-picker">
+  <img src={{img}} />
+  {{#each directories as |directory|}}
+    <div class='directory-wrapper'>
+      <ul>
+        {{#each directory.choices as |choice|}}
+          <li>
+            <button {{action "onSelect" directory choice}}>
+              {{#if (eq directory.type "audio")}}
+                {{filename-ui choice}}
+              {{else}}
+                {{choice}}
+              {{/if}}
+            </button>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
   {{/each}}
-</select>
-<img src="{{img}}" alt="" />
+</div>

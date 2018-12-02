@@ -12,6 +12,11 @@
   role="group"
   aria-label="toggle-interface"
 >
+  <button class="circle-btn btn-xs filePicker" type="button" {{action "switchInterface" "filePicker"}}>
+    {{bs-tooltip placement="right" title="Select a drum sample"}}
+    D
+  </button>
+
   <button
     class="circle-btn btn-xs rhythm"
     type="button"
@@ -48,28 +53,23 @@
     outputNodeSelector="#master-compressor" as |sampler|
   }}
     {{ui-step-sequencer sequence=sequence stepIndex=sampler.stepIndex}}
-    {{drum-file-picker
-      track=track
-      saveTrack=saveTrack
-      updateFilename=(action "updateFilename")
-    }}
-    <div class="row interface-row">
-      {{sampleFolder}}
-      <div class="file-select">
-        {{!-- {{ui-select
-            choices=filenames
-            onChangeValue=(action "updateFilename" track)
-            value=track.filename
-          }} --}}
-      </div>
+
+
       <button
         type="delete"
-        class="btn btn-danger delete-track"
+        class="btn btn-danger delete-track-btn"
         {{action "deleteTrack" track}}
       >
         ✕
       </button>
-    </div>
+
+    {{#if (eq visibleInterface "filePicker")}}
+      {{drum-file-picker
+        track=track
+        saveTrack=saveTrack
+        updateFilename=(action "updateFilename")
+      }}
+    {{/if}}
     {{#if (eq visibleInterface "steps")}}
       {{step-param-sliders
         uiStepSize=uiStepSize

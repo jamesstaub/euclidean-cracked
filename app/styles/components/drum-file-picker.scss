@@ -1,0 +1,20 @@
+.drum-file-picker {
+  display: flex;
+  overflow-x: scroll;
+  text-align: left;
+  button {
+    background: none;
+  }
+
+  .directory-wrapper {
+    box-shadow: 1px 1px 3px darkgray;
+    flex: 0 0 33%;
+    height: 200px;
+    overflow-y: scroll;
+    position: relative;
+    ul {
+      list-style: none;
+      padding:0;
+    }
+  }
+}
