@@ -60,27 +60,5 @@ module.exports = function(environment) {
   if (environment === 'production') {
   }
 
-  ENV.audioDirectory = '/audio/TR-808-Kit-05/';
-  ENV.audioFileNames = [
-    'Bassdrum-01.wav',
-    'Bassdrum-02.wav',
-    'Bassdrum-03.wav',
-    'Bassdrum-04.wav',
-    'Bassdrum-05.wav',
-    'Cabasa.wav',
-    'Clap.wav',
-    'Claves.wav',
-    'Cowbell.wav',
-    'Crash-01.wav',
-    'Crash-02.wav',
-    'Hat Closed.wav',
-    'Hat Open.wav',
-    'Tom H.wav',
-    'Tom L.wav',
-    'Tom M.wav',
-    'Rimshot.wav',
-    'Snaredrum.wav'
-  ];
-
   return ENV;
 };

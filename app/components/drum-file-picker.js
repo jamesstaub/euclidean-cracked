@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import { set  } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { task, waitForProperty} from 'ember-concurrency';
 
 export default Component.extend({
   store: service(),
@@ -9,7 +8,6 @@ export default Component.extend({
   init() {
     this._super(...arguments);
     set(this, 'directories', []);
-    set(this, 'currentPath', '');
   },
 
   didReceiveAttrs() {
@@ -50,7 +48,6 @@ export default Component.extend({
   },
 
   async updateDirectories(pathToFetch) {
-    set(this, 'currentPath', pathToFetch);
     let response = await this.fetchDirectory(pathToFetch);
     let directory = this.parseResponse(response);
     // clear any child directories when clicking back higher up the tree
@@ -65,11 +62,11 @@ export default Component.extend({
 
   actions: {
     onSelect(directory, choice) {
+      set(directory, 'currentSelection', choice);
       let newPath = `${directory.path}${choice}`;
       let type = directory.type;
       if (type === 'dir') {
         newPath = `${newPath}/`;
-        set(this, 'currentPath', newPath);
         this.updateDirectories(newPath);
       } else if (type === 'audio') {
         this.track.set('filepath', newPath);

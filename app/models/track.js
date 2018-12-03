@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-
+import { computed } from '@ember/object';
 export default DS.Model.extend({
 
   post: DS.belongsTo('post'),
@@ -19,6 +19,17 @@ export default DS.Model.extend({
     // labelled categories for random kick, snare, hat etc
     // defaultValue() {
     // }
+  }),
+
+  filename: computed('filepath', {
+    get() {
+      if(this.filepath) {
+        let filename = this.filepath.replace(/^.*[\\\/]/, '');
+        filename = filename.split('.');
+        filename.pop();
+        return filename;
+      }
+    }
   }),
 
   hits: DS.attr('number', {

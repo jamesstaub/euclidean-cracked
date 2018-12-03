@@ -4,6 +4,11 @@
   text-align: left;
   button {
     background: none;
+    border: 0;
+    text-align: left;
+    width: 100%;
+    outline-color: darkgray;
+    outline-width: 2px;
   }
 
   .directory-wrapper {
@@ -15,6 +20,13 @@
     ul {
       list-style: none;
       padding:0;
+      li:hover {
+        background-color: darkgray;
+      }
+      li.selected {
+        background-color: darken(darkgray, 20%);
+        color: lightgray;
+      }
     }
   }
 }

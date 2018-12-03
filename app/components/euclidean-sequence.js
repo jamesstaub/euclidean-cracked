@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import E from 'euclidean-cracked/utils/euclidean';
-import { get, set } from "@ember/object";
+import { set } from "@ember/object";
 import { next } from "@ember/runloop";
 
 Array.prototype.rotate = (function() {

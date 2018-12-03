@@ -1,12 +1,12 @@
-{{currentPath}}
 
+<h3>{{track.filename}}9</h3>
 <div class="drum-file-picker">
-  <img src={{img}} />
+  {{!-- <img src={{img}} alt={{track.filename}}> --}}
   {{#each directories as |directory|}}
-    <div class='directory-wrapper'>
+    <div class="directory-wrapper">
       <ul>
         {{#each directory.choices as |choice|}}
-          <li>
+          <li class={{if (eq directory.currentSelection choice) 'selected'}}>
             <button {{action "onSelect" directory choice}}>
               {{#if (eq directory.type "audio")}}
                 {{filename-ui choice}}
