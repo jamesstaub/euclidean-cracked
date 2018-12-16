@@ -43,7 +43,7 @@ export default Component.extend(SequenceHelper, {
 
   path: computed('directory', 'filepath', {
     get() {
-      return `http://localhost:8080/static${this.filepath}`;
+      return `http://s3.amazonaws.com/drumserver${this.filepath}`;
     }
   }),
 

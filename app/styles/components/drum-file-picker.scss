@@ -1,3 +1,12 @@
+.drum-file-header {
+  display: flex;
+  padding: 10px 0;
+  justify-content: space-between;
+  h3 {
+    margin: 0;
+  }
+}
+
 .drum-file-picker {
   display: flex;
   overflow-x: scroll;

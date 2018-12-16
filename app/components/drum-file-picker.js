@@ -1,6 +1,9 @@
 import Component from '@ember/component';
 import { set  } from '@ember/object';
 import { inject as service } from '@ember/service';
+import ENV from '../config/environment';
+import { task } from 'ember-concurrency';
+import { on } from '@ember/object/evented';
 
 export default Component.extend({
   store: service(),
@@ -20,40 +23,44 @@ export default Component.extend({
     }
   },
 
-  async fetchDirectory(path) {
-    const url = `http://localhost:8080${path}`;
-    const response = await fetch(url);
-    const json = await response.json();
-    return json.content;
-  },
+  fetchDirectory: task(function*(path) {
+    const url = `${ENV.DRUMSERVER_HOST}${path}`;
+    const response = yield fetch(url);
+    const json = yield response.json();
+    return json;
+  }).evented(),
 
   parseResponse(content) {
     const { dirs, audio } = content;
     // prefer type as audio if contains both
     content.type = audio.length ? 'audio' : 'dir';
     content.choices = audio.length ? audio : dirs;
+
+    // choices will be either audio or dirs
+    //  no need to retain these
+    delete content.audio;
+    delete content.dirs;
+
     return content;
   },
 
   async initDirectoryFromTrack(filepath) {
-    let path = filepath.split('/')
+    let path = filepath.split('/');
     path.pop();
-    let response = await this.fetchDirectory(path.join('/'));
+    let response = await this.fetchDirectory.perform(path.join('/'));
     if (response.ancestor_tree) {
-      let directories = response.ancestor_tree.map((dir) => {
-        return this.parseResponse(dir.content);
+      let directories = response.ancestor_tree.map(dir => {
+        return this.parseResponse(dir);
       });
       set(this, 'directories', directories);
-    } 
+    }
   },
 
   async updateDirectories(pathToFetch) {
-    let response = await this.fetchDirectory(pathToFetch);
+    let response = await this.fetchDirectory.perform(pathToFetch);
     let directory = this.parseResponse(response);
     // clear any child directories when clicking back higher up the tree
-    const pathDepth = directory.path
-      .split('/')
-      .filter(s => s.length).length;
+    const pathDepth = directory.path.split('/').filter(s => s.length).length;
     while (this.directories.length > pathDepth) {
       this.directories.pop();
     }
@@ -72,16 +79,6 @@ export default Component.extend({
         this.track.set('filepath', newPath);
         this.saveTrack.perform(this.track);
       }
-    },
-  },
-
-  _getParentPath(path) {
-    // split path into array, filter empty str from trailing slash
-    path = path.split('/').filter(lvl => lvl != '');
-    // pop last item to move up a level
-    path.pop();
-    // re-add trailing slash
-    path = path.join('/');
-    return path.length ? `${path}/` : '';
+    }
   }
 });

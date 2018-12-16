@@ -6,6 +6,7 @@ module.exports = function(environment) {
     modulePrefix: 'euclidean-cracked',
     environment,
     rootURL: '/',
+    DRUMSERVER_HOST: 'https://drumserver.herokuapp.com',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {

@@ -40,6 +40,6 @@ export default Route.extend({
     logout() {
       get(this, 'session').close();
       set(this, 'session.currentUserModel.online', false);
-    }
+    },
   }
 });

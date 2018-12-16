@@ -1,22 +1,17 @@
-
-<h3>{{track.filename}}9</h3>
-<div class="drum-file-picker">
+<div class='drum-file-header'>
+  <h3>{{track.filename}}</h3>
   {{!-- <img src={{img}} alt={{track.filename}}> --}}
-  {{#each directories as |directory|}}
-    <div class="directory-wrapper">
-      <ul>
-        {{#each directory.choices as |choice|}}
-          <li class={{if (eq directory.currentSelection choice) 'selected'}}>
-            <button {{action "onSelect" directory choice}}>
-              {{#if (eq directory.type "audio")}}
-                {{filename-ui choice}}
-              {{else}}
-                {{choice}}
-              {{/if}}
-            </button>
-          </li>
-        {{/each}}
-      </ul>
-    </div>
-  {{/each}}
+    {{#if fetchDirectory.isRunning}}
+      <div class='spinner'></div>
+    {{/if}}
+</div>
+<div class="drum-file-picker">
+    {{#each directories as |directory idx|}}
+      {{file-directory 
+        directory=directory 
+        filepath=track.filepath
+        idx=idx
+        onSelect=(action "onSelect")
+      }}
+    {{/each}}
 </div>

@@ -43,6 +43,6 @@ export default Component.extend({
         .find('.interface-switches .btn')
         .removeClass('active');
       this.$(`.interface-switches .${name}`).addClass('active');
-    }
+    },
   }
 });
