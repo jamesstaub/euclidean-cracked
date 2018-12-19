@@ -1,4 +1,6 @@
 .track-function-editor {
+  display: flex;
+  flex-direction: column;
   .function-editor {
     flex: 1 1 auto;
     flex-direction: column;

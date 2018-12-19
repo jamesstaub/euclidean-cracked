@@ -249,15 +249,10 @@ export default Component.extend(SequenceHelper, {
     let callback = this.onStepCallback.bind(this);
     let sequence = this.sequence;
 
-    let customFunction = get(this, 'track.function');
-
-    if (customFunction) {
+    let customFunction = this.track.function;
+    if (customFunction && this.track.functionIsLoaded) {
       let scope = this.customFunctionScope;
-      this.audioService.applyTrackFunction(
-        serviceTrackRef,
-        customFunction,
-        scope
-      );
+      this.audioService.applyTrackFunction(serviceTrackRef, customFunction, scope);
     }
 
     // set sampler selector, onStep callback and rhythm sequence

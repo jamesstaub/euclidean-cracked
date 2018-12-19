@@ -12,11 +12,7 @@
         type="submit"
         name="button"
       >
-        {{#if editorClean}}
-          up to date
-        {{else}}
-          {{if functionIsLoaded "update" "load"}}
-        {{/if}}
+        {{if functionIsLoaded "update" "load"}}
       </button>
       {{#if functionIsLoaded}}
         <button
@@ -35,9 +31,7 @@
           revert changes
         </button>
       {{else}}
-        <span>
-          function not loaded
-        </span>
+        <span>function not loaded</span>
       {{/if}}
     </div>
     {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
@@ -79,7 +73,7 @@
   </div>
   {{ember-ace
     lines=20
-    value=function
+    value=functionEditorContent
     mode="ace/mode/javascript"
     theme="ace/theme/ambiance"
     update=(action "onUpdateEditor")

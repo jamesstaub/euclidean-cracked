@@ -1,73 +1,72 @@
 import Component from '@ember/component';
 import { computed, get, set } from "@ember/object";
 import { inject as service } from '@ember/service';
-import { bool, not } from "@ember/object/computed";
+import { reads, not } from "@ember/object/computed";
+import exampleFunctions from '../utils/example-functions';
 
 export default Component.extend({
   audioService: service(),
+  classNames: ['track-function-editor'],
 
-  serviceTrackRef: computed('audioService.tracks.@each.trackId', {
+  // code that gets run in audio service on submit
+  function: reads('track.function'),
+  // code in text editor
+  functionEditorContent: reads('track.functionEditorContent'),
+  editorClean: reads('functionIsLoaded'),
+
+  functionIsLoaded: computed('function', 'functionEditorContent', {
     get() {
-      return get(this, 'audioService').findOrCreateTrackRef(get(this, 'track.id'));
-    }
-  }),
-
-  functionIsLoaded: bool('serviceTrackRef.customFunction'),
-
-  function: computed('track.function', {
-    get() {
-      return get(this, 'track.function') || '';
-    }
-  }),
-
-  // when the track's function property is different than
-  // the function runnign on the audio service
-  hasUnloadedCode: computed('function', 'loadedFunctionString',{
-    get() {
-      let editorFunction = get(this, 'function');
-      let loadedFunction = get(this, 'loadedFunctionString');
-      return loadedFunction != editorFunction;
-    },
-    set(key, value) {
-      return value;
+      return this.function === this.functionEditorContent;
     }
   }),
 
   showDiscardBtn: not('hasUnloadedCode'),
 
-  actions: {
+  serviceTrackRef: computed('audioService.tracks.@each.trackId', {
+    get() {
+      return get(this, 'audioService').findOrCreateTrackRef(
+        get(this, 'track.id')
+      );
+    }
+  }),
 
+  // TODO
+  // add track save task and invoke that everywhere
+  actions: {
     onUpdateEditor(content) {
-      set(this, 'trackFunctionString', content);
-      this.track.set('function', content);
+      this.track.set('functionEditorContent', content);
       this.track.save();
     },
 
     submitCode(audioTrackSampler) {
-      let scope = get(audioTrackSampler, 'customFunctionScope');
+      const scope = audioTrackSampler.customFunctionScope;
+      const serviceTrackRef = this.serviceTrackRef;
 
-      let trackFunctionString = get(this, 'trackFunctionString');
-      let serviceTrackRef = get(this, 'serviceTrackRef');
+      if (this.functionEditorContent) {
+        this.track.set('function', this.functionEditorContent);
+        this.track.save();
 
-      if (trackFunctionString) {
-        get(this, 'audioService').applyTrackFunction(serviceTrackRef, trackFunctionString, scope);
-        set(this, 'loadedFunctionString', trackFunctionString);
-        set(this, 'isDisabled', false);
+        get(this, 'audioService').applyTrackFunction(
+          serviceTrackRef,
+          this.functionEditorContent,
+          scope
+        );
       }
     },
 
     discardChanges() {
-      // revert the saved data to the function that is currently loaded
-      let loadedFunction = get(this, 'loadedFunctionString');
-      this.track.set('function', loadedFunction);
-      this.track.save().then(()=>{
-        set(this, 'hasUnloadedCode', false);
-      });
+      this.track.set('functionEditorContent', this.track.function);
+      this.track.save();
     },
 
     disableFunction() {
-      set(get(this, 'serviceTrackRef'), 'customFunction', null);
-      set(this, 'isDisabled', true);
+      this.track.set('function', 'null');
+      this.track.save();
+      set(this.serviceTrackRef, 'customFunction', 'null');
+    },
+
+    injectExample(name) {
+      // exampleFunctions;?
     }
   }
 });

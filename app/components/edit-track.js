@@ -9,7 +9,7 @@ export default Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
-    this.send('switchInterface', 'rhythm');
+    this.send('switchInterface', 'function');
   },
 
   saveTrack: task(function*(track) {

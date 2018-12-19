@@ -3,7 +3,6 @@ import { set  } from '@ember/object';
 import { inject as service } from '@ember/service';
 import ENV from '../config/environment';
 import { task } from 'ember-concurrency';
-import { on } from '@ember/object/evented';
 
 export default Component.extend({
   store: service(),
@@ -17,7 +16,7 @@ export default Component.extend({
     this._super(...arguments);
     let path = '';
     if (this.track && this.track.filepath) {
-      this.initDirectoryFromTrack(this.track.filepath);
+      this.initDirectoryFromTrack.perform(this.track.filepath);
     } else {
       this.updateDirectories(path);
     }
@@ -44,17 +43,17 @@ export default Component.extend({
     return content;
   },
 
-  async initDirectoryFromTrack(filepath) {
+  initDirectoryFromTrack: task(function *(filepath) {
     let path = filepath.split('/');
     path.pop();
-    let response = await this.fetchDirectory.perform(path.join('/'));
+    let response = yield this.fetchDirectory.perform(path.join('/'));
     if (response.ancestor_tree) {
       let directories = response.ancestor_tree.map(dir => {
         return this.parseResponse(dir);
       });
       set(this, 'directories', directories);
     }
-  },
+  }),
 
   async updateDirectories(pathToFetch) {
     let response = await this.fetchDirectory.perform(pathToFetch);
