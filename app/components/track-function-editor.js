@@ -2,21 +2,22 @@ import Component from '@ember/component';
 import { computed, get, set } from "@ember/object";
 import { inject as service } from '@ember/service';
 import { reads, not } from "@ember/object/computed";
+import { task, waitForProperty } from 'ember-concurrency';
 import exampleFunctions from '../utils/example-functions';
-
 export default Component.extend({
   audioService: service(),
   classNames: ['track-function-editor'],
 
-  // code that gets run in audio service on submit
-  function: reads('track.function'),
+
+  // stringified code that gets run in audio service on submit
+  function: reads('customFunction.function'),
   // code in text editor
-  functionEditorContent: reads('track.functionEditorContent'),
+  editorContent: reads('customFunction.editorContent'),
   editorClean: reads('functionIsLoaded'),
 
-  functionIsLoaded: computed('function', 'functionEditorContent', {
+  functionIsLoaded: computed('function', 'editorContent', {
     get() {
-      return this.function === this.functionEditorContent;
+      return this.function === this.editorContent;
     }
   }),
 
@@ -30,38 +31,43 @@ export default Component.extend({
     }
   }),
 
+
   // TODO
   // add track save task and invoke that everywhere
   actions: {
     onUpdateEditor(content) {
-      this.track.set('functionEditorContent', content);
-      this.track.save();
+      // customFunction is a proxy but for some reason
+      // await and waitForProperty dont resolve
+      this.customFunction.then((customFunction) => {
+        customFunction.set('editorContent', content);
+        customFunction.save();
+      });
     },
 
     submitCode(audioTrackSampler) {
       const scope = audioTrackSampler.customFunctionScope;
       const serviceTrackRef = this.serviceTrackRef;
 
-      if (this.functionEditorContent) {
-        this.track.set('function', this.functionEditorContent);
-        this.track.save();
+      if (this.editorContent) {
+        this.customFunction.set('function', this.editorContent);
+        this.customFunction.save();
 
         get(this, 'audioService').applyTrackFunction(
           serviceTrackRef,
-          this.functionEditorContent,
+          this.editorContent,
           scope
         );
       }
     },
 
     discardChanges() {
-      this.track.set('functionEditorContent', this.track.function);
-      this.track.save();
+      this.customFunction.set('editorContent', this.customFunction.function);
+      this.customFunction.save();
     },
 
     disableFunction() {
-      this.track.set('function', 'null');
-      this.track.save();
+      this.customFunction.set('function', 'null');
+      this.customFunction.save();
       set(this.serviceTrackRef, 'customFunction', 'null');
     },
 

@@ -65,14 +65,15 @@ export default Route.extend({
   },
 
   actions: {
-    delete(post) {
-      let tracks = get(post, 'tracks');
-
-      post.destroyRecord().then(() => {
-        // TODO: how to actually delete all associated tracks?
-        // install cascade-delete?
-        tracks.forEach((t) => t.unloadRecord());
-      });
+    async delete(post) {
+      let tracks = await post.tracks.toArray();
+      for (const track of tracks) {
+        const customFunction = await track.customFunction;
+        await customFunction.destroyRecord();
+        await track.destroyRecord();
+      }
+      await post.destroyRecord();
+      this.transitionTo('new');
     },
 
     save(post) {
@@ -85,13 +86,23 @@ export default Route.extend({
       });
     },
 
-    createTrack(post) {
+    async createTrack(post) {
+
+      let customFunction = this.store.createRecord('customFunction', {
+        postCreatorUid: get(post, 'creator.uid'),
+      });
+
+      await customFunction.save();
+
       // TODO: instead of setting defaults here, just use
       // defaults on the model
       let track = this.store.createRecord('track', {
         postCreatorUid: get(post, 'creator.uid'),
         publicEditable: get(post, 'publicEditable'),
+        customFunction: customFunction
       });
+
+      track.set('customFunction', customFunction);
 
       post.get('tracks').addObject(track);
 

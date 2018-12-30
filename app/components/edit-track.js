@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { set } from '@ember/object';
+import { set, computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
 
 export default Component.extend({
@@ -11,6 +11,14 @@ export default Component.extend({
     this._super(...arguments);
     this.send('switchInterface', 'function');
   },
+
+  customFunction: computed('track.customFunction', {
+    get() {
+      this.track.customFunction.then(customFunction => {
+        return customFunction;
+      });
+    }
+  }),
 
   saveTrack: task(function*(track) {
     yield track.save();
@@ -33,7 +41,9 @@ export default Component.extend({
       set(this, 'sequence', sequence);
     },
 
-    deleteTrack(track) {
+    async deleteTrack(track) {
+      const customFunction = await track.customFunction
+      customFunction.destroyRecord();
       track.destroyRecord();
     },
 

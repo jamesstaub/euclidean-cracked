@@ -249,8 +249,9 @@ export default Component.extend(SequenceHelper, {
     let callback = this.onStepCallback.bind(this);
     let sequence = this.sequence;
 
-    let customFunction = this.track.function;
-    if (customFunction && this.track.functionIsLoaded) {
+    let customFunction = this.track.customFunction.function;
+    let isSafe = !this.track.illegalTokens;
+    if (isSafe && customFunction) {
       let scope = this.customFunctionScope;
       this.audioService.applyTrackFunction(serviceTrackRef, customFunction, scope);
     }

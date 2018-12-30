@@ -128,7 +128,7 @@
       </div>
     {{/if}}
     {{#if (eq visibleInterface "function")}}
-      {{track-function-editor track=track sampler=sampler}}
+      {{track-function-editor customFunction=track.customFunction sampler=sampler}}
     {{/if}}
   {{/audio-track-sampler}}
 </div>

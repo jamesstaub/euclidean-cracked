@@ -14,10 +14,11 @@
       >
         {{if functionIsLoaded "update" "load"}}
       </button>
-      {{#if functionIsLoaded}}
+
         <button
           class="btn btn-xs disable-code-btn"
           type="button"
+          disabled={{not functionIsLoaded}}
           {{action "disableFunction"}}
         >
           disable
@@ -30,8 +31,14 @@
         >
           revert changes
         </button>
-      {{else}}
-        <span>function not loaded</span>
+      {{#unless functionIsLoaded }}
+        <span>changes not loaded</span>
+      {{/unless}}
+      {{#if track.illegalTokens}}
+      <div>
+        <p>Cannot load a function with unsupported keywords:</p>
+        <p>{{track.illegalTokens}}</p>
+      </div>
       {{/if}}
     </div>
     {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
@@ -73,7 +80,7 @@
   </div>
   {{ember-ace
     lines=20
-    value=functionEditorContent
+    value=editorContent
     mode="ace/mode/javascript"
     theme="ace/theme/ambiance"
     update=(action "onUpdateEditor")

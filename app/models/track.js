@@ -31,6 +31,8 @@ export default DS.Model.extend({
     }
   }),
 
+  customFunction: DS.belongsTo('customFunction'),
+
   hits: DS.attr('number', {
     defaultValue() {
       return 3;
@@ -57,16 +59,5 @@ export default DS.Model.extend({
 
   gainStepSeq: DS.attr('string'),
   speedStepSeq: DS.attr('string'),
-  loopStepArray: DS.attr('string'),
-
-  function: DS.attr('string', {
-    defaultValue() {
-      return '';
-    }
-  }),
-  functionEditorContent: DS.attr('string', {
-    defaultValue() {
-      return '';
-    }
-  })
+  loopStepArray: DS.attr('string')
 });
