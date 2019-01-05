@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import Mixin from '@ember/object/mixin';
 import { get, set, computed } from "@ember/object";
 
 function arraySequenceComputed(stringKey) {
@@ -13,10 +13,10 @@ function arraySequenceComputed(stringKey) {
       this.saveArrayAsString(stringKey, value);
       return value;
     }
-  }
+  };
 }
 
-export default Ember.Mixin.create({
+export default Mixin.create({
 
   gainStepArray: computed('track.gainStepSeq', arraySequenceComputed('gainStepSeq')),
   speedStepArray: computed('track.speedStepSeq', arraySequenceComputed('speedStepSeq')),
@@ -27,14 +27,14 @@ export default Ember.Mixin.create({
     if (trackData){
       return get(this, `track.${stringKey}`)
       .split(',')
-      .map((str)=> parseFloat(str))
+      .map((str)=> parseFloat(str));
     } else {
-      return get(this, 'gainStepDefault');
+      return this.gainStepDefault;
     }
   },
 
   saveArrayAsString(stringKey, array){
-    let track = get(this, 'track');
+    let track = this.track;
     let seqString = array.toString();
     track.set(stringKey, seqString);
     track.save();

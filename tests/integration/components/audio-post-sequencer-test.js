@@ -1,25 +1,26 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('audio-post-sequencer', 'Integration | Component | audio post sequencer', {
-  integration: true
-});
+module('Integration | Component | audio post sequencer', function(hooks) {
+  setupRenderingTest(hooks);
 
-test('it renders', function(assert) {
+  test('it renders', async function(assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+    await render(hbs`{{audio-post-sequencer}}`);
 
-  this.render(hbs`{{audio-post-sequencer}}`);
+    assert.dom('*').hasText('');
 
-  assert.equal(this.$().text().trim(), '');
+    // Template block usage:
+    await render(hbs`
+      {{#audio-post-sequencer}}
+        template block text
+      {{/audio-post-sequencer}}
+    `);
 
-  // Template block usage:
-  this.render(hbs`
-    {{#audio-post-sequencer}}
-      template block text
-    {{/audio-post-sequencer}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
+    assert.dom('*').hasText('template block text');
+  });
 });

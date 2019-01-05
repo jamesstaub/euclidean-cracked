@@ -43,7 +43,6 @@ export default Route.extend({
     user.then((user) => {
       set(user, 'online', true);
 
-
       post.get('activeUsers').pushObject(user);
 
       user.save().then((user)=>{
@@ -54,27 +53,29 @@ export default Route.extend({
   },
 
   removeUser() {
-    let post = get(this, 'post');
+    let post = this.post;
     let user = get(this, 'session.currentUserModel');
     get(post, 'activeUsers').then((activeUsers)=>{
       activeUsers.removeObject(user);
       post.save()
       .then(()=>{
         user.save();
-      })
+      });
     });
   },
 
   actions: {
-    delete(post) {
-      let tracks = get(post, 'tracks');
-
-      post.destroyRecord().then(() => {
-        // TODO: how to actually delete all associated tracks?
-        // install cascade-delete?
-        tracks.forEach((t) => t.unloadRecord());
-      });
-
+    async delete(post) {
+      let tracks = await post.tracks.toArray();
+      for (const track of tracks) {
+        const customFunction = await track.customFunction;
+        // TODO: delete customFunction with cloud Function
+        // since validation prevents deletion
+        // await customFunction.destroyRecord();
+        await track.destroyRecord();
+      }
+      await post.destroyRecord();
+      this.transitionTo('new');
     },
 
     save(post) {
@@ -87,15 +88,25 @@ export default Route.extend({
       });
     },
 
-    createTrack(post) {
+    async createTrack(post) {
+
+      let customFunction = this.store.createRecord('customFunction', {
+        postCreatorUid: get(post, 'creator.uid'),
+      });
+
+      await customFunction.save();
+
       // TODO: instead of setting defaults here, just use
       // defaults on the model
       let track = this.store.createRecord('track', {
         postCreatorUid: get(post, 'creator.uid'),
         publicEditable: get(post, 'publicEditable'),
+        customFunction: customFunction
       });
 
-      post.get('tracks').addObject(track)
+      track.set('customFunction', customFunction);
+
+      post.get('tracks').addObject(track);
 
       return track.save()
         .then(()=>{
@@ -108,7 +119,7 @@ export default Route.extend({
         })
         .then(() => {
           debug('post saved successfuly');
-        })
+        });
     },
 
     createComment(author, body, post) {
@@ -117,7 +128,7 @@ export default Route.extend({
         body: body
       });
 
-      //TODO verify use of user_id vs session uid
+      // TODO verify use of user_id vs session uid
       user = getOrCreateUser(
         get(author, 'uid'),
         this.store
@@ -151,7 +162,6 @@ export default Route.extend({
             user.rollbackAttributes();
           });
       });
-
     },
   }
 });

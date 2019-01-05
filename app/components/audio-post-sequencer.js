@@ -27,7 +27,7 @@ export default Component.extend({
   },
 
   initSignalChain() {
-    this.disconnectAll()
+    this.disconnectAll();
     // create a compressor -> DAC node for other nodes to connect to
     __()
     .compressor({
@@ -35,7 +35,7 @@ export default Component.extend({
       id: 'master-compressor',
       class:`post-${get(this, 'post.id')}`,
     })
-    .dac(get(this, 'dacGain'));
+    .dac(this.dacGain);
   },
 
   actions: {
@@ -47,8 +47,7 @@ export default Component.extend({
     },
 
     loopAction(action) {
-
-      let audio = get(this, 'audioService');
+      let audio = this.audioService;
       let interval = get(this, 'post.interval');
 
       switch (action) {
@@ -58,13 +57,12 @@ export default Component.extend({
           break;
         case 'reset':
           audio.resetLoop(interval);
-          break
+          break;
         case 'stop':
           this.toggleProperty('isPlaying');
           __.loop(action);
-          break
+          break;
       }
-
     }
   },
 

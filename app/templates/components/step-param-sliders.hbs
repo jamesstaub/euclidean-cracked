@@ -1,27 +1,50 @@
 {{yield}}
-<div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
-  <button {{action 'switchInterface' 'gain'}} type="button" class="btn btn-default gain active">volume</button>
-  <button {{action 'switchInterface' 'speed'}} type="button" class="btn btn-default speed">playback speed</button>
-  <button {{action 'switchInterface' 'loopEnd'}} type="button" class="btn btn-default loopEnd">loop length</button>
+<div
+  class="btn-group btn-group-xs interface-switches"
+  role="group"
+  aria-label="toggle-interface"
+>
+  <button
+    type="button"
+    class="btn btn-default gain active"
+    {{action "switchInterface" "gain"}}
+  >
+    volume
+  </button>
+  <button
+    type="button"
+    class="btn btn-default speed"
+    {{action "switchInterface" "speed"}}
+  >
+    playback speed
+  </button>
+  <button
+    type="button"
+    class="btn btn-default loopEnd"
+    {{action "switchInterface" "loopEnd"}}
+  >
+    loop length
+  </button>
   <label class="toggle-loop">
-    loop {{input type='checkbox' checked=track.isLooping click=(action 'toggleIsLooping')}}
+    loop
+    {{input
+      type="checkbox"
+      checked=track.isLooping
+      click=(action "toggleIsLooping")
+    }}
   </label>
 </div>
-
-{{#if (eq visibleInterface 'gain')}}
+{{#if (eq visibleInterface "gain")}}
   {{ui-multislider
     stepIndex=stepIndex
     sequence=sequence
     size=multisliderSize
     numberOfSliders=sequence.length
     values=gainStepArray
-    onChangeValue=(action "updateParam" 'gainStepArray')
+    onChangeValue=(action "updateParam" "gainStepArray")
   }}
 {{/if}}
-
-
-{{#if (eq visibleInterface 'speed')}}
-
+{{#if (eq visibleInterface "speed")}}
   {{ui-multislider
     stepIndex=stepIndex
     sequence=sequence
@@ -29,17 +52,16 @@
     numberOfSliders=sequence.length
     values=speedStepArray
     max=3
-    onChangeValue=(action "updateParam" 'speedStepArray')
+    onChangeValue=(action "updateParam" "speedStepArray")
   }}
 {{/if}}
-
-{{#if (eq visibleInterface 'loopEnd')}}
+{{#if (eq visibleInterface "loopEnd")}}
   {{ui-multislider
     stepIndex=stepIndex
     sequence=sequence
     size=multisliderSize
     numberOfSliders=sequence.length
     values=loopEndStepSeq
-    onChangeValue=(action "updateParam" 'loopEndStepArray')
+    onChangeValue=(action "updateParam" "loopEndStepArray")
   }}
 {{/if}}

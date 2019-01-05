@@ -19,7 +19,6 @@ export default Component.extend({
       });
 
       return DS.PromiseObject.create({promise: creatorPromise});
-
     }
   }),
 
@@ -29,12 +28,10 @@ export default Component.extend({
 
       if (sessionName === post.get('creator.uid')) {
         set(this, 'isEditing', false);
-        get(this, 'onSavePost')(post)
-
+        get(this, 'onSavePost')(post);
       } else {
         alert('Sorry not authorized');
       }
-
     },
     edit() {
       set(this, 'isEditing', true);

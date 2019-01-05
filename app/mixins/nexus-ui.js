@@ -17,7 +17,7 @@ export default Mixin.create({
     if (get(this, 'value')) {
       next(()=>{
         set(this, 'NexusElement.value', get(this, 'value'));
-      })
+      });
     }
   },
 
@@ -38,7 +38,8 @@ export default Mixin.create({
         if (get(this, 'value') !== v) {
           set(this, 'value', v);
         }
-        // components using this mixin must have an action onChangeValue passed in
+        // components using this mixin must 
+        // have an action onChangeValue passed in
         get(this, 'onChangeValue')(v);
       });
     }
@@ -57,7 +58,6 @@ export default Mixin.create({
     if (get(this, 'NexusElement')) {
       get(this, 'NexusElement').destroy();
     }
-
   },
 
 });

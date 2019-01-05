@@ -14,9 +14,9 @@ export default Component.extend(SequenceHelper, {
     get() {
       // variables available for user defined track functions
       return {
-        sampler: `#${get(this, 'samplerId')}`,
-        gain: `#${get(this, 'gainId')}-onstep`,
-        lowpass: `#${get(this, 'lowpassId')}`
+        sampler: `#${this.samplerId}`,
+        gain: `#${this.gainId}-onstep`,
+        lowpass: `#${this.lowpassId}`
       };
     }
   }),
@@ -25,46 +25,47 @@ export default Component.extend(SequenceHelper, {
 
   samplerId: computed('trackId', {
     get() {
-      return `sampler-${get(this, 'trackId')}`;
+      return `sampler-${this.trackId}`;
     }
   }),
 
   gainId: computed('samplerId', {
     get() {
-      return `${get(this, 'samplerId')}-gain`;
+      return `${this.samplerId}-gain`;
     }
   }),
 
   lowpassId: computed('samplerId', {
     get() {
-      return `${get(this, 'samplerId')}-lowpass`;
+      return `${this.samplerId}-lowpass`;
     }
   }),
 
-  path: computed('directory', 'filename', {
+  path: computed('directory', 'filepath', {
     get() {
-      // TODO: how to set new filename without rebuilding node?
-      return `${get(this, 'directory')}${get(this, 'filename')}`;
+      return `https://s3.amazonaws.com/drumserver${this.filepath}`;
     }
   }),
 
+  // control the track gain with the ui slider
   gain: computed({
     set(key, val) {
-      __(`#${get(this, 'gainId')}`).attr({ gain: val });
+      __(`#${this.gainId}`).attr({ gain: val });
       return val;
     }
   }),
 
+  // control the gain of a given step with ui multislider
   gainOnStep: computed({
     set(key, val) {
-      __(`#${get(this, 'gainId')}-onstep`).attr({ gain: val });
+      __(`#${this.gainId}-onstep`).attr({ gain: val });
       return val;
     }
   }),
 
   speedOnStep: computed({
     set(key, val) {
-      __(`#${get(this, 'samplerId')}`).attr({ speed: val });
+      __(`#${this.samplerId}`).attr({ speed: val });
       return val;
     }
   }),
@@ -72,7 +73,7 @@ export default Component.extend(SequenceHelper, {
   loopEndOnStep: computed({
     set(key, val) {
       // __(`#${get(this, 'samplerId')}`).attr({loop:true});
-      __(`#${get(this, 'samplerId')}`).attr({ start: 0, end: val });
+      __(`#${this.samplerId}`).attr({ start: 0, end: val });
       return val;
     }
   }),
@@ -94,16 +95,15 @@ export default Component.extend(SequenceHelper, {
     this._super(...arguments);
     // cache and compare properties that require
     // a refresh of sampler nodes on update
-    // ie [sequence, filename, ...
+    // ie [sequence, filepath, ...
     let refreshOnUpdate =
-      get(this, 'sequence') !== get(this, '_sequence') ||
-      get(this, 'filename') !== get(this, '_filename');
+      this.sequence !== this._sequence || this.filepath !== this._filepath;
 
     if (refreshOnUpdate) {
-      get(this, 'initializeSampler').perform();
+      this.initializeSampler.perform();
     }
-    set(this, '_sequence', get(this, 'sequence'));
-    set(this, '_filename', get(this, 'filename'));
+    set(this, '_sequence', this.sequence);
+    set(this, '_filepath', this.filepath);
   },
 
   willDestroy() {
@@ -117,7 +117,7 @@ export default Component.extend(SequenceHelper, {
       s => typeof s !== 'undefined'
     );
 
-    yield waitForProperty(this, 'filename', f => typeof f !== 'undefined');
+    yield waitForProperty(this, 'filepath');
 
     if (typeof this.stepIndex === 'undefined') {
       set(this, 'stepIndex', 0);
@@ -129,12 +129,12 @@ export default Component.extend(SequenceHelper, {
       this.buildNode();
       this.setSequenceParams();
       this.setSamplerData();
-      get(this, 'audioService').bindTrackSamplers();
+      this.audioService.bindTrackSamplers();
     }
   }).drop(),
 
   removeAllNodes() {
-    __(`#${get(this, 'samplerId')}`).unbind('step');
+    __(`#${this.samplerId}`).unbind('step');
 
     // NOTE: any cracked node created in this component must be selected
     // for tear down here, otherwise lingering nodes will break
@@ -145,7 +145,7 @@ export default Component.extend(SequenceHelper, {
     //   `#${get(this, 'lowpassId')}`,
     //   `#${get(this, 'gainId')}-onstep`
     // ];
-    let selectors = [`.${get(this, 'trackId')}-node`];
+    let selectors = [`.${this.trackId}-node`];
     selectors.forEach(selector => {
       __(selector).remove();
     });
@@ -154,34 +154,35 @@ export default Component.extend(SequenceHelper, {
 
     // remove reference from service
     let serviceTracks = get(this, 'audioService.tracks');
-    let ref = serviceTracks.findBy('trackId', get(this, 'trackId'));
+    let ref = serviceTracks.findBy('trackId', this.trackId);
     serviceTracks.removeObject(ref);
   },
 
+  // TODO: how to set new filepath without rebuilding node?
   buildNode() {
     set(this, 'hasBuiltNode', true);
     __()
       .sampler({
-        id: get(this, 'samplerId'),
-        path: get(this, 'path'),
-        class: `${get(this, 'trackId')}-node`
+        id: this.samplerId,
+        path: this.path,
+        class: `${this.trackId}-node`
       })
       .lowpass({
-        id: get(this, 'lowpassId'),
+        id: this.lowpassId,
         frequency: 10000,
         q: 0,
-        class: `${get(this, 'trackId')}-node`
+        class: `${this.trackId}-node`
       })
       .gain({
-        id: get(this, 'gainId'),
-        class: `${get(this, 'trackId')}-node`,
-        gain: get(this, 'gain')
+        id: this.gainId,
+        class: `${this.trackId}-node`,
+        gain: this.gain
       })
       .gain({
-        id: `${get(this, 'gainId')}-onstep`,
-        class: `${get(this, 'trackId')}-node`
+        id: `${this.gainId}-onstep`,
+        class: `${this.trackId}-node`
       })
-      .connect(get(this, 'outputNodeSelector'));
+      .connect(this.outputNodeSelector);
   },
 
   // callback functions to be called on each step of sequencer
@@ -190,13 +191,13 @@ export default Component.extend(SequenceHelper, {
     let serviceTracks = get(this, 'audioService.tracks');
     // TODO: refactor this so findBy is not called on every step
     // also: find a clearer way of distinguishing between track model and service track reference
-    let trackRef = serviceTracks.findBy('trackId', get(this, 'trackId'));
+    let trackRef = serviceTracks.findBy('trackId', this.trackId);
 
     if (data) {
       __(this).stop();
       __(this).start();
 
-      __(this).attr({ loop: get(this, 'isLooping') });
+      __(this).attr({ loop: this.isLooping });
 
       if (trackRef.gainStepArray) {
         set(this, 'gainOnStep', trackRef.gainStepArray[index]);
@@ -223,10 +224,8 @@ export default Component.extend(SequenceHelper, {
 
   setSequenceParams() {
     // apply sequence data from track model to global service track reference
-    let trackId = get(this, 'trackId');
-    let serviceTrackRef = get(this, 'audioService').findOrCreateTrackRef(
-      trackId
-    );
+    let trackId = this.trackId;
+    let serviceTrackRef = this.audioService.findOrCreateTrackRef(trackId);
 
     let sequenceArrayKeys = [
       'gainStepArray',
@@ -242,25 +241,18 @@ export default Component.extend(SequenceHelper, {
   },
 
   setSamplerData() {
-    let trackId = get(this, 'trackId');
-
-    let serviceTrackRef = get(this, 'audioService').findOrCreateTrackRef(
-      trackId
-    );
-
-    let selector = `#${get(this, 'samplerId')}`;
-    let callback = get(this, 'onStepCallback').bind(this);
-    let sequence = get(this, 'sequence');
-
-    let customFunction = get(this, 'track.function');
-
-    if (customFunction) {
-      let scope = get(this, 'customFunctionScope');
-      get(this, 'audioService').applyTrackFunction(
-        serviceTrackRef,
-        customFunction,
-        scope
-      );
+    let trackId = this.trackId;
+    let serviceTrackRef = this.audioService.findOrCreateTrackRef(trackId);
+    let selector = `#${this.samplerId}`;
+    let callback = this.onStepCallback.bind(this);
+    let sequence = this.sequence;
+    // customFunction.function can only be written by a cloud function
+    // that filters out dangerous tokens
+    let customFunction = get(this, 'track.customFunction.function');
+    let isSafe = !this.track.illegalTokens;
+    if (isSafe && customFunction) {
+      let scope = this.customFunctionScope;
+      this.audioService.applyTrackFunction(serviceTrackRef, customFunction, scope);
     }
 
     // set sampler selector, onStep callback and rhythm sequence

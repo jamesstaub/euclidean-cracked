@@ -1,10 +1,1 @@
-<div class='row index-wrapper'>
-  <div class='container-fluid'>
-    {{#each model as |post|}}
-      {{index-post-item post=post}}
-    {{else}}
-      There are no posts...
-    {{/each}}
-
-  </div>
-</div>
+{{post-list posts=model}}

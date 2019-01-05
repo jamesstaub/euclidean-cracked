@@ -8,7 +8,9 @@ export default DS.Model.extend({
     creator: DS.belongsTo('user'),
 
     interval: DS.attr('number', {
-      defaultValue() { return 200 }
+      defaultValue() {
+ return 200; 
+}
     }),
 
     tracks: DS.hasMany('track'),
@@ -19,6 +21,5 @@ export default DS.Model.extend({
 
     publicVisible: DS.attr('boolean'),
     publicEditable: DS.attr('boolean'),
-
 
 });

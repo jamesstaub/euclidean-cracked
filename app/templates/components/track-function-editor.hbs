@@ -1,65 +1,99 @@
 {{yield}}
-<form {{action 'submitCode' sampler on='submit'}} class="function-editor">
-    <legend>
+<form class="function-editor" {{action "submitCode" sampler on="submit"}}>
+  {{! <legend>
       <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
       <p>script will be called on each step of the step sequencer.</p>
-    </legend>
+    </legend> }}
+  <div class="function-controls">
+    <div class="load-buttons">
+      <button
+        class="btn btn-xs btn-primary run-code-btn"
+        disabled={{editorClean}}
+        type="submit"
+        name="button"
+      >
+        {{if functionIsLoaded "update" "load"}}
+      </button>
 
-    <div class="buttons">
-      <button class="btn btn-primary run-code-btn" type="submit" name="button">{{if functionIsLoaded 'update' 'apply'}}</button>
-      {{#if functionIsLoaded}}
-        <button class="btn disable-code-btn" type="button" {{action "disableFunction"}}>disable </button>
-        <button class="btn disable-code-btn" disabled={{showDiscardBtn}} type="button" {{action "discardChanges"}}>revert changes</button>
-      {{else}}
-        <!-- <span>not currently active</span> -->
+        <button
+          class="btn btn-xs disable-code-btn"
+          type="button"
+          disabled={{not functionIsLoaded}}
+          {{action "disableFunction"}}
+        >
+          disable
+        </button>
+        <button
+          class="btn btn-xs disable-code-btn"
+          disabled={{editorClean}}
+          type="button"
+          {{action "discardChanges"}}
+        >
+          revert changes
+        </button>
+      {{#unless functionIsLoaded }}
+        <span>changes not loaded</span>
+      {{/unless}}
+      {{#if track.illegalTokens}}
+      <div>
+        <p>Cannot load a function with unsupported keywords:</p>
+        <p>{{track.illegalTokens}}</p>
+      </div>
       {{/if}}
     </div>
-    {{ember-ace
-      lines=20
-      value=function
-      mode="ace/mode/javascript"
-      theme="ace/theme/ambiance"
-      update=(action 'onUpdateEditor')}}
+    {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
+      {{#dd.button class="btn-xs"}}
+        Examples<span class="caret"></span>
+      {{/dd.button}}
+      {{#dd.menu as |menu|}}
+        {{#menu.item}}
+          <span class="dropdown-header">
+            Tutorial
+          </span>
+        {{/menu.item}}
+        {{#menu.item}}
+          <a
+            class="dropdown-item"
+            {{action "injectExample" "sequencerVariables"}}
+          >
+            sequencer variables
+          </a>
+        {{/menu.item}}
+        {{#menu.item}}
+          <a class="dropdown-item" {{action "injectExample" "audioNodes"}}>
+            audio nodes
+          </a>
+        {{/menu.item}}
+        {{menu.divider}}
+        {{#menu.item}}
+          <span class="dropdown-header">
+            Examples
+          </span>
+        {{/menu.item}}
+        {{#menu.item}}
+          <a class="dropdown-item" {{action "injectExample" "filterSweep"}}>
+            filter sweep
+          </a>
+        {{/menu.item}}
+      {{/dd.menu}}
+    {{/bs-dropdown}}
+  </div>
+  {{ember-ace
+    lines=20
+    value=editorContent
+    mode="ace/mode/javascript"
+    theme="ace/theme/ambiance"
+    update=(action "onUpdateEditor")
+  }}
 </form>
-
 <div class="code-info">
-  <strong>available variables:</strong>
-  <ul>
-    <li>
-      <code>index</code>
-      <small>[int] current step of the sequence</small>
-    </li>
-    <li>
-      <code>data</code>
-      <small>[boolean] true if there is a hit on this step.</small>
-    </li>
-    <li>
-      <code>array</code>
-      <small>[array] the rhythm sequence for this track</small>
-    </li>
-    <li>
-      <code>this.sampler</code>
-      <small>[string] id selector for this track's sampler node</small>
-    </li>
-    <li>
-      <code>this.gain</code>
-      <small>[string] id selector for this track's gain node</small>
-    </li>
-    <li>
-      <p>to access the available audio nodes on this track use the selector as an argument to the cracked object</p>
-      <code>__(this.sampler)</code>
-    </li>
-    <li>
-      <p>modify sampler speed every other step</p>
-      <p>(this will overwrite values entered with step sliders)</p>
-      <pre><code>
-        if (index % 2) {
-          __(this.sampler).attr({speed: .5});
-        }
-      </code></pre>
-    </li>
-  </ul>
-
-  <p><strong>note:</strong> this code will be called repeatedly, so creating new objects or audio nodes is not recommended.</p>
-  <p>instead, use the global code editor (coming soon) (which is only called once on initialization) to create audio nodes, or other objects. you can then access and modify those nodes with this code. </p>
+  <p>
+    <strong>
+      note:
+    </strong>
+    this code will be called repeatedly, so creating new objects or audio nodes is not recommended.
+  </p>
+  <p>
+    instead, use the global code editor (coming soon) (which is only called once on initialization) to create audio nodes, or other objects. you can then access and modify those nodes with this code.
+  </p>
 </div>

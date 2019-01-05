@@ -10,14 +10,17 @@ export default function getOrCreateUser(currentUser, store) {
     return {
       avatar,
       username
-    }
-  }
+    };
+  };
 
   return new Promise((resolve)=>{
     let userRecord;
 
     if (currentUser) {
-      store.query('user', {orderBy: 'uid', equalTo: currentUser.uid }).then( (records) =>{
+      store.query('user', {
+        orderBy: 'uid',
+        equalTo: currentUser.uid 
+      }).then( (records) => {
         if(records.get('length') === 0){
           let defaults = getAnonDefaults();
           let avatar = currentUser.photoURL || defaults.avatar;
@@ -28,10 +31,8 @@ export default function getOrCreateUser(currentUser, store) {
             username: username,
             avatar: avatar,
           });
-
-        }
-        else{
-          userRecord = records.get('firstObject')
+        } else{
+          userRecord = records.get('firstObject');
         }
 
         userRecord.ref().child('online').onDisconnect().set(false);
@@ -41,5 +42,4 @@ export default function getOrCreateUser(currentUser, store) {
       debug('no current user session');
     }
   });
-
 }

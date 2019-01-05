@@ -21,9 +21,9 @@ export default Component.extend({
         title,
         publicEditable,
         publicVisible
-      } = this.getProperties('title', 'publicEditable', 'publicVisible');
+      } = this;
 
-      get(this, 'onSave')(title, publicEditable, publicVisible)
+      get(this, 'onSave')(title, publicEditable, publicVisible);
       set(this, 'interval', 200);
     }
   }

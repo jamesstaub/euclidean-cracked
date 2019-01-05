@@ -1,22 +1,21 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 import SequenceHelper from  'euclidean-cracked/mixins/sequence-helper';
 import { get, set, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
 
-const { service } = Ember.inject;
-
-export default Ember.Component.extend(SequenceHelper,{
+export default Component.extend(SequenceHelper,{
   classNames: ['step-param-sliders'],
   audioService: service(),
 
-  gainStepDefault: Array.from(new Array(16), ()=> .5),
+  gainStepDefault: Array.from(new Array(16), () => 0.5),
   // speedStepSeq: Array.from(new Array(16), ()=> .5).toString(),
 
   gainStepSeq: alias('track.gainStepSeq'),
 
   multisliderSize: computed('sequence', {
     get() {
-      let width = (get(this, 'uiStepSize')* .85) * get(this, 'sequence.length');
+      let width = (this.uiStepSize* .85) * get(this, 'sequence.length');
       let height = 100;
       return [width, height];
     }
@@ -35,16 +34,16 @@ export default Ember.Component.extend(SequenceHelper,{
     },
 
     toggleIsLooping(evt) {
-
       this.track.set('isLooping', evt.target.checked);
       this.track.save();
     },
 
     switchInterface(name) {
       set(this, 'visibleInterface', name);
-      this.$().find('.interface-switches .btn').removeClass('active');
+      this.$()
+        .find('.interface-switches .btn')
+        .removeClass('active');
       this.$(`.interface-switches .${name}`).addClass('active');
-    },
+    }
   }
-
 });

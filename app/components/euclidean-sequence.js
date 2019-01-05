@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import E from 'euclidean-cracked/utils/euclidean';
-import { get, set } from "@ember/object";
+import { set } from "@ember/object";
 import { next } from "@ember/runloop";
 
 Array.prototype.rotate = (function() {
@@ -26,11 +26,10 @@ export default Component.extend({
 
   didReceiveAttrs() {
     this._super(...arguments);
-    let hasHits = typeof get(this, 'hits') !== 'undefined';
-    let hasSteps = typeof get(this, 'steps') !== 'undefined';
+    let hasHits = typeof this.hits !== 'undefined';
+    let hasSteps = typeof this.steps !== 'undefined';
 
     if (hasHits && hasSteps) {
-
     // use next instead of fixing double update that occurs
     // when hits exceeds steps. kind of a hack
       next(()=>{
@@ -45,18 +44,18 @@ export default Component.extend({
 
   calculateSequence() {
     let [hits, steps] = this._sortParameters(
-      get(this, 'hits'), get(this, 'steps')
+      this.hits, this.steps
     );
 
     let seq = E(hits, steps)
-      .rotate(get(this, 'offset'));
+      .rotate(this.offset);
 
     set(this, 'sequence', seq);
-    get(this, 'onCalculateSequence')(seq);
+    this.onCalculateSequence(seq);
   },
 
   _sortParameters(hits, steps) {
-    //for euclidean algorithm hits must always be lower than steps
+    // for euclidean algorithm hits must always be lower than steps
     let params = [hits, steps].sort((a, b)=>{
       // method to sort by value, not alpha
       return a - b;

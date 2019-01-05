@@ -1,113 +1,129 @@
-  {{ui-slider
-    max=1
-    min=0
-    size=gainSliderSize
-    step=0.01
-    class='gain-slider'
-    onChangeValue=(action "updateSequenceParam" track 'gain')
-    value=track.gain
+{{ui-slider
+  max=1
+  min=0
+  size=gainSliderSize
+  step=0.01
+  class="gain-slider"
+  onChangeValue=(action "updateSequenceParam" track "gain")
+  value=track.gain
+}}
+<div
+  class="btn-group-vertical track-interface-switches"
+  role="group"
+  aria-label="toggle-interface"
+>
+  <button class="circle-btn btn-xs filePicker" type="button" {{action "switchInterface" "filePicker"}}>
+    {{bs-tooltip placement="right" title="Select a drum sample"}}
+    D
+  </button>
+
+  <button
+    class="circle-btn btn-xs rhythm"
+    type="button"
+    {{action "switchInterface" "rhythm"}}
+  >
+    {{bs-tooltip placement="right" title="Euclidean Rhythm Sequence"}}
+    E
+  </button>
+  <button
+    class="circle-btn btn-xs steps"
+    type="button"
+    {{action "switchInterface" "steps"}}
+  >
+    {{bs-tooltip placement="right" title="Automation controls"}}
+    A
+  </button>
+  <button
+    class="circle-btn btn-xs function"
+    type="button"
+    {{action "switchInterface" "function"}}
+  >
+    {{bs-tooltip placement="right" title="Function editor"}}
+    F
+  </button>
+</div>
+<div class="inner-ui-controls">
+  {{#audio-track-sampler
+    sequence=sequence
+    directory=directory
+    track=track
+    gain=track.gain
+    isLooping=track.isLooping
+    filepath=track.filepath
+    outputNodeSelector="#master-compressor" as |sampler|
   }}
+    {{ui-step-sequencer sequence=sequence stepIndex=sampler.stepIndex}}
 
-  <div class="ui-controls">
 
-    {{#audio-track-sampler
-      sequence=sequence
-      directory=directory
-      track=track
-      gain=track.gain
-      isLooping=track.isLooping
-      filename=track.filename
-      outputNodeSelector="#master-compressor"
-      as |sampler|
-    }}
+      <button
+        type="delete"
+        class="btn btn-danger delete-track-btn"
+        {{action "deleteTrack" track}}
+      >
+        ✕
+      </button>
 
-      {{ui-step-sequencer
+    {{#if (eq visibleInterface "filePicker")}}
+      {{drum-file-picker
+        track=track
+        saveTrack=saveTrack
+        updateFilepath=(action "updateFilepath")
+      }}
+    {{/if}}
+    {{#if (eq visibleInterface "steps")}}
+      {{step-param-sliders
+        uiStepSize=uiStepSize
         sequence=sequence
+        track=track
         stepIndex=sampler.stepIndex
       }}
-
-      <div class="row interface-row">
-        <div class="btn-group btn-group-xs interface-switches" role="group" aria-label="toggle-interface">
-          <button {{action 'switchInterface' 'rhythm'}} type="button" class="btn btn-default rhythm">Euclidean Rhythm</button>
-          <button {{action 'switchInterface' 'steps'}} type="button" class="btn btn-default steps">Step Automation</button>
-          <button {{action 'switchInterface' 'function'}} type="button" class="btn btn-default function">Function</button>
-        </div>
-
-        <div class="file-select">
-          {{ui-select
-            choices=filenames
-            onChangeValue=(action "updateFilename" track)
-            value=track.filename
-          }}
-        </div>
-        <button type='delete' class='btn btn-danger delete-track'
-          {{action 'deleteTrack' track}} >
-          ✕
-        </button>
-      </div>
-
-      {{#if (eq visibleInterface 'steps' )}}
-        {{step-param-sliders
-          uiStepSize=uiStepSize
-          sequence=sequence
-          track=track
-          stepIndex=sampler.stepIndex
+    {{/if}}
+    {{#if (eq visibleInterface "rhythm")}}
+      <div class="sequence-dials">
+        {{#ui-dial
+          max=16
+          step=1
+          onChangeValue=(action "updateSequenceParam" track "hits")
+          value=track.hits
         }}
-      {{/if}}
-
-      {{#if (eq visibleInterface 'rhythm' )}}
-        <div class="sequence-dials">
-          {{#ui-dial
-            max=16
-            step=1
-            onChangeValue=(action "updateSequenceParam" track 'hits')
-            value=track.hits
-          }}
           <dl>
             <dt>hits</dt>
             <dd>{{track.hits}}</dd>
           </dl>
-          {{/ui-dial}}
-
-          {{#ui-dial
-            max=16
-            step=1
-            onChangeValue=(action "updateSequenceParam" track 'steps')
-            value=track.steps
-          }}
-            <dl>
-              <dt>steps</dt>
-              <dd>{{track.steps}}</dd>
-            </dl>
-          {{/ui-dial}}
-
-          {{#ui-dial
-            max=16
-            step=1
-            onChangeValue=(action "updateSequenceParam" track 'offset')
-            value=track.offset
-          }}
-            <dl>
-              <dt>offset</dt>
-              <dd>{{track.offset}}</dd>
-            </dl>
-          {{/ui-dial}}
-        </div>
-      {{/if}}
-
-      {{#if (eq visibleInterface 'function')}}
-
-        {{track-function-editor track=track sampler=sampler}}
-
-      {{/if}}
-    {{/audio-track-sampler}}
-  </div>
-
-  {{euclidean-sequence
-    hits=track.hits
-    steps=track.steps
-    offset=track.offset
-    onCalculateSequence=(action "setTrackSequence" track)
-  }}
-
-  {{yield}}
+        {{/ui-dial}}
+        {{#ui-dial
+          max=16
+          step=1
+          onChangeValue=(action "updateSequenceParam" track "steps")
+          value=track.steps
+        }}
+          <dl>
+            <dt>steps</dt>
+            <dd>{{track.steps}}</dd>
+          </dl>
+        {{/ui-dial}}
+        {{#ui-dial
+          max=16
+          step=1
+          onChangeValue=(action "updateSequenceParam" track "offset")
+          value=track.offset
+        }}
+          <dl>
+            <dt>offset</dt>
+            <dd>{{track.offset}}</dd>
+          </dl>
+        {{/ui-dial}}
+      </div>
+    {{/if}}
+    {{#if (eq visibleInterface "function")}}
+      {{track-function-editor customFunction=track.customFunction sampler=sampler}}
+    {{/if}}
+  {{/audio-track-sampler}}
+</div>
+{{euclidean-sequence
+  hits=track.hits
+  steps=track.steps
+  offset=track.offset
+  onCalculateSequence=(action "setTrackSequence" track)
+}}
+{{yield}}

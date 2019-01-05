@@ -1,19 +1,29 @@
-<h4>Comments:</h4>
-
+<h4>
+  Comments:
+</h4>
 {{#unless post.comments}}
-    <h4> No Comments</h4>
+  <h4>
+    No Comments
+  </h4>
 {{/unless}}
-    {{#each post.comments as |comment|}}
-<div class='comments'>
-    <img src='{{comment.user.photoURL}}'/>
-        {{comment.body}}<br>
-</div>
-    {{/each}}
-
+{{#each post.comments as |comment|}}
+  <div class="comments">
+    <img src="{{comment.user.photoURL}}" />
+    {{comment.body}}
+    <br />
+  </div>
+{{/each}}
 {{#if session.isAuthenticated}}
-<div>
-    <img src='{{session.currentUser.photoURL}}' height='35px' width='35px'/>
-    <textarea rows='2' placeholder='Add New Comment' value= {{body}} onchange={{action (mut body) value='target.value'}} />
-    <button {{action 'submitComment' session body}}>Submit</button>
-</div>
+  <div>
+    <img src="{{session.currentUser.photoURL}}" height="35px" width="35px" />
+    <textarea
+      rows="2"
+      placeholder="Add New Comment"
+      value={{body}}
+      onchange={{action (mut body) value="target.value"}}
+    ></textarea>
+    <button {{action "submitComment" session body}}>
+      Submit
+    </button>
+  </div>
 {{/if}}

@@ -1,0 +1,15 @@
+<div class="directory-wrapper">
+  <ul>
+    {{#each directory.choices as |choice|}}
+      <li class={{if (eq choice selected) 'selected'}}>
+        <button {{action "onSelect" directory choice}}>
+          {{#if (eq directory.type "audio")}}
+            {{filename-ui choice}}
+          {{else}}
+            {{choice}}
+          {{/if}}
+        </button>
+      </li>
+    {{/each}}
+  </ul>
+</div>
