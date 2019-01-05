@@ -13,6 +13,28 @@
       }
     },
 
+
+    "customFunctions": {
+      "$customFunction": {
+        "postCreatorUid": {
+          ".write": "auth !== null"
+        },
+        "editorContent": {
+          ".write": "auth !== null"
+        },
+        "functionPreCheck": {
+          ".write": "auth !== null"
+        },
+        "function": {
+          ".write": false
+        },
+        "illegalTokens": {
+          ".write": false
+        }
+      }
+    },
+    
+
     "comments": {
       "$comment": {
         "body": {
@@ -21,7 +43,6 @@
         ".validate": "newData.hasChildren(['body','user'])"
       },
       ".write": "auth !== null"
-
     },
     "users": {
       "$user": {
