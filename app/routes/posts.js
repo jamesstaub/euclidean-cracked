@@ -69,7 +69,9 @@ export default Route.extend({
       let tracks = await post.tracks.toArray();
       for (const track of tracks) {
         const customFunction = await track.customFunction;
-        await customFunction.destroyRecord();
+        // TODO: delete customFunction with cloud Function
+        // since validation prevents deletion
+        // await customFunction.destroyRecord();
         await track.destroyRecord();
       }
       await post.destroyRecord();

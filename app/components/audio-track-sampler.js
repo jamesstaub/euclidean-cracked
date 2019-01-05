@@ -43,7 +43,7 @@ export default Component.extend(SequenceHelper, {
 
   path: computed('directory', 'filepath', {
     get() {
-      return `http://s3.amazonaws.com/drumserver${this.filepath}`;
+      return `https://s3.amazonaws.com/drumserver${this.filepath}`;
     }
   }),
 
@@ -242,14 +242,13 @@ export default Component.extend(SequenceHelper, {
 
   setSamplerData() {
     let trackId = this.trackId;
-
     let serviceTrackRef = this.audioService.findOrCreateTrackRef(trackId);
-
     let selector = `#${this.samplerId}`;
     let callback = this.onStepCallback.bind(this);
     let sequence = this.sequence;
-
-    let customFunction = this.track.customFunction.function;
+    // customFunction.function can only be written by a cloud function
+    // that filters out dangerous tokens
+    let customFunction = get(this, 'track.customFunction.function');
     let isSafe = !this.track.illegalTokens;
     if (isSafe && customFunction) {
       let scope = this.customFunctionScope;

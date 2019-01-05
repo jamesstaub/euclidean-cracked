@@ -5,22 +5,15 @@ export default DS.Model.extend({
 
   // the text of the function string as the user types
   // (not ever loaded into an actual javascript function)
-  editorContent: DS.attr('string', {
-    defaultValue() {
-      return '';
-    }
-  }),
+  editorContent: DS.attr('string'),
 
-  // always copied from editorContent when submitted
-  function: DS.attr('string', {
-    defaultValue() {
-      return '';
-    }
-  }),
+  // copied from editorContent when user clicks load function
+  functionPreCheck: DS.attr('string'),
+
+  // always copied from functionPreCheck in cloud function
+  // after submitted and checked for forbidden tokens
+  function: DS.attr('string', { readOnly: true }),
 
   // unsafe javascript keywords returned from cloud function
-  illegalTokens: DS.attr('string'),
-
-  // can only be set by cloud function
-  isSafe: DS.attr('boolean')
+  illegalTokens: DS.attr('string', { readOnly: true })
 });

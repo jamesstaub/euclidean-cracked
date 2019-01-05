@@ -9,16 +9,8 @@ export default Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
-    this.send('switchInterface', 'function');
+    this.send('switchInterface', 'filePicker');
   },
-
-  customFunction: computed('track.customFunction', {
-    get() {
-      this.track.customFunction.then(customFunction => {
-        return customFunction;
-      });
-    }
-  }),
 
   saveTrack: task(function*(track) {
     yield track.save();
@@ -43,7 +35,9 @@ export default Component.extend({
 
     async deleteTrack(track) {
       const customFunction = await track.customFunction
-      customFunction.destroyRecord();
+      // TODO: delete customFunction with cloud Function
+      // since readOnly validation prevents deletion
+      // customFunction.destroyRecord();
       track.destroyRecord();
     },
 

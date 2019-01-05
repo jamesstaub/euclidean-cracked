@@ -8,7 +8,6 @@ export default Component.extend({
   audioService: service(),
   classNames: ['track-function-editor'],
 
-
   // stringified code that gets run in audio service on submit
   function: reads('customFunction.function'),
   // code in text editor
@@ -40,7 +39,6 @@ export default Component.extend({
       // await and waitForProperty dont resolve
       this.customFunction.then((customFunction) => {
         customFunction.set('editorContent', content);
-        // customFunction.set('isSafe', true);
         customFunction.save();
       });
     },
@@ -48,21 +46,29 @@ export default Component.extend({
     submitCode(audioTrackSampler) {
       const scope = audioTrackSampler.customFunctionScope;
       const serviceTrackRef = this.serviceTrackRef;
+      
+      this.customFunction.then((customFunction) => {
 
-      if (this.editorContent) {
-        this.customFunction.set('function', this.editorContent);
-        this.customFunction.save();
+        if (this.editorContent) {
 
-        get(this, 'audioService').applyTrackFunction(
-          serviceTrackRef,
-          this.editorContent,
-          scope
-        );
-      }
+          // apply the editor content to functionPreCheck
+          // which then gets checked in cloud function
+          // if safe, the property `function` will then get applied
+          set(customFunction, 'functionPreCheck', this.editorContent);
+
+          customFunction.save();
+
+          get(this, 'audioService').applyTrackFunction(
+            serviceTrackRef,
+            this.editorContent,
+            scope
+          );
+        }
+      });
     },
 
     discardChanges() {
-      this.customFunction.set('editorContent', this.customFunction.function);
+      this.customFunction.set('editorContent', get(this, 'customFunction.function'));
       this.customFunction.save();
     },
 
