@@ -40,6 +40,7 @@ export default Component.extend({
       // await and waitForProperty dont resolve
       this.customFunction.then((customFunction) => {
         customFunction.set('editorContent', content);
+        // customFunction.set('isSafe', true);
         customFunction.save();
       });
     },
