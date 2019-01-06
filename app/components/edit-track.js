@@ -29,10 +29,6 @@ export default Component.extend({
       this.saveTrack.perform(track);
     },
 
-    setTrackSequence(track, sequence) {
-      set(this, 'sequence', sequence);
-    },
-
     async deleteTrack(track) {
       const customFunction = await track.customFunction
       // TODO: delete customFunction with cloud Function

@@ -10,6 +10,7 @@
  *  @param {Number} pulses Number of pulses in the pattern
  *  @param {Number} steps  Number of steps in the pattern (pattern length)
  */
+
 const getPattern = (pulses, steps) => {
   if (pulses < 0 || steps < 0 || steps < pulses) {
     return [];
@@ -62,4 +63,18 @@ const getPattern = (pulses, steps) => {
   return pattern;
 };
 
-export default getPattern;
+// for euclidean algorithm hits must always be lower than steps
+const sortParameters = (hits, steps) => {
+  const params = [hits, steps].sort((a, b) => {
+    return a - b;
+  });
+  return params;
+};
+
+const calculateSequence = (hits, steps, offset) => {
+  const sortedHitsSteps = sortParameters(hits, steps);
+  offset = steps - offset;
+  return getPattern(...sortedHitsSteps).rotate(offset);
+};
+
+export default calculateSequence;

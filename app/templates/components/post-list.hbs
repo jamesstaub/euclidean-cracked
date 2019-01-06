@@ -1,24 +1,15 @@
 <div class='row index-wrapper'>
 {{audio-post-sequencer post=currentPost readOnly=true}}
 {{#each currentPost.tracks as |track|}}
-  {{#euclidean-sequence
-    hits=track.hits
-    steps=track.steps
-    offset=track.offset
-    as |sequence|
+  {{audio-track-sampler
+    sequence=track.sequence
+    directory=directory
+    track=track
+    gain=track.gain
+    isLooping=track.isLooping
+    filepath=track.filepath
+    outputNodeSelector="#master-compressor"
   }}
-
-    {{audio-track-sampler
-      sequence=sequence
-      directory=directory
-      track=track
-      gain=track.gain
-      isLooping=track.isLooping
-      filepath=track.filepath
-      outputNodeSelector="#master-compressor"
-    }}
-
-  {{/euclidean-sequence}}
 {{/each}}
 </div>
 

@@ -1,0 +1,36 @@
+{{! template-lint-disable }}
+<div class="sequence-dials">
+  {{#ui-dial
+    max=16
+    step=1
+    onChangeValue=(action "updateSequenceParam" "hits")
+    value=hits
+  }}
+  <dl>
+    <dt>hits</dt>
+    <dd>{{hits}}</dd>
+  </dl>
+  {{/ui-dial}}
+  {{#ui-dial
+    max=16
+    step=1
+    onChangeValue=(action "updateSequenceParam" "steps")
+    value=steps
+  }}
+  <dl>
+    <dt>steps</dt>
+    <dd>{{steps}}</dd>
+  </dl>
+  {{/ui-dial}}
+  {{#ui-dial
+    max=16
+    step=1
+    onChangeValue=(action "updateSequenceParam" "offset")
+    value=offset
+  }}
+  <dl>
+    <dt>offset</dt>
+    <dd>{{offset}}</dd>
+  </dl>
+  {{/ui-dial}}
+</div>
