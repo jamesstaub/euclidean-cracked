@@ -83,7 +83,6 @@ export default Route.extend({
     },
 
     async createTrack(post) {
-
       let customFunction = this.store.createRecord('customFunction', {
         postCreatorUid: get(post, 'creator.uid'),
       });
@@ -95,7 +94,7 @@ export default Route.extend({
       let track = this.store.createRecord('track', {
         postCreatorUid: get(post, 'creator.uid'),
         publicEditable: get(post, 'publicEditable'),
-        customFunction: customFunction
+        customFunction: customFunction,
       });
 
       track.set('customFunction', customFunction);

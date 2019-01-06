@@ -6,6 +6,7 @@ import { next } from "@ember/runloop";
 export default Mixin.create({
   nexusId: computed('elementId', {
     get() {
+      // FIXME: ember ids deprecated soon
       // strip 'ember' out of component id and use as
       // nexus instance id
       return parseInt(get(this, 'elementId').substring(5));

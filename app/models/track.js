@@ -18,8 +18,9 @@ export default DS.Model.extend({
   filepath: DS.attr('string', {
     // TODO request file server api
     // labelled categories for random kick, snare, hat etc
-    // defaultValue() {
-    // }
+    defaultValue() {
+      return "/Ace Tone Rhythm Ace/KICK1.mp3";
+    }
   }),
 
   filename: computed('filepath', {

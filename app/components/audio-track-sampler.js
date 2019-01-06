@@ -88,22 +88,13 @@ export default Component.extend(SequenceHelper, {
 
   init() {
     this._super(...arguments);
+    this.set('stepIndex', 0);
     // set(this, 'isLooping', false);/
   },
 
   didReceiveAttrs() {
     this._super(...arguments);
-    // cache and compare properties that require
-    // a refresh of sampler nodes on update
-    // ie [sequence, filepath, ...
-    let refreshOnUpdate =
-      this.sequence !== this._sequence || this.filepath !== this._filepath;
-
-    if (refreshOnUpdate) {
-      this.initializeSampler.perform();
-    }
-    set(this, '_sequence', this.sequence);
-    set(this, '_filepath', this.filepath);
+    this.initializeSampler.perform();
   },
 
   willDestroy() {
@@ -118,10 +109,8 @@ export default Component.extend(SequenceHelper, {
     );
 
     yield waitForProperty(this, 'filepath');
-
-    if (typeof this.stepIndex === 'undefined') {
-      set(this, 'stepIndex', 0);
-    }
+    // wait until beginning of sequence to apply changes
+    // prevents lots of concurrent disruptions
     yield waitForProperty(this, 'stepIndex', 0);
 
     if (sequence.length) {
@@ -158,7 +147,7 @@ export default Component.extend(SequenceHelper, {
     serviceTracks.removeObject(ref);
   },
 
-  // TODO: how to set new filepath without rebuilding node?
+  // TODO: cracked: how to set new filepath without rebuilding node?
   buildNode() {
     set(this, 'hasBuiltNode', true);
     __()
