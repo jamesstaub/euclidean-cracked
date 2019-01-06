@@ -9,6 +9,8 @@ export default Route.extend({
   session: service(),
 
   beforeModel() {
+    // fire a request to wake up heroku drumserver
+    fetch('https://drumserver.herokuapp.com/');
     return get(this, 'session')
       .fetch()
       .catch(er => {
@@ -37,9 +39,11 @@ export default Route.extend({
     login() {
       this.openSession('google');
     },
-    logout() {
-      get(this, 'session').close();
+    async logout() {
       set(this, 'session.currentUserModel.online', false);
+      this.session.currentUserModel.set('online', false);
+      await this.session.currentUserModel.save();
+      this.session.close();
     },
   }
 });

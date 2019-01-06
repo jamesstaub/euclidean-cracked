@@ -25,12 +25,6 @@ export default Route.extend({
     this._super(controller, model);
   },
 
-  // FIXME exit() is a private method.
-  // for some reason willTransition() does not fire
-  exit() {
-    this.removeUser();
-  },
-
   addPostActiveUser(model) {
     let post = model.get('firstObject');
     set(this, 'post', post);
@@ -163,5 +157,8 @@ export default Route.extend({
           });
       });
     },
+    willTransition() {
+      this.removeUser();
+    }
   }
 });

@@ -30,7 +30,6 @@ export default Component.extend({
     }
   }),
 
-
   // TODO
   // add track save task and invoke that everywhere
   actions: {

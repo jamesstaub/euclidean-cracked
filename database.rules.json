@@ -12,8 +12,6 @@
         ".write": "auth.uid == data.child('postCreatorUid').val() || auth.uid == newData.child('postCreatorUid').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
       }
     },
-
-
     "customFunctions": {
       "$customFunction": {
         "postCreatorUid": {
