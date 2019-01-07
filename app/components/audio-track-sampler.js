@@ -1,7 +1,7 @@
 import SequenceHelper from 'euclidean-cracked/mixins/sequence-helper';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { task, waitForProperty } from 'ember-concurrency';
+import { task, waitForProperty, timeout } from 'ember-concurrency';
 import { get, set, computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
@@ -120,7 +120,8 @@ export default Component.extend(SequenceHelper, {
       this.setSamplerData();
       this.audioService.bindTrackSamplers();
     }
-  }).drop(),
+
+  }).keepLatest(),
 
   removeAllNodes() {
     __(`#${this.samplerId}`).unbind('step');
@@ -211,8 +212,8 @@ export default Component.extend(SequenceHelper, {
     }
   },
 
+  // apply sequence data from track model to global service track reference
   setSequenceParams() {
-    // apply sequence data from track model to global service track reference
     let trackId = this.trackId;
     let serviceTrackRef = this.audioService.findOrCreateTrackRef(trackId);
 
@@ -225,7 +226,6 @@ export default Component.extend(SequenceHelper, {
     sequenceArrayKeys.forEach(key => {
       set(serviceTrackRef, key, get(this, key));
     });
-
     return serviceTrackRef;
   },
 
