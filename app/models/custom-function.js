@@ -5,7 +5,11 @@ export default DS.Model.extend({
 
   // the text of the function string as the user types
   // (not ever loaded into an actual javascript function)
-  editorContent: DS.attr('string'),
+  editorContent: DS.attr('string', {
+    defaultValue() {
+      return '';
+    }
+  }),
 
   // copied from editorContent when user clicks load function
   functionPreCheck: DS.attr('string'),

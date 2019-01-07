@@ -8,38 +8,29 @@
     <div class="load-buttons">
       <button
         class="btn btn-xs btn-primary run-code-btn"
-        disabled={{editorClean}}
+        disabled={{cantSubmit}}
         type="submit"
         name="button"
       >
-        {{if functionIsLoaded "update" "load"}}
+        load script
       </button>
 
-        <button
-          class="btn btn-xs disable-code-btn"
-          type="button"
-          disabled={{not functionIsLoaded}}
-          {{action "disableFunction"}}
-        >
-          disable
-        </button>
-        <button
-          class="btn btn-xs disable-code-btn"
-          disabled={{editorClean}}
-          type="button"
-          {{action "discardChanges"}}
-        >
-          revert changes
-        </button>
-      {{#unless functionIsLoaded }}
-        <span>changes not loaded</span>
-      {{/unless}}
-      {{#if track.illegalTokens}}
-      <div>
-        <p>Cannot load a function with unsupported keywords:</p>
-        <p>{{track.illegalTokens}}</p>
-      </div>
-      {{/if}}
+      <button
+        class="btn btn-xs disable-code-btn"
+        type="button"
+        disabled={{not functionIsLoaded}}
+        {{action "disableFunction"}}
+      >
+        {{if functionIsLoaded 'disable' 'no script loaded'}}
+      </button>
+      <button
+        class="btn btn-xs disable-code-btn"
+        disabled={{functionIsLoaded}}
+        type="button"
+        {{action "discardChanges"}}
+      >
+        revert changes
+      </button>
     </div>
     {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
       {{#dd.button class="btn-xs"}}
@@ -77,6 +68,13 @@
         {{/menu.item}}
       {{/dd.menu}}
     {{/bs-dropdown}}
+  </div>
+  <div>
+    {{#if illegalTokens}}
+      <div class="alert alert-danger" role="alert">
+        <span>remove unsupported keywords: <span class='danger'>{{illegalTokens}}</span></span>
+      </div>
+    {{/if}}
   </div>
   {{ember-ace
     lines=20
