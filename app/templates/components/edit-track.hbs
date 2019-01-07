@@ -7,44 +7,7 @@
   onChangeValue=(action "updateSequenceParam" track "gain")
   value=track.gain
 }}
-<div
-  class="btn-group-vertical track-interface-switches"
-  role="group"
-  aria-label="toggle-interface"
->
-  <button
-    class="circle-btn btn-xs filePicker"
-    type="button"
-    {{action "switchInterface" "filePicker"}}
-  >
-    {{bs-tooltip placement="right" title="Select a drum sample"}}
-    D
-  </button>
-  <button
-    class="circle-btn btn-xs rhythm"
-    type="button"
-    {{action "switchInterface" "rhythm"}}
-  >
-    {{bs-tooltip placement="right" title="Euclidean Rhythm Sequence"}}
-    E
-  </button>
-  <button
-    class="circle-btn btn-xs steps"
-    type="button"
-    {{action "switchInterface" "steps"}}
-  >
-    {{bs-tooltip placement="right" title="Automation controls"}}
-    A
-  </button>
-  <button
-    class="circle-btn btn-xs function"
-    type="button"
-    {{action "switchInterface" "function"}}
-  >
-    {{bs-tooltip placement="right" title="Function editor"}}
-    F
-  </button>
-</div>
+
 <div class="inner-ui-controls">
   {{#audio-track-sampler
     sequence=track.sequence
@@ -66,6 +29,9 @@
     >
       ✕
     </button>
+
+    {{track-interface-switches switchInterface=(action "switchInterface")}}
+    
     {{#if (eq visibleInterface "filePicker")}}
       {{drum-file-picker
         track=track

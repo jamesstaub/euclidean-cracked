@@ -13,7 +13,6 @@ export default Component.extend(NexusMixin, {
     get() {
       // TODO: generalize ui element sizes to a global config
       // (or nexus mixin)
-
       return {
         size: [this.width, 30],
         mode: 'toggle',

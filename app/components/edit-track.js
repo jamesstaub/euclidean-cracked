@@ -49,10 +49,6 @@ export default Component.extend({
 
     switchInterface(name) {
       set(this, 'visibleInterface', name);
-      this.$()
-        .find('.interface-switches .btn')
-        .removeClass('active');
-      this.$(`.interface-switches .${name}`).addClass('active');
     }
   }
 });
