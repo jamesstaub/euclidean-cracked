@@ -25,12 +25,6 @@ export default Route.extend({
     this._super(controller, model);
   },
 
-  // FIXME exit() is a private method.
-  // for some reason willTransition() does not fire
-  exit() {
-    this.removeUser();
-  },
-
   addPostActiveUser(model) {
     let post = model.get('firstObject');
     set(this, 'post', post);
@@ -89,7 +83,6 @@ export default Route.extend({
     },
 
     async createTrack(post) {
-
       let customFunction = this.store.createRecord('customFunction', {
         postCreatorUid: get(post, 'creator.uid'),
       });
@@ -101,7 +94,7 @@ export default Route.extend({
       let track = this.store.createRecord('track', {
         postCreatorUid: get(post, 'creator.uid'),
         publicEditable: get(post, 'publicEditable'),
-        customFunction: customFunction
+        customFunction: customFunction,
       });
 
       track.set('customFunction', customFunction);
@@ -163,5 +156,8 @@ export default Route.extend({
           });
       });
     },
+    willTransition() {
+      this.removeUser();
+    }
   }
 });

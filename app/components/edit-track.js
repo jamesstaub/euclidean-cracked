@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { set, computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
+import { debug } from '@ember/debug';
 
 export default Component.extend({
   classNames: ['edit-track border'],
@@ -13,7 +14,12 @@ export default Component.extend({
   },
 
   saveTrack: task(function*(track) {
-    yield track.save();
+    try {
+      yield track.save();
+    } catch (e) {
+      debug(`error saving track:  ${e}`);
+      track.rollbackAttributes();
+    }
   }).keepLatest(),
 
   actions: {
@@ -25,16 +31,16 @@ export default Component.extend({
     updateSequenceParam(track, parameter, value) {
       // NOTE: try using store.push to instantly update the UI
       // if server roundtrip causes UI problems
-      track.set(parameter, value);
+      try {
+        track.set(parameter, value);
+      } catch(e) {
+        debug('error saving track', e)
+      }
       this.saveTrack.perform(track);
     },
 
-    setTrackSequence(track, sequence) {
-      set(this, 'sequence', sequence);
-    },
-
     async deleteTrack(track) {
-      const customFunction = await track.customFunction
+      const customFunction = await track.customFunction;
       // TODO: delete customFunction with cloud Function
       // since readOnly validation prevents deletion
       // customFunction.destroyRecord();
@@ -43,10 +49,6 @@ export default Component.extend({
 
     switchInterface(name) {
       set(this, 'visibleInterface', name);
-      this.$()
-        .find('.interface-switches .btn')
-        .removeClass('active');
-      this.$(`.interface-switches .${name}`).addClass('active');
-    },
+    }
   }
 });

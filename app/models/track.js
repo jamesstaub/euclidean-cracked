@@ -1,5 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import E from 'euclidean-cracked/utils/euclidean';
+
 export default DS.Model.extend({
   post: DS.belongsTo('post'),
 
@@ -16,8 +18,9 @@ export default DS.Model.extend({
   filepath: DS.attr('string', {
     // TODO request file server api
     // labelled categories for random kick, snare, hat etc
-    // defaultValue() {
-    // }
+    defaultValue() {
+      return "/Ace Tone Rhythm Ace/KICK1.mp3";
+    }
   }),
 
   filename: computed('filepath', {
@@ -48,6 +51,16 @@ export default DS.Model.extend({
   offset: DS.attr('number', {
     defaultValue() {
       return 0;
+    }
+  }),
+
+  sequence: computed('hits', 'steps', 'offset', {
+    get() {
+      const hasHits = typeof this.hits !== 'undefined';
+      const hasSteps = typeof this.steps !== 'undefined';
+      if (hasHits && hasSteps) {
+        return E(this.hits, this.steps, this.offset);
+      }
     }
   }),
 

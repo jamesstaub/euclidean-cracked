@@ -3,8 +3,8 @@
 }
 
 .edit-track {
-  display: flex;
   align-content: flex-start;
+  display: flex;
   margin: 15px 0;
   min-height: 260px;
   position: relative;
@@ -27,23 +27,6 @@
     background-color: gray;
     padding: 15px;
   }
-
-  .track-interface-switches {
-    left: 13px;
-    position: absolute;
-    top: 130px;
-    width: 50px;
-
-    .circle-btn {
-      background-color: darkgray;
-      border-radius: 50%;
-      display: block;
-      height: 24px;
-      margin-bottom: 5px;
-      width: 24px;
-    }
-  }
-
   .inner-ui-controls {
     background-color: lightgray;
     flex: 1 1 auto;

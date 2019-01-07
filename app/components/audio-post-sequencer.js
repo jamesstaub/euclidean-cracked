@@ -12,7 +12,6 @@ export default Component.extend({
 
   didInsertElement() {
     this.initSignalChain();
-    __().play();
   },
 
   willDestroyElement() {
@@ -39,28 +38,27 @@ export default Component.extend({
   },
 
   actions: {
-
     setLoopInterval(post, interval) {
-      __.loop(interval);
-      __.loop('start');
+      this.audioService.setInterval(interval);
       post.save();
     },
 
     loopAction(action) {
-      let audio = this.audioService;
-      let interval = get(this, 'post.interval');
+      const audio = this.audioService;
+      const interval = get(this, 'post.interval');
 
       switch (action) {
         case 'start':
+          audio.setInterval(interval);
+          audio.startLoop();
           this.toggleProperty('isPlaying');
-          audio.startLoop(interval);
           break;
         case 'reset':
           audio.resetLoop(interval);
           break;
         case 'stop':
+          audio.stopLoop();
           this.toggleProperty('isPlaying');
-          __.loop(action);
           break;
       }
     }

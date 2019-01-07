@@ -1,7 +1,7 @@
 import SequenceHelper from 'euclidean-cracked/mixins/sequence-helper';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { task, waitForProperty } from 'ember-concurrency';
+import { task, waitForProperty, timeout } from 'ember-concurrency';
 import { get, set, computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
@@ -88,22 +88,13 @@ export default Component.extend(SequenceHelper, {
 
   init() {
     this._super(...arguments);
+    this.set('stepIndex', 0);
     // set(this, 'isLooping', false);/
   },
 
   didReceiveAttrs() {
     this._super(...arguments);
-    // cache and compare properties that require
-    // a refresh of sampler nodes on update
-    // ie [sequence, filepath, ...
-    let refreshOnUpdate =
-      this.sequence !== this._sequence || this.filepath !== this._filepath;
-
-    if (refreshOnUpdate) {
-      this.initializeSampler.perform();
-    }
-    set(this, '_sequence', this.sequence);
-    set(this, '_filepath', this.filepath);
+    this.initializeSampler.perform();
   },
 
   willDestroy() {
@@ -118,10 +109,8 @@ export default Component.extend(SequenceHelper, {
     );
 
     yield waitForProperty(this, 'filepath');
-
-    if (typeof this.stepIndex === 'undefined') {
-      set(this, 'stepIndex', 0);
-    }
+    // wait until beginning of sequence to apply changes
+    // prevents lots of concurrent disruptions
     yield waitForProperty(this, 'stepIndex', 0);
 
     if (sequence.length) {
@@ -131,7 +120,8 @@ export default Component.extend(SequenceHelper, {
       this.setSamplerData();
       this.audioService.bindTrackSamplers();
     }
-  }).drop(),
+
+  }).keepLatest(),
 
   removeAllNodes() {
     __(`#${this.samplerId}`).unbind('step');
@@ -158,7 +148,7 @@ export default Component.extend(SequenceHelper, {
     serviceTracks.removeObject(ref);
   },
 
-  // TODO: how to set new filepath without rebuilding node?
+  // TODO: cracked: how to set new filepath without rebuilding node?
   buildNode() {
     set(this, 'hasBuiltNode', true);
     __()
@@ -222,8 +212,8 @@ export default Component.extend(SequenceHelper, {
     }
   },
 
+  // apply sequence data from track model to global service track reference
   setSequenceParams() {
-    // apply sequence data from track model to global service track reference
     let trackId = this.trackId;
     let serviceTrackRef = this.audioService.findOrCreateTrackRef(trackId);
 
@@ -236,7 +226,6 @@ export default Component.extend(SequenceHelper, {
     sequenceArrayKeys.forEach(key => {
       set(serviceTrackRef, key, get(this, key));
     });
-
     return serviceTrackRef;
   },
 

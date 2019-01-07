@@ -3,8 +3,7 @@ import { get, computed } from '@ember/object';
 export default Component.extend({
   classNames: ['post-active-users'],
 
-  // TODO: also watch activeUsers.each.online to catch when someone closes browser window
-  visible: computed('post.activeUsers.length,', {
+  visible: computed('post.activeUsers.length', 'post.activeUsers.@each.online', {
     get() {
       let online = get(this, 'post.activeUsers').filter(user => {
         if (user) {

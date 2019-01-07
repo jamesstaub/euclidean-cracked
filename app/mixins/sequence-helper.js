@@ -3,7 +3,7 @@ import { get, set, computed } from "@ember/object";
 
 function arraySequenceComputed(stringKey) {
   // reusable computed property template
-  // to serialize stringified sequence array to/from store
+  // to serialize/normalize sequence from string ("1,0,0" )to array [1,0,1]
   return {
     get() {
       return this.stringToArray(stringKey);
@@ -43,8 +43,6 @@ export default Mixin.create({
   setParamsAudioService(paramKey, stepArray) {
     let serviceTracks = get(this, 'audioService.tracks');
     let trackRef = serviceTracks.findBy('trackId', get(this, 'track.id'));
-
     set(trackRef, paramKey, stepArray);
   },
-
 });
