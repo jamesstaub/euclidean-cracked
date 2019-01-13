@@ -9,8 +9,8 @@ export default DS.Model.extend({
 
     interval: DS.attr('number', {
       defaultValue() {
- return 200; 
-}
+        return 200; 
+      }
     }),
 
     tracks: DS.hasMany('track'),

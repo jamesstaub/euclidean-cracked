@@ -118,9 +118,7 @@ export default Component.extend(SequenceHelper, {
       this.buildNode();
       this.setSequenceParams();
       this.setSamplerData();
-      this.audioService.bindTrackSamplers();
     }
-
   }).keepLatest(),
 
   removeAllNodes() {
@@ -241,12 +239,19 @@ export default Component.extend(SequenceHelper, {
     let isSafe = !this.track.illegalTokens;
     if (isSafe && customFunction) {
       let scope = this.customFunctionScope;
-      this.audioService.applyTrackFunction(serviceTrackRef, customFunction, scope);
+      this.audioService.applyTrackFunction(
+        serviceTrackRef,
+        customFunction,
+        scope
+      );
     }
 
     // set sampler selector, onStep callback and rhythm sequence
     set(serviceTrackRef, 'selector', selector);
     set(serviceTrackRef, 'callback', callback);
     set(serviceTrackRef, 'sequence', sequence);
-  }
+
+    this.audioService.bindTrackSamplers();
+  },
+
 });

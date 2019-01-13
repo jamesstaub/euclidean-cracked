@@ -1,5 +1,6 @@
 {{yield}}
-<form class="function-editor" {{action "submitCode" sampler on="submit"}}>
+{{if applyFunction.isRunning 'checking code...'}}
+<form class="function-editor" {{action "submitCode" on="submit"}}>
   {{! <legend>
       <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
       <p>script will be called on each step of the step sequencer.</p>
@@ -42,30 +43,31 @@
             Tutorial
           </span>
         {{/menu.item}}
-        {{#menu.item}}
-          <a
-            class="dropdown-item"
-            {{action "injectExample" "sequencerVariables"}}
-          >
-            sequencer variables
-          </a>
-        {{/menu.item}}
-        {{#menu.item}}
-          <a class="dropdown-item" {{action "injectExample" "audioNodes"}}>
-            audio nodes
-          </a>
-        {{/menu.item}}
+
+
+        {{#each tutorialExamples as |example| }}
+          {{#menu.item}}
+            <a
+              class="dropdown-item"
+              onclick={{perform injectExample example.code}}
+            >
+              {{example.name}}
+            </a>
+          {{/menu.item}}
+        {{/each}}
         {{menu.divider}}
-        {{#menu.item}}
-          <span class="dropdown-header">
-            Examples
-          </span>
-        {{/menu.item}}
-        {{#menu.item}}
-          <a class="dropdown-item" {{action "injectExample" "filterSweep"}}>
-            filter sweep
-          </a>
-        {{/menu.item}}
+        {{#each effectsExamples as |example| }}
+          {{#menu.item}}
+            <a
+              class="dropdown-item"
+              onclick={{perform injectExample example.code}}
+            >
+              {{example.name}}
+            </a>
+          {{/menu.item}}
+        {{/each}}
+
+
       {{/dd.menu}}
     {{/bs-dropdown}}
   </div>

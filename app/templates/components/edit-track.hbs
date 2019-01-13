@@ -16,7 +16,7 @@
     gain=track.gain
     isLooping=track.isLooping
     filepath=track.filepath
-    outputNodeSelector="#master-compressor" as |sampler|
+    outputNodeSelector="#master-compressor" as |sampler onApplyFunction|
   }}
     {{ui-step-sequencer 
       sequence=track.sequence 
@@ -55,6 +55,8 @@
         onUpdateSequenceParam=(action "updateSequenceParam" track)  
       }}
     {{/if}}
+    {{!-- TODO refactor to be nested in audio-track-sampler --}}
+    {{!-- and passs onApplyFunction as action instead--}}
     {{#if (eq visibleInterface "function")}}
       {{track-function-editor
         customFunction=track.customFunction

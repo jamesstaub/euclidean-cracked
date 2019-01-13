@@ -3,7 +3,7 @@ import { computed, get, set} from "@ember/object";
 import { inject as service } from '@ember/service';
 import { reads, not, and, or } from "@ember/object/computed";
 import { task, waitForProperty } from 'ember-concurrency';
-import exampleFunctions from '../utils/example-functions';
+import { tutorial, effects } from '../utils/example-functions';
 export default Component.extend({
   audioService: service(),
   classNames: ['track-function-editor'],
@@ -33,53 +33,62 @@ export default Component.extend({
     }
   }),
 
+  init() {
+    this._super(...arguments);
+    this.set('tutorialExamples', tutorial);
+    this.set('effectsExamples', effects);
+  },
+
+  // set property to cusotmFunction model then save
+  saveFunctionTask: task(function * (property, value) {
+    //yield proxy to model record
+    const customFunction = yield this.customFunction;
+    customFunction.set(property, value);
+    yield customFunction.save();
+  }),
+
+  applyFunction: task(function * (){
+    // apply the editor content to functionPreCheck
+    // which then gets checked in cloud function
+    yield this.saveFunctionTask.perform('functionPreCheck', this.editorContent);
+    // after save is called, functionPreCheck has a value
+    // until the function checker sets it null and either sets 
+    // the function property, or returns illegal keywords
+    yield waitForProperty(this, 'customFunction.functionPreCheck', null);
+    //the cloud function check succeeded if function + editor are identical
+    if (this.function === this.editorContent) {
+      yield this.sampler.initializeSampler.perform();
+    }
+  }),
+
+  injectExample: task(function * (code) {
+    if (this.editorContent) {
+      if (!window.confirm('overwrite existing script?')) {
+        return
+      }
+    }
+    yield this.saveFunctionTask.perform('editorContent', code);
+    yield this.applyFunction.perform();
+  }),
+
   // TODO
   // add track save task and invoke that everywhere
   actions: {
-    onUpdateEditor(content) {
-      // customFunction is a proxy but for some reason
-      // await and waitForProperty dont resolve
-      this.customFunction.then(customFunction => {
-        customFunction.set('editorContent', content);
-        customFunction.save();
-      });
+    submitCode() {
+      this.applyFunction.perform();
     },
 
-    submitCode(audioTrackSampler) {
-      const scope = audioTrackSampler.customFunctionScope;
-      const serviceTrackRef = this.serviceTrackRef;
-
-      this.customFunction.then(customFunction => {
-        // apply the editor content to functionPreCheck
-        // which then gets checked in cloud function
-        // if safe, the property `function` will then get applied
-        customFunction.set('functionPreCheck', this.editorContent);
-        customFunction.save();
-        this.audioService.applyTrackFunction(
-          serviceTrackRef,
-          this.editorContent,
-          scope
-        );
-      });
+    onUpdateEditor(content) {
+      this.saveFunctionTask.perform('editorContent', content);
     },
 
     discardChanges() {
-      this.customFunction.then(customFunction => {
-        customFunction.set('editorContent', this.function);
-        customFunction.save();
-      });
+      this.saveFunctionTask.perform('editorContent', this.function);
     },
 
     disableFunction() {
-      this.customFunction.then(customFunction => {
-        customFunction.set('function', '');
-        customFunction.save();
-      });
+      this.saveFunctionTask.perform('functionPreCheck', '');
       set(this.serviceTrackRef, 'customFunction', null);
     },
-
-    injectExample(name) {
-      // exampleFunctions;?
-    }
   }
 });
