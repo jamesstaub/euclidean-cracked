@@ -1,5 +1,6 @@
 {{yield}}
-<form class="function-editor" {{action "submitCode" sampler on="submit"}}>
+
+<form class="function-editor" {{action "submitCode" on="submit"}}>
   {{! <legend>
       <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
       <p>script will be called on each step of the step sequencer.</p>
@@ -8,75 +9,70 @@
     <div class="load-buttons">
       <button
         class="btn btn-xs btn-primary run-code-btn"
-        disabled={{editorClean}}
+        disabled={{cantSubmit}}
         type="submit"
         name="button"
       >
-        {{if functionIsLoaded "update" "load"}}
+      
+        {{#if functionIsLoaded }}
+          {{fa-icon "check"}}
+        {{else if applyFunction.isRunning}}
+          {{fa-icon "spinner"}}
+        {{else}}
+          load script
+        {{/if}} 
       </button>
 
-        <button
-          class="btn btn-xs disable-code-btn"
-          type="button"
-          disabled={{not functionIsLoaded}}
-          {{action "disableFunction"}}
-        >
-          disable
-        </button>
-        <button
-          class="btn btn-xs disable-code-btn"
-          disabled={{editorClean}}
-          type="button"
-          {{action "discardChanges"}}
-        >
-          revert changes
-        </button>
-      {{#unless functionIsLoaded }}
-        <span>changes not loaded</span>
-      {{/unless}}
-      {{#if track.illegalTokens}}
-      <div>
-        <p>Cannot load a function with unsupported keywords:</p>
-        <p>{{track.illegalTokens}}</p>
-      </div>
-      {{/if}}
+      <button
+        class="btn btn-xs disable-code-btn"
+        type="button"
+        disabled={{not functionIsLoaded}}
+        {{action "disableFunction"}}
+      >
+        {{if functionIsLoaded "disable" "no script loaded"}}
+      </button>
+      <button
+        class="btn btn-xs disable-code-btn"
+        disabled={{functionIsLoaded}}
+        type="button"
+        {{action "discardChanges"}}
+      >
+        revert changes
+      </button>
     </div>
     {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
       {{#dd.button class="btn-xs"}}
-        Examples<span class="caret"></span>
+        Example Scripts <span class="caret"></span>
       {{/dd.button}}
       {{#dd.menu as |menu|}}
-        {{#menu.item}}
-          <span class="dropdown-header">
-            Tutorial
-          </span>
-        {{/menu.item}}
-        {{#menu.item}}
-          <a
-            class="dropdown-item"
-            {{action "injectExample" "sequencerVariables"}}
-          >
-            sequencer variables
-          </a>
-        {{/menu.item}}
-        {{#menu.item}}
-          <a class="dropdown-item" {{action "injectExample" "audioNodes"}}>
-            audio nodes
-          </a>
-        {{/menu.item}}
-        {{menu.divider}}
-        {{#menu.item}}
-          <span class="dropdown-header">
-            Examples
-          </span>
-        {{/menu.item}}
-        {{#menu.item}}
-          <a class="dropdown-item" {{action "injectExample" "filterSweep"}}>
-            filter sweep
-          </a>
-        {{/menu.item}}
+        {{#each exampleFunctions as |exampleGroup| }}
+          {{#menu.item}}
+            <span class="dropdown-header">
+              {{exampleGroup.sectionName}}
+            </span>
+          {{/menu.item}}
+          {{#each exampleGroup.examples as |example|}}
+            {{#menu.item}}
+              <a
+                class="dropdown-item"
+                onclick={{perform injectExample example.code}}
+              >
+                {{example.name}}
+              </a>
+            {{/menu.item}}
+          {{/each}}
+          {{menu.divider}}
+        {{/each}}
+
       {{/dd.menu}}
     {{/bs-dropdown}}
+  </div>
+  <div>
+    {{#if illegalTokens}}
+      <div class="alert alert-danger" role="alert">
+        <span>remove unsupported keywords: <span class="danger">{{illegalTokens}}</span></span>
+      </div>
+    {{/if}}
   </div>
   {{ember-ace
     lines=20

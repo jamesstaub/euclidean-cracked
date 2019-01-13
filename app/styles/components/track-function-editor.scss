@@ -1,6 +1,7 @@
 .track-function-editor {
   display: flex;
   flex-direction: column;
+  
   .function-editor {
     flex: 1 1 auto;
     flex-direction: column;
@@ -11,6 +12,8 @@
     .function-controls {
       display: flex;
       justify-content: space-between;
+      padding: 10px 0;
+      position: relative;
     }
 
     fieldset {
@@ -28,6 +31,10 @@
     .run-code-btn,
     .disable-code-btn {
       flex: 0 1 100px;
+    }
+
+    .run-code-btn {
+      width: 70px;
     }
   }
 }
