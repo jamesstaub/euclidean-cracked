@@ -86,6 +86,7 @@ export default Component.extend({
     },
 
     disableFunction() {
+      // TODO: fix
       this.saveFunctionTask.perform('functionPreCheck', '');
       set(this.serviceTrackRef, 'customFunction', null);
     },
