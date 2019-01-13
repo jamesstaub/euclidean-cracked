@@ -1,5 +1,5 @@
 {{yield}}
-{{if applyFunction.isRunning 'checking code...'}}
+
 <form class="function-editor" {{action "submitCode" on="submit"}}>
   {{! <legend>
       <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
@@ -13,7 +13,14 @@
         type="submit"
         name="button"
       >
-        load script
+      
+        {{#if functionIsLoaded }}
+          {{fa-icon "check"}}
+        {{else if applyFunction.isRunning}}
+          {{fa-icon "spinner"}}
+        {{else}}
+          load script
+        {{/if}} 
       </button>
 
       <button
@@ -22,7 +29,7 @@
         disabled={{not functionIsLoaded}}
         {{action "disableFunction"}}
       >
-        {{if functionIsLoaded 'disable' 'no script loaded'}}
+        {{if functionIsLoaded "disable" "no script loaded"}}
       </button>
       <button
         class="btn btn-xs disable-code-btn"
@@ -35,38 +42,27 @@
     </div>
     {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
       {{#dd.button class="btn-xs"}}
-        Examples<span class="caret"></span>
+        Example Scripts <span class="caret"></span>
       {{/dd.button}}
       {{#dd.menu as |menu|}}
-        {{#menu.item}}
-          <span class="dropdown-header">
-            Tutorial
-          </span>
-        {{/menu.item}}
-
-
-        {{#each tutorialExamples as |example| }}
+        {{#each exampleFunctions as |exampleGroup| }}
           {{#menu.item}}
-            <a
-              class="dropdown-item"
-              onclick={{perform injectExample example.code}}
-            >
-              {{example.name}}
-            </a>
+            <span class="dropdown-header">
+              {{exampleGroup.sectionName}}
+            </span>
           {{/menu.item}}
+          {{#each exampleGroup.examples as |example|}}
+            {{#menu.item}}
+              <a
+                class="dropdown-item"
+                onclick={{perform injectExample example.code}}
+              >
+                {{example.name}}
+              </a>
+            {{/menu.item}}
+          {{/each}}
+          {{menu.divider}}
         {{/each}}
-        {{menu.divider}}
-        {{#each effectsExamples as |example| }}
-          {{#menu.item}}
-            <a
-              class="dropdown-item"
-              onclick={{perform injectExample example.code}}
-            >
-              {{example.name}}
-            </a>
-          {{/menu.item}}
-        {{/each}}
-
 
       {{/dd.menu}}
     {{/bs-dropdown}}
@@ -74,7 +70,7 @@
   <div>
     {{#if illegalTokens}}
       <div class="alert alert-danger" role="alert">
-        <span>remove unsupported keywords: <span class='danger'>{{illegalTokens}}</span></span>
+        <span>remove unsupported keywords: <span class="danger">{{illegalTokens}}</span></span>
       </div>
     {{/if}}
   </div>

@@ -71,10 +71,17 @@ if (data) {
 `
   }];
 
-export {
-  tutorial,
-  effects
-};
+
+export default [
+  {
+    sectionName: 'tutorial',
+    examples: tutorial
+  },
+  {
+    sectionName: 'effects',
+    examples: effects
+  }
+];
 
 /*
 

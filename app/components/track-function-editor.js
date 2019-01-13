@@ -3,7 +3,7 @@ import { computed, get, set} from "@ember/object";
 import { inject as service } from '@ember/service';
 import { reads, not, and, or } from "@ember/object/computed";
 import { task, waitForProperty } from 'ember-concurrency';
-import { tutorial, effects } from '../utils/example-functions';
+import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
   audioService: service(),
   classNames: ['track-function-editor'],
@@ -35,8 +35,7 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
-    this.set('tutorialExamples', tutorial);
-    this.set('effectsExamples', effects);
+    this.set('exampleFunctions', exampleFunctions);
   },
 
   // set property to cusotmFunction model then save
