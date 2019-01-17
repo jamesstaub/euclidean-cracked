@@ -37,6 +37,10 @@ body {
   }
 }
 
+.container-fluid {
+  flex-wrap: wrap;
+}
+
 .new-post {
   .border {
     padding: 15px;
@@ -64,7 +68,6 @@ body {
   flex-direction: column;
   align-items: flex-end;
 }
-
 
 .spinner {
     width: 40px;
