@@ -26,7 +26,7 @@
   <label class="interval-container">
     <small>
       loop interval
-      {{post.interval}}
+      {{project.interval}}
       ms
     </small>
     {{ui-slider
@@ -35,8 +35,8 @@
       size=intervalSliderSize
       step=10
       class="interval-slider"
-      onChangeValue=(action "setLoopInterval" post)
-      value=post.interval
+      onChangeValue=(action "setLoopInterval" project)
+      value=project.interval
     }}
   </label>
   {{yield}}

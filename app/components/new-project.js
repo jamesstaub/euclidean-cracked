@@ -4,7 +4,7 @@ import { set, get } from "@ember/object";
 import { equal } from "@ember/object/computed";
 
 export default Component.extend({
-  classNames: 'new-post',
+  classNames: 'new-project',
   session: service(),
   
   init() {

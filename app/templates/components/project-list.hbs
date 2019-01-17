@@ -1,6 +1,6 @@
 <div class='row index-wrapper'>
-{{audio-post-sequencer post=currentPost readOnly=true}}
-{{#each currentPost.tracks as |track|}}
+{{audio-project-sequencer project=currentProject readOnly=true}}
+{{#each currentProject.tracks as |track|}}
   {{audio-track-sampler
     sequence=track.sequence
     directory=directory
@@ -15,14 +15,14 @@
 
 <div class='row index-wrapper'>
   <div class='container-fluid row'>
-    {{#each posts as |post|}}
-      {{#index-post-item post=post}}
-        <button type="button" class="btn play-btn" {{action "setCurrentPost" post}}>
+    {{#each projects as |project|}}
+      {{#index-project-item project=project}}
+        <button type="button" class="btn play-btn" {{action "setCurrentProject" project}}>
           {{fa-icon "play"}}
         </button>
-      {{/index-post-item}}
+      {{/index-project-item}}
     {{else}}
-      There are no posts...
+      There are no projects...
     {{/each}}
   </div>
 </div>

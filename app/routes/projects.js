@@ -11,23 +11,23 @@ export default Route.extend({
   session: service(),
 
   model(param) {
-    return this.store.query('post', {
+    return this.store.query('project', {
       orderBy: 'slug',
       equalTo: param.slug
     });
   },
 
   afterModel(model) {
-    this.addPostActiveUser(model);
+    this.addProjectActiveUser(model);
   },
 
   setupController(controller, model) {
     this._super(controller, model);
   },
 
-  addPostActiveUser(model) {
-    let post = model.get('firstObject');
-    set(this, 'post', post);
+  addProjectActiveUser(model) {
+    let project = model.get('firstObject');
+    set(this, 'project', project);
 
     let user = getOrCreateUser(
       get(this, 'session.currentUser'),
@@ -37,21 +37,21 @@ export default Route.extend({
     user.then((user) => {
       set(user, 'online', true);
 
-      post.get('activeUsers').pushObject(user);
+      project.get('activeUsers').pushObject(user);
 
       user.save().then((user)=>{
         set(this, 'session.currentUserModel', user);
-        post.save();
+        project.save();
       });
     });
   },
 
   removeUser() {
-    let post = this.post;
+    let project = this.project;
     let user = get(this, 'session.currentUserModel');
-    get(post, 'activeUsers').then((activeUsers)=>{
+    get(project, 'activeUsers').then((activeUsers)=>{
       activeUsers.removeObject(user);
-      post.save()
+      project.save()
       .then(()=>{
         user.save();
       });
@@ -59,28 +59,28 @@ export default Route.extend({
   },
 
   actions: {
-    async delete(post) {
-      let tracks = await post.tracks.toArray();
+    async delete(project) {
+      let tracks = await project.tracks.toArray();
       for (const track of tracks) {
         await track.destroyRecord();
       }
-      await post.destroyRecord();
+      await project.destroyRecord();
       this.transitionTo('new');
     },
 
-    save(post) {
-      let slug = cleanURI(post.get('title'));
+    save(project) {
+      let slug = cleanURI(project.get('title'));
 
-      post.set('slug', slug);
-      post.save()
-      .then((post)=> {
-        this.transitionTo('posts', get(post, 'slug'));
+      project.set('slug', slug);
+      project.save()
+      .then((project)=> {
+        this.transitionTo('projects', get(project, 'slug'));
       });
     },
 
-    async createTrack(post) {
+    async createTrack(project) {
       let customFunction = this.store.createRecord('customFunction', {
-        postCreatorUid: get(post, 'creator.uid'),
+        projectCreatorUid: get(project, 'creator.uid'),
       });
 
       await customFunction.save();
@@ -88,30 +88,30 @@ export default Route.extend({
       // TODO: instead of setting defaults here, just use
       // defaults on the model
       let track = this.store.createRecord('track', {
-        postCreatorUid: get(post, 'creator.uid'),
-        publicEditable: get(post, 'publicEditable'),
+        projectCreatorUid: get(project, 'creator.uid'),
+        publicEditable: get(project, 'publicEditable'),
         customFunction: customFunction,
       });
 
       track.set('customFunction', customFunction);
 
-      post.get('tracks').addObject(track);
+      project.get('tracks').addObject(track);
 
       return track.save()
         .then(()=>{
           debug('track saved succesfully');
-          return post.save();
+          return project.save();
         })
         .catch((error) => {
           debug(`track:  ${error}`);
           track.rollbackAttributes();
         })
         .then(() => {
-          debug('post saved successfuly');
+          debug('project saved successfuly');
         });
     },
 
-    createComment(author, body, post) {
+    createComment(author, body, project) {
       let user = null;
       let comment = this.store.createRecord('comment', {
         body: body
@@ -125,23 +125,23 @@ export default Route.extend({
 
       user.then((userData) => {
         userData.get('comments').addObject(comment);
-        post.get('comments').addObject(comment);
+        project.get('comments').addObject(comment);
 
         return comment.save().then(() => {
             debug('comment saved succesfully');
-            return post.save();
+            return project.save();
           })
           .catch((error) => {
             debug(`comment:  ${error}`);
             comment.rollbackAttributes();
           })
           .then(() => {
-            debug('post saved successfuly');
+            debug('project saved successfuly');
             return userData.save();
           })
           .catch((error) => {
-            debug(`post:  ${error}`);
-            post.rollbackAttributes();
+            debug(`project:  ${error}`);
+            project.rollbackAttributes();
           })
           .then(() => {
             debug('user saved successfuly');

@@ -3,22 +3,22 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | audio post sequencer', function(hooks) {
+module('Integration | Component | edit project', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.on('myAction', function(val) { ... });
 
-    await render(hbs`{{audio-post-sequencer}}`);
+    await render(hbs`{{edit-project}}`);
 
     assert.dom('*').hasText('');
 
     // Template block usage:
     await render(hbs`
-      {{#audio-post-sequencer}}
+      {{#edit-project}}
         template block text
-      {{/audio-post-sequencer}}
+      {{/edit-project}}
     `);
 
     assert.dom('*').hasText('template block text');

@@ -7,7 +7,7 @@ export default Component.extend({
 
   intervalSliderSize: [120, 20],
 
-  classNames: ['audio-post-sequencer'],
+  classNames: ['audio-project-sequencer'],
   dacGain: .9,
 
   didInsertElement() {
@@ -45,20 +45,20 @@ export default Component.extend({
       .compressor({
         release: .1,
         id: 'master-compressor',
-        class: `post-${get(this, 'post.id')}`,
+        class: `project-${get(this, 'project.id')}`,
       })
       .dac(this.dacGain);
   },
 
   actions: {
-    setLoopInterval(post, interval) {
+    setLoopInterval(project, interval) {
       this.audioService.setInterval(interval);
-      post.save();
+      project.save();
     },
 
     loopAction(action) {
       const audio = this.audioService;
-      const interval = get(this, 'post.interval');
+      const interval = get(this, 'project.interval');
 
       switch (action) {
         case 'start':

@@ -1,0 +1,27 @@
+<div class="main">
+  {{#each model as |project|}}
+    {{#edit-project
+      project=project
+      session=session
+      onSaveProject=(route-action "save")
+      delete="delete"
+      createComment="createComment"
+    }}
+      {{#audio-project-sequencer project=project}}
+        <button
+          class="btn btn-primary"
+          type="button"
+          onclick={{route-action "createTrack" project}}
+        >
+          add track (
+          <span>
+            {{project.tracks.length}}
+          </span>
+          )
+        </button>
+      {{/audio-project-sequencer}}
+      {{add-track project=project session=session}}
+    {{/edit-project}}
+  {{/each}}
+  {{outlet}}
+</div>

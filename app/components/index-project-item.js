@@ -5,15 +5,15 @@ import { inject as service } from '@ember/service';
 
 export default Component.extend({
   session: service(),
-  classNames: ['index-post-item'],
-  classNameBindings: ['post.publicVisible:public:private'],
+  classNames: ['index-project-item'],
+  classNameBindings: ['project.publicVisible:public:private'],
 
-  visible: computed('post.publicVisible', 'post.creator.uid', {
+  visible: computed('project.publicVisible', 'project.creator.uid', {
     get() {
-      let creator = get(this, 'post.creator.uid');
+      let creator = get(this, 'project.creator.uid');
       let currentUser = get(this, 'session.currentUser.uid');
 
-      let permission = get(this, 'post.publicVisible');
+      let permission = get(this, 'project.publicVisible');
 
       return permission || creator === currentUser;
     }

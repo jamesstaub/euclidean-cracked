@@ -8,8 +8,8 @@ export default Component.extend({
   },
 
   actions: {
-    setCurrentPost(post) {
-      set(this, 'currentPost', post);
+    setCurrentProject(project) {
+      set(this, 'currentProject', project);
     }
   }
 });

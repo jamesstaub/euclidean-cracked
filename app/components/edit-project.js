@@ -4,13 +4,13 @@ import DS from 'ember-data';
 
 export default Component.extend({
   isEditing: false,
-  classNames: 'edit-post',
+  classNames: 'edit-project',
 
-  isAllowed: computed('post.creator.uid', 'session.currentUser.uid',{
+  isAllowed: computed('project.creator.uid', 'session.currentUser.uid',{
     get() {
       const currentUser = get(this, 'session.currentUser.uid');
 
-      const creatorPromise = get(this, 'post.creator').then((creator)=>{
+      const creatorPromise = get(this, 'project.creator').then((creator)=>{
         if (creator) {
           return get(creator, 'uid') === currentUser;
         } else {
@@ -23,12 +23,12 @@ export default Component.extend({
   }),
 
   actions: {
-    save(post) {
+    save(project) {
       let sessionName = get(this, 'session.currentUser.uid');
 
-      if (sessionName === post.get('creator.uid')) {
+      if (sessionName === project.get('creator.uid')) {
         set(this, 'isEditing', false);
-        get(this, 'onSavePost')(post);
+        get(this, 'onSaveProject')(project);
       } else {
         alert('Sorry not authorized');
       }
@@ -37,13 +37,13 @@ export default Component.extend({
       set(this, 'isEditing', true);
     },
 
-    delete(post) {
-      this.sendAction('delete', post);
+    delete(project) {
+      this.sendAction('delete', project);
       set(this, 'isEditing', false);
     },
 
-    createComment(author, body, post) {
-      this.sendAction('createComment', author, body, post);
+    createComment(author, body, project) {
+      this.sendAction('createComment', author, body, project);
     },
   }
 });

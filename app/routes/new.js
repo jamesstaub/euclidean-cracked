@@ -10,7 +10,7 @@ export default Route.extend({
       let user = null;
       let slug = cleanURI(title);
       let date = new Date();
-      let post = this.store.createRecord('post', {
+      let project = this.store.createRecord('project', {
         title,
         publicEditable,
         publicVisible,
@@ -25,10 +25,10 @@ export default Route.extend({
         this.store
       );
 
-      await user.get('posts').addObject(post);
-      post = await post.save();
+      await user.get('projects').addObject(project);
+      project = await project.save();
       await user.save();
-      return this.transitionTo('posts', get(post, 'slug'));
+      return this.transitionTo('projects', get(project, 'slug'));
     }
   }
 });

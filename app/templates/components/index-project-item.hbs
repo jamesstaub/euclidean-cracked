@@ -2,14 +2,14 @@
   <div class="card border">
     <div class="card-body">
       {{yield}}
-      <h2 class="card-title post-title">
+      <h2 class="card-title project-title">
         <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
-        {{#link-to "posts" post.slug}}
-          {{post.title}}
+        {{#link-to "projects" project.slug}}
+          {{project.title}}
         {{/link-to}}
       </h2>
       <p class="card-text">
-        {{post.body}}
+        {{project.body}}
       </p>
     </div>
   </div>

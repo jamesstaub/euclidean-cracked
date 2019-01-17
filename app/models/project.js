@@ -16,7 +16,7 @@ export default DS.Model.extend({
     tracks: DS.hasMany('track'),
     comments: DS.hasMany('comment' ),
     activeUsers: DS.hasMany('user',  {
-      inverse: 'activePost'
+      inverse: 'activeProject'
     }),
 
     publicVisible: DS.attr('boolean'),

@@ -7,7 +7,7 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('posts', { path: '/:slug' });
+  this.route('projects', { path: '/:slug' });
   this.route('new');
 });
 
@@ -20,7 +20,7 @@ export default Router;
  *   or transition to a new project with generated name
  *      - on change project name, transition
  * 
- *  rename /post resource to project
+ *  rename /project resource to project
  * 
  *  
  * 

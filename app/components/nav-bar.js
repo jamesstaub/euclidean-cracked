@@ -7,7 +7,7 @@ export default Component.extend({
 
   session: service(),
 
-// FIXME: Why doesnt this update when posts route sets user on session?
+// FIXME: Why doesnt this update when projects route sets user on session?
   avatar: computed('session.currentUserModel.avatar', {
     get() {
       let sessionPhoto = get(this, 'session.currentUser.photoURL');

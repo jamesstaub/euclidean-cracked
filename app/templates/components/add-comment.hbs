@@ -1,12 +1,12 @@
 <h4>
   Comments:
 </h4>
-{{#unless post.comments}}
+{{#unless project.comments}}
   <h4>
     No Comments
   </h4>
 {{/unless}}
-{{#each post.comments as |comment|}}
+{{#each project.comments as |comment|}}
   <div class="comments">
     <img src="{{comment.user.photoURL}}" />
     {{comment.body}}
