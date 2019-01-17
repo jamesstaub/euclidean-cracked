@@ -89,29 +89,42 @@ if (data) {
 /*
   In the euclidean rhythm menu, set both the hits and steps
   to 12
+
+  Multiply the sample speed by interval ratios to tune a sample
+  to a scale
+
+  1:1   unison
+  16:15 minor seconrd
+  9:8   major second
+  6:5   minor third
+  5:4   major third
+  4:3   fourth
+  3:2   fifth
+  8:5   minor sixth
+  5:3   major sixth
+  5:3   minor seventh
+  16:9  major seventh
+  15:8  octave
 */
+
+var semitoneRatios = [1/1, 16/15, 9/8, 6/5, 5/4, 4/3, 3/2, 8/5, 5/3, 16/9, 15/8, 2/1];
+var speed = semitoneRatios[index];
+__(this.sampler).attr({speed: speed});
 
 /*
-Multiply the sample speed by interval ratios to tune a sample
-to a scale
-
-1:1   unison
-16:15 minor seconrd
-9:8   major second
-6:5   minor third
-5:4   major third
-4:3   fourth
-3:2   fifth
-8:5   minor sixth
-5:3   major sixth
-5:3   minor seventh
-16:9  major seventh
-15:8  octave
+  1:1   unison
+  16:15 minor seconrd
+  9:8   major second
+  6:5   minor third
+  5:4   major third
+  4:3   fourth
+  3:2   fifth
+  8:5   minor sixth
+  5:3   major sixth
+  5:3   minor seventh
+  16:9  major seventh
+  15:8  octave
 */
-
-var ratios = [1/1, 16/15, 9/8, 6/5, 5/4, 4/3, 3/2, 8/5, 5/3, 16/9, 15/8, 2/1];
-var ratio = ratios[index];
-__(this.sampler).attr({speed: ratio});
 `
   }
 ];

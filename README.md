@@ -9,12 +9,15 @@ After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/se
 ## to do list
 ### user concurrency features
 
+* Presets
+  - save project state 
+    - interface for user to easily sequence or trigger presets
+  
+
 * sidebar chat window
 * flash of color on a given track when another user has made a change.
   - centralize all track.save() calls to call a single route-action so, then trigger visual feedback any track data is saved
 
-* option to quantize all changes until beginning of next loop (to reduce disruption of the beat)
-  - currently, the loop restarts any time a parameter is changed, with many active users, this could be disruptive to the beat
 
 ### audio processing features
 * implement a code editor for writing custom cracked audio scripts.
@@ -23,7 +26,7 @@ After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/se
 
 * add a track field `custom class` (for cracked audio nodes), so users can write macro controls
   - eg. multiple tracks with class `bass-drum` can be selected in the code editor like so:  `__('.bass-drum').connect('reverb');`
-
+ 
 
 ### rhythm composition
 * implement "bars",  a system for extending a given track's rhythm beyond a single euclidean pattern

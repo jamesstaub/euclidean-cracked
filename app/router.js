@@ -12,3 +12,16 @@ Router.map(function() {
 });
 
 export default Router;
+
+/*
+ * 
+ * /index
+ *   check if user has a recent project in  localstorage 
+ *   or transition to a new project with generated name
+ *      - on change project name, transition
+ * 
+ *  rename /post resource to project
+ * 
+ *  
+ * 
+ */
