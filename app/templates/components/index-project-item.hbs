@@ -1,0 +1,21 @@
+{{#if visible}}
+  <div class="card border">
+    <div class="card-body">
+      {{#if canDelete}}
+        <button type="delete" class="btn btn-danger delete-project-btn" {{action "deleteProject" project}}>
+          ✕
+        </button>
+      {{/if}}
+      {{yield}}
+      <h2 class="card-title project-title">
+        <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
+        {{#link-to "user.project" session.currentUser  project}}
+          {{project.title}}
+        {{/link-to}}
+      </h2>
+      <p class="card-text">
+        {{project.body}}
+      </p>
+    </div>
+  </div>
+{{/if}}

@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  postCreatorUid: DS.attr('string'),
+  projectCreatorUid: DS.attr('string'),
 
   // the text of the function string as the user types
   // (not ever loaded into an actual javascript function)

@@ -3,13 +3,13 @@ import { computed } from '@ember/object';
 import E from 'euclidean-cracked/utils/euclidean';
 
 export default DS.Model.extend({
-  post: DS.belongsTo('post'),
+  project: DS.belongsTo('project'),
 
-  // belongs on post model but used here as
+  // belongs on project model but used here as
   // convenience for firebase .write rules
-  postCreatorUid: DS.attr('string'),
+  projectCreatorUid: DS.attr('string'),
 
-  // written only by same property on post
+  // written only by same property on project
   // again, convenience for firebase auth rules
   publicEditable: DS.attr('boolean'),
 

@@ -1,0 +1,23 @@
+.project-active-users {
+
+  .user-list {
+    display: flex;
+    overflow: scroll;
+  }
+
+  .user {
+    flex: 0 1 auto;
+    opacity: .5;
+    padding: 5px 5px 0 0;
+
+    img {
+      width: 35px;
+      height: 35px;
+    }
+
+    &.online {
+      opacity: 1;
+    }
+  }
+
+}

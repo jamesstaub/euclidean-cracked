@@ -1,0 +1,49 @@
+<div class="container-fluid border">
+  <p>
+    New Project
+  </p>
+  <form {{action "save" on="submit"}}>
+    <div class="form-group">
+      <label>
+        title:
+        <input
+          type="text"
+          placeholder="Title"
+          value={{title}}
+          oninput={{action (mut title) value="target.value"}}
+         />
+
+      </label>
+      <div>
+        {{#if anonymous}}
+          <small>
+            you can login to control these permissions
+          </small>
+        {{/if}}
+      </div>
+      <label>
+        anyone can edit:
+        {{input
+          type="checkbox"
+          disabled=anonymous
+          checked=publicVisible
+          action=(mut publicEditable)
+          on="change"
+        }}
+      </label>
+      <label>
+        show in public feed:
+        {{input
+          type="checkbox"
+          disabled=anonymous
+          checked=publicVisible
+          action=(mut publicVisible)
+          on="change"
+        }}
+      </label>
+    </div>
+    <button type="submit" class="btn btn-primary">
+      Create
+    </button>
+  </form>
+</div>

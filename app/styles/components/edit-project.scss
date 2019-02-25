@@ -1,0 +1,44 @@
+.edit-project {
+  flex: 1 0 auto;
+  margin: 0 auto;
+  max-width: 700px;
+  min-width: 100%;
+
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    padding: 15px;
+
+    &-title {
+      flex: 1 1 auto;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 5px 0;
+    }
+
+    .permissions {
+      padding: 15px 0;
+    }
+
+    .creator-meta {
+    }
+  }
+  .project-date {
+    padding: 10px 0;
+  }
+  .edit-project-meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .track-section {
+    flex: 1 1 100%;
+  }
+}

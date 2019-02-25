@@ -6,11 +6,11 @@ export default DS.Model.extend({
 
   avatar: DS.attr('string'),
 
-  posts: DS.hasMany('post', {
+  projects: DS.hasMany('project', {
     inverse: 'creator'
   }),
   comments: DS.hasMany('comment'),
 
   online: DS.attr('boolean'),
-  activePost: DS.belongsTo('post')
+  activeProject: DS.belongsTo('project')
 });

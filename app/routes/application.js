@@ -18,9 +18,6 @@ export default Route.extend({
         return this.openSession('anonymous');
       });
   },
-  model() {
-    return this.store.findAll('post');
-  },
 
   openSession(provider) {
     return get(this, 'session')
@@ -40,9 +37,10 @@ export default Route.extend({
       this.openSession('google');
     },
     async logout() {
-      set(this, 'session.currentUserModel.online', false);
-      this.session.currentUserModel.set('online', false);
-      await this.session.currentUserModel.save();
+      if (this.session.currentUserModel && session.currentUserModel.online) {
+        set(this, 'session.currentUserModel.online', false);
+        await this.session.currentUserModel.save();
+      }
       this.session.close();
     },
   }

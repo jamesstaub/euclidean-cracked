@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { set, computed, get } from "@ember/object";
-
+import { equal } from '@ember/object/computed';
 export default Component.extend({
   isCollapsed: true,
 
   session: service(),
 
-// FIXME: Why doesnt this update when posts route sets user on session?
+// FIXME: Why doesnt this update when projects route sets user on session?
   avatar: computed('session.currentUserModel.avatar', {
     get() {
       let sessionPhoto = get(this, 'session.currentUser.photoURL');
@@ -16,11 +16,7 @@ export default Component.extend({
     }
   }),
 
-  isAnonymous: computed('session.provider', {
-    get() {
-      return get(this, 'session.provider') === 'anonymous';
-    }
-  }),
+  isAnonymous: equal('session.provider', 'anonymous'),
 
   didInsertElement() {
     this._super(...arguments);

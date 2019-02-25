@@ -1,0 +1,111 @@
+<div class="container-fluid project-meta border">
+  <div class="project-meta-title">
+    <h1>
+      {{project.title}}
+    </h1>
+    <h3>
+      {{markdown-to-html markdown=project.body}}
+    </h3>
+    <div class="creator-meta">
+      <p>
+        {{#if project.date}}
+          <span class="project-date">
+            created
+            {{moment-from-now project.date}}
+          </span>
+        {{/if}}
+        by
+        <strong>
+          {{project.creator.username}}
+        </strong>
+      </p>
+      {{project-active-users project=project}}
+    </div>
+  </div>
+  {{#if session.isAuthenticated}}
+    {{#if isAllowed}}
+      <form {{action "save" project on="submit"}}>
+        {{#unless isEditing}}
+          <button type="submit" class="btn btn-primary" {{action "edit"}}>
+            Edit
+          </button>
+        {{/unless}}
+        {{#if isEditing}}
+          <legend>
+            edit project
+          </legend>
+          <div class="edit-project-meta form-group">
+            <!-- TODO: de-duplicate this code with new-project.hbs -->
+            <div class="form-group">
+              <label for="titleInput">
+                title
+              </label>
+              <input
+                cols="40"
+                rows="1"
+                value={{project.title}}
+                class="form-control"
+                id="titleInput"
+                oninput={{action (mut project.title) value="target.value"}}
+               />
+
+            </div>
+            <div class="form-group">
+              <label for="descriptionInput">
+                description
+              </label>
+              <textarea
+                class="form-control"
+                cols="40"
+                rows="2"
+                id="descriptionInput"
+                value={{project.body}}
+                oninput={{action (mut project.body) value="target.value"}}
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>
+                allow anyone to edit:
+                <input
+                  type="checkbox"
+                  checked={{project.publicEditable}}
+                  {{action
+                    (mut project.publicEditable)
+                    value="target.value"
+                    on="change"
+                  }}
+                 />
+
+              </label>
+              <label>
+                show in public feed:
+                <input
+                  type="checkbox"
+                  checked={{project.publicVisible}}
+                  {{action
+                    (mut project.publicVisible)
+                    value="target.value"
+                    on="change"
+                  }}
+                 />
+
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Save
+          </button>
+          <button type="delete" class="btn btn-danger" {{action "delete" project}}>
+            Delete
+          </button>
+        {{/if}}
+      </form>
+    {{/if}}
+  {{/if}}
+</div>
+<div class="container-fluid border">
+  <section class='track-section'>
+    {{yield}}
+  </section>
+</div>
+<!-- {{add-comment project=project session=session store='createComment' }} -->
