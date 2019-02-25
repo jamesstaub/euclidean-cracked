@@ -13,41 +13,17 @@ export default Controller.extend({
 
       project.set('slug', slug);
       project.save().then(project => {
-        this.transitionTo('user.project', project.slug);
+        this.transitionToRoute('user.project', project.slug);
       });
     },
 
-    async createTrack(project) {
-      let customFunction = this.store.createRecord('customFunction', {
-        projectCreatorUid: project.get('creator.uid'),
-      });
-
-      await customFunction.save();
-
-      // TODO: instead of setting defaults here, just use
-      // defaults on the model
-      let track = this.store.createRecord('track', {
-        projectCreatorUid: project.get('creator.uid'),
-        publicEditable: project.get('publicEditable'),
-        customFunction: customFunction,
-      });
-
-      track.set('customFunction', customFunction);
-
-      project.get('tracks').addObject(track);
-
-      return track.save()
-        .then(() => {
-          debug('track saved succesfully');
-          return project.save();
-        })
-        .catch((error) => {
-          debug(`track:  ${error}`);
-          track.rollbackAttributes();
-        })
-        .then(() => {
-          debug('project saved successfuly');
-        });
+    async delete(project) {
+      let tracks = await project.tracks.toArray();
+      for (const track of tracks) {
+        await track.destroyRecord();
+      }
+      await project.destroyRecord();
+      this.transitionToRoute('user');
     },
 
     async createTrack(project) {

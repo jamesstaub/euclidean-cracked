@@ -8,7 +8,6 @@ const Router = EmberRouter.extend({
 
 Router.map(function() {
   this.route('new');
-  this.route('projects', { path: '/:slug' });
   this.route('user', { path: '/:uid' },  function() {
     this.route('project', { path: '/:slug' });
   });
