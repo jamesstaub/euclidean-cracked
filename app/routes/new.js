@@ -39,7 +39,7 @@ export default Route.extend({
     await user.get('projects').addObject(project);
     project = await project.save();
     await user.save();
-    return this.transitionTo('projects', get(project, 'slug'));
+    return this.transitionTo('user.project', user, get(project, 'slug'));
   }
 
 });
