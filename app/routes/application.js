@@ -37,7 +37,7 @@ export default Route.extend({
       this.openSession('google');
     },
     async logout() {
-      if (this.session.currentUserModel && session.currentUserModel.online) {
+      if (this.session.currentUserModel && this.session.currentUserModel.online) {
         set(this, 'session.currentUserModel.online', false);
         await this.session.currentUserModel.save();
       }
