@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { set, computed, get } from "@ember/object";
-
+import { equal } from '@ember/object/computed';
 export default Component.extend({
   isCollapsed: true,
 
@@ -16,11 +16,7 @@ export default Component.extend({
     }
   }),
 
-  isAnonymous: computed('session.provider', {
-    get() {
-      return get(this, 'session.provider') === 'anonymous';
-    }
-  }),
+  isAnonymous: equal('session.provider', 'anonymous'),
 
   didInsertElement() {
     this._super(...arguments);

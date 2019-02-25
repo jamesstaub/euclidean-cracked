@@ -7,21 +7,11 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('projects', { path: '/:slug' });
   this.route('new');
+  this.route('projects', { path: '/:slug' });
+  this.route('user', { path: '/:uid' },  function() {
+    this.route('project', { path: '/:slug' });
+  });
 });
 
 export default Router;
-
-/*
- * 
- * /index
- *   check if user has a recent project in  localstorage 
- *   or transition to a new project with generated name
- *      - on change project name, transition
- * 
- *  rename /project resource to project
- * 
- *  
- * 
- */

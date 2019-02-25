@@ -9,7 +9,6 @@ export default Component.extend({
   isAllowed: computed('project.creator.uid', 'session.currentUser.uid',{
     get() {
       const currentUser = get(this, 'session.currentUser.uid');
-
       const creatorPromise = get(this, 'project.creator').then((creator)=>{
         if (creator) {
           return get(creator, 'uid') === currentUser;

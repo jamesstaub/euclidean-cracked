@@ -5,12 +5,12 @@ export default Component.extend({
 
   visible: computed('project.activeUsers.length', 'project.activeUsers.@each.online', {
     get() {
-      let online = get(this, 'project.activeUsers').filter(user => {
-        if (user) {
-          return get(user, 'online');
-        }
-      });
-      return get(online, 'length') > 1;
+      // let online = get(this, 'project.activeUsers').filter(user => {
+      //   if (user) {
+      //     return get(user, 'online');
+      //   }
+      // });
+      // return get(online, 'length') > 1;
     }
   })
 });

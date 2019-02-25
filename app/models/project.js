@@ -9,14 +9,17 @@ export default DS.Model.extend({
 
     interval: DS.attr('number', {
       defaultValue() {
-        return 200; 
+        return 200;
       }
     }),
 
     tracks: DS.hasMany('track'),
     comments: DS.hasMany('comment' ),
     activeUsers: DS.hasMany('user',  {
-      inverse: 'activeProject'
+      inverse: 'activeProject',
+      defaultValue() {
+        return [];
+      }
     }),
 
     publicVisible: DS.attr('boolean'),

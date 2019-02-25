@@ -12,10 +12,24 @@ export default Component.extend({
     get() {
       let creator = get(this, 'project.creator.uid');
       let currentUser = get(this, 'session.currentUser.uid');
-
       let permission = get(this, 'project.publicVisible');
-
       return permission || creator === currentUser;
     }
-  })
+  }),
+
+  canDelete: computed('session.currentUser.uid', 'project.creator.uid', {
+    get() {
+      return this.session.get('currentUser.uid') === this.project.get('creator.uid');
+    }
+  }),
+
+  actions: {
+    async deleteProject(project) {
+      let tracks = await project.tracks.toArray();
+      for (const track of tracks) {
+        await track.destroyRecord();
+      }
+      await project.destroyRecord();
+    }
+  }
 });
