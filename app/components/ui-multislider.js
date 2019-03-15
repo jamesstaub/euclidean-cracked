@@ -66,11 +66,14 @@ export default Component.extend(NexusMixin, {
 
   _styleOnStep() {
     let $rectElements = this.$rectElements;
-    let index = this.stepIndex;
-
-    if ($rectElements && index) {
+    if ($rectElements && this.stepIndex) {
       this.applyStyle();
-      this.$($rectElements[index - 1]).attr('stroke', 'red');
+      let rectIndex = this.stepIndex - 1;
+      // hack to avoid off by one error in current step display
+      if (rectIndex === this.sequence.length - 2) {
+        rectIndex = rectIndex + 1;
+      }
+      this.$($rectElements[rectIndex]).attr('stroke', 'red');
     }
   },
 

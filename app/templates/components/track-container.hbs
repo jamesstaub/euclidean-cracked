@@ -1,0 +1,26 @@
+{{#audio-track-sampler
+  class="flex justify-between w-100"
+  sequence=track.sequence
+  directory=directory
+  track=track
+  gain=track.gain
+  isLooping=track.isLooping
+  isActive=isActive
+  filepath=track.filepath
+  outputNodeSelector="#master-compressor" 
+  as |sampler|
+}}
+  {{ui-step-sequencer 
+      sequence=track.sequence 
+      stepIndex=sampler.stepIndex
+    }}
+  <button 
+    type="delete" 
+    class="btn btn-danger delete-track-btn" 
+    {{action "deleteTrack" track}}
+  >
+    ✕
+  </button>
+{{/audio-track-sampler}}
+
+{{yield}}

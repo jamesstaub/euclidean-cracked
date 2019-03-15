@@ -55,6 +55,17 @@ export default Component.extend(SequenceHelper, {
     }
   }),
 
+  stepIndex: computed({
+    set(key, val) {
+      // stepIndex of currently visible track passed to service so it can
+      // update UI of other elements (like multislider)
+      if (this.isActive) {
+        this.audioService.set('activeTrackStepIndex', val);
+      }
+      return val;
+    }
+  }),
+
   // control the gain of a given step with ui multislider
   gainOnStep: computed({
     set(key, val) {

@@ -19,6 +19,19 @@
         )
       </button>
     {{/audio-project-sequencer}}
-    {{add-track project=model session=session}}
+    
+    <div class='tracks'>
+      {{#each model.tracks as |track|}}
+        {{track-container
+          isActive=(eq track.id activeTrack.id) 
+          track=track
+          selectActiveTrack=(action "selectActiveTrack")
+        }}
+      {{else}}
+        <h4> No tracks</h4>
+      {{/each}}
+    </div>
+
   {{/edit-project}}
+  {{current-track-footer track=activeTrack}}
 {{/if}}

@@ -17,6 +17,12 @@ export default Controller.extend({
       });
     },
 
+    // when a user clicks a track in the list,
+    //  set footer controls to that track
+    selectActiveTrack(track) {
+      this.set('activeTrack', track);
+    },
+
     async delete(project) {
       let tracks = await project.tracks.toArray();
       for (const track of tracks) {

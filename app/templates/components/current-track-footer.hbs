@@ -1,0 +1,39 @@
+{{ui-slider
+  max=1
+  min=0
+  size=gainSliderSize
+  step=0.01
+  class="gain-slider"
+  onChangeValue=(action "updateSequenceParam" track "gain")
+  value=track.gain
+}}
+
+{{track-interface-switches switchInterface=(action "switchInterface")}}
+{{#if (eq visibleInterface "filePicker")}}
+  {{drum-file-picker
+    track=track
+    saveTrack=saveTrack
+    updateFilepath=(action "updateFilepath")
+  }}
+{{/if}}
+{{#if (eq visibleInterface "steps")}}
+  {{step-param-sliders
+    uiStepSize=uiStepSize
+    sequence=track.sequence
+    track=track
+    stepIndex=audioService.activeTrackStepIndex
+  }}
+{{/if}}
+{{#if (eq visibleInterface "rhythm")}}
+  {{ui-sequence-controls
+    hits=track.hits
+    steps=track.steps
+    offset=track.offset
+    onUpdateSequenceParam=(action "updateSequenceParam" track)
+  }}
+{{/if}}
+{{! TODO refactor to be nested in audio-track-sampler }}
+{{! and passs onApplyFunction as action instead}}
+{{#if (eq visibleInterface "function")}}
+  {{track-function-editor customFunction=track.customFunction sampler=sampler}}
+{{/if}}
