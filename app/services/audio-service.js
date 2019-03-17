@@ -1,6 +1,16 @@
 import Service from '@ember/service';
 import { set } from "@ember/object";
 
+/**
+ * This service is a global singleton for web audio node parameters and state.
+ * the tracks array is managed by the components rendered on the current project
+ * 
+ * The service's tracks array could be refactored into ember data models + methods, independent of the current track route
+ * which is the source of truth for web audio parameters (ie ), and the service 
+ * could be a top-level controller. 
+ *
+ * 
+ */
 export default Service.extend({
   tracks: [],
 

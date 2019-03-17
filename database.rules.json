@@ -1,10 +1,11 @@
 {
   "rules": {
+    ".indexOn": "uid",
     ".read": true,
     "projects": {
       "$projects": {
         ".write": "auth.uid == data.child('creator').val() || auth.uid == newData.child('creator').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
-      },
+      }
     },
 
     "tracks": {

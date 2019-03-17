@@ -58,6 +58,12 @@ export default Component.extend({
     if (this.function === this.editorContent) {
       yield this.sampler.initializeSampler.perform();
     }
+
+    /**
+     * TODO: set a timeout condition for this method
+     * if the cloud function fails to respond, it can still set
+     * the track function locally for this user (also display an error message)
+     */
   }),
 
   injectExample: task(function*(code) {
