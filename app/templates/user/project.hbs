@@ -25,6 +25,7 @@
         {{track-container
           isActive=(eq track.id activeTrack.id) 
           track=track
+          onDeleteTrack=(action "deleteTrack")
           selectActiveTrack=(action "selectActiveTrack")
         }}
       {{else}}

@@ -2,10 +2,17 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import cleanURI from 'euclidean-cracked/utils/clean';
 import { debug } from "@ember/debug";
+import { computed } from '@ember/object';
 
 export default Controller.extend({
   session: service(),
   store: service(),
+
+  activeTrack: computed('model.tracks.[]', {
+    get() {
+      return this.model.tracks.firstObject;
+    },
+  }),
 
   actions: {
     save(project) {
@@ -21,6 +28,15 @@ export default Controller.extend({
     //  set footer controls to that track
     selectActiveTrack(track) {
       this.set('activeTrack', track);
+    },
+
+    async deleteTrack(track) {
+      const customFunction = await track.customFunction;
+      // TODO: delete customFunction with cloud Function
+      // since readOnly validation prevents deletion
+      // customFunction.destroyRecord();
+      this.model.tracks.removeObject(track);
+      track.destroyRecord();
     },
 
     async delete(project) {

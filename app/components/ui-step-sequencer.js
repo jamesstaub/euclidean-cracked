@@ -62,6 +62,7 @@ export default Component.extend(NexusMixin, {
 
   didUpdateAttrs() {
     this._super(...arguments);
+    this.updateAndCacheSequence();
   },
 
   updateAndCacheSequence() {

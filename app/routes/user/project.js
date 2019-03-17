@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { set, get } from "@ember/object";
 import getOrCreateUser from 'euclidean-cracked/utils/get-or-create-user';
-import { waitForProperty } from 'ember-concurrency';
 
 export default Route.extend({
   session: service(),
@@ -20,20 +19,6 @@ export default Route.extend({
     this.addProjectActiveUser(model);
     if (!model.tracks.length) {
       this.createDefaultTrack(model, transition);
-    }
-  },
-
-  setupController(controller, model) {
-    this._super(...arguments);
-    this.setDefaultActiveTrack(controller, model);
-  },
-
-  async setDefaultActiveTrack(controller, project) {
-    await project.tracks;
-    if (!this.activeTrack) {
-      // tracks might not be available in this hook when new project created
-      await waitForProperty(project, 'tracks.firstObject');
-      controller.set('activeTrack', project.tracks.firstObject);
     }
   },
 
