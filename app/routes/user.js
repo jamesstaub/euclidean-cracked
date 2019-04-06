@@ -25,20 +25,20 @@ export default Route.extend({
   async beforeModel() {
     // fire a request to wake up heroku drumserver
     fetch('https://drumserver.herokuapp.com/');
-
-    const sessionProviderUser = this.session.get('currentUser');
-
-    if (!sessionProviderUser) {
+    try {
+      await this.session.fetch();
+    } catch (error) {
       await this.openSession('anonymous');
     }
-    return this.session.get('currentUser'); 
   },
 
   async model() {
     const userRecordsQuery = await this.store.query('user', {
       orderBy: 'uid',
-      equalTo: this.session.get('currentUser.uid')
+      equalTo: this.session.get('currentUser.uid'),
+      limitToFirst: 1,
     });
+
     if (userRecordsQuery.length === 0) {
       return this.createAnonUser();
     } else {
@@ -87,14 +87,14 @@ export default Route.extend({
   },
 
   async saveAuthenticatedUser(userRecord) {
-    const authProviderUser = this.session.get('currentUser');
+    const authProviderUser =  await this.session.get('currentUser');
     userRecord.setProperties({
       username: this.usernameFromEmail(authProviderUser.email),
+      email: authProviderUser.email,
       uid: authProviderUser.uid,
-      avatar: authProviderUser.photoUrl
+      avatar: authProviderUser.photoURL
     });
     await userRecord.save();
-
     this.session.set('currentUserModel', userRecord);
   },
 

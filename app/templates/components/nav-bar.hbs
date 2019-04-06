@@ -2,20 +2,29 @@
   {{#mdc-top-app-bar-row}}
     {{#mdc-top-app-bar-section position="alignStart"}}
       {{mdc-top-app-bar-navigation-icon}}
-      {{#mdc-top-app-bar-title}}EUCLIP{{/mdc-top-app-bar-title}}
+      {{#mdc-top-app-bar-title}}
+        {{#link-to "user" class="link white"}}
+          EUCLIP
+        {{/link-to}}
+      {{/mdc-top-app-bar-title}}
     {{/mdc-top-app-bar-section}}
     {{#mdc-top-app-bar-section position="alignEnd" role="toolbar"}}
+      {{#mdc-button-linkto "user.new" style="unelevated" class="ml4"}}
+        New Project
+      {{/mdc-button-linkto}}
       <div>
-          {{#mdc-fab click=(action "toggleMenu")}}
-            {{#if session.currentUserModel.avatar}}
-              <img
-                class="br-100"
-                src={{session.currentUserModel.avatar}}
-                height="56px"
-                width="56px"
-              />
-            {{/if}}
-          {{/mdc-fab}}
+        {{#mdc-fab click=(action "toggleMenu")}}
+          {{#if session.currentUserModel.avatar}}
+            <img
+              alt={{session.currentUserModel.username}}
+              class="br-100"
+              src={{session.currentUserModel.avatar}}
+              height="56px"
+              width="56px"
+             />
+
+          {{/if}}
+        {{/mdc-fab}}
         {{#mdc-menu-surface
           class="w5"
           anchor="parent"
@@ -30,25 +39,18 @@
               {{/mdc-list-item-secondary-text}}
             {{/mdc-list-item}}
             {{mdc-list-divider}}
-            {{#mdc-list-item-link-to "user.new"}}
-              New Project
-            {{/mdc-list-item-link-to}}
             {{#if isAnonymous}}
               {{#mdc-list-item class="pointer" click=(action onLogin)}}
                 Log in with Google
               {{/mdc-list-item}}
+            {{else if session.isAuthenticated}}
+              {{#mdc-list-item class="pointer" click=(action onLogout)}}
+                Logout
+              {{/mdc-list-item}}
             {{else}}
-              {{#if session.isAuthenticated}}
-                <li class="mdc-list-item">
-                  <a href="#" {{action onLogout}}>
-                    Logout
-                  </a>
-                </li>
-              {{else}}
-                {{#mdc-list-item click=(action onLogin)}}
-                  Login
-                {{/mdc-list-item}}
-              {{/if}}
+              {{#mdc-list-item click=(action onLogin)}}
+                Login
+              {{/mdc-list-item}}
             {{/if}}
           {{/mdc-list}}
         {{/mdc-menu-surface}}
