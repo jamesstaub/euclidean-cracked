@@ -1,10 +1,11 @@
 import Route from '@ember/routing/route';
-import cleanURI from '../utils/clean';
-import getOrCreateUser from '../utils/get-or-create-user';
-
+import cleanURI from '../../utils/clean';
 import { get } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default Route.extend({
+  session: service(),
+
   beforeModel() {
     const randomSlug =
       Math.random()
@@ -31,15 +32,12 @@ export default Route.extend({
 
     // TODO: get auth type here
     // allow custom username for anonymous or google auth
-    user = await getOrCreateUser(
-      get(this, 'session.currentUser'),
-      this.store
-    );
+    user = this.session.get('currentUserModel');
 
     await user.get('projects').addObject(project);
     project = await project.save();
     await user.save();
-    return this.transitionTo('user.project', user, get(project, 'slug'));
+    return this.transitionTo('user.creator.project', user, get(project, 'slug'));
   }
 
 });

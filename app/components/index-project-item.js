@@ -8,7 +8,7 @@ export default Component.extend({
   classNames: ['index-project-item'],
   classNameBindings: ['project.publicVisible:public:private'],
 
-  visible: computed('project.publicVisible', 'project.creator.uid', {
+  visible: computed('project.{publicVisible,creator.uid}', {
     get() {
       let creator = get(this, 'project.creator.uid');
       let currentUser = get(this, 'session.currentUser.uid');

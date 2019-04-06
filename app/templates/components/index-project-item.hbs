@@ -9,7 +9,7 @@
       {{yield}}
       <h2 class="card-title project-title">
         <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
-        {{#link-to "user.project" session.currentUser project}}
+        {{#link-to "user.creator.project" session.currentUser project}}
           {{project.title}}
         {{/link-to}}
       </h2>

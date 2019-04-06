@@ -20,7 +20,7 @@ export default Controller.extend({
 
       project.set('slug', slug);
       project.save().then(project => {
-        this.transitionToRoute('user.project', project.slug);
+        this.transitionToRoute('user.creator.project', project.slug);
       });
     },
 

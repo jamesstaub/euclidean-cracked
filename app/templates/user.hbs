@@ -1,1 +1,8 @@
+{{nav-bar session=session 
+  onLogin=(route-action "login") 
+  onLogout=(route-action "logout")
+}}
+
+{{#mdc-content}}
 {{outlet}}
+{{/mdc-content}}

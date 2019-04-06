@@ -7,7 +7,6 @@
   .project-meta {
     display: flex;
     justify-content: space-between;
-    margin: 20px 0;
     padding: 15px;
 
     &-title {
@@ -22,9 +21,6 @@
 
     .permissions {
       padding: 15px 0;
-    }
-
-    .creator-meta {
     }
   }
   .project-date {

@@ -1,4 +1,6 @@
-<div class="container-fluid project-meta border">
+{{new-project onSave=(route-action "save")}}
+
+<div class="project-meta">
   <div class="project-meta-title">
     <h1>
       {{project.title}}
@@ -103,7 +105,7 @@
     {{/if}}
   {{/if}}
 </div>
-<div class="container-fluid border">
+<div>
   <section class='track-section'>
     {{yield}}
   </section>

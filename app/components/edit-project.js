@@ -37,7 +37,7 @@ export default Component.extend({
     },
 
     delete(project) {
-      this.sendAction('delete', project);
+      this.send('delete', project);
       set(this, 'isEditing', false);
     },
 

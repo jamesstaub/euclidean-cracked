@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { set, get } from "@ember/object";
-import getOrCreateUser from 'euclidean-cracked/utils/get-or-create-user';
+import { set } from "@ember/object";
 
 export default Route.extend({
   session: service(),
@@ -24,27 +23,20 @@ export default Route.extend({
 
   async createDefaultTrack(project, transition) {
     await transition;
-    this.controllerFor('user.project').send('createTrack', project);
+    this.controllerFor('user.creator.project').send('createTrack', project);
   },
 
-  addProjectActiveUser(model) {
+  async addProjectActiveUser(model) {
     set(this, 'project', model);
+    
+    let user = this.session.get('currentUserModel');
+    set(user, 'online', true);
 
-    let user = getOrCreateUser(
-      get(this, 'session.currentUser'),
-      this.store
-    );
+    model.get('activeUsers').pushObject(user);
 
-    user.then((user) => {
-      set(user, 'online', true);
-
-      model.get('activeUsers').pushObject(user);
-
-      user.save().then((user) => {
-        set(this, 'session.currentUserModel', user);
-        model.save();
-      });
-    });
+    await user.save();
+    set(this, 'session.currentUserModel', user);
+    model.save();
   },
 
   removeUser() {
