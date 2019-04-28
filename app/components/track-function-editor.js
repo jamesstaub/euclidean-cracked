@@ -53,6 +53,9 @@ export default Component.extend({
     // after save is called, functionPreCheck has a value
     // until the function checker sets it null and either sets
     // the function property, or returns illegal keywords
+
+    // TODO: add a timeout here in case function is down;
+    
     yield waitForProperty(this, 'customFunction.functionPreCheck', null);
     // the cloud function check succeeded if function + editor are identical
     if (this.function === this.editorContent) {

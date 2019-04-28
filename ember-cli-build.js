@@ -13,8 +13,8 @@ module.exports = function(defaults) {
       enabled: process.env.NODE_ENV !== 'development',
       extensions: ['js', 'css', 'png', 'jpg', 'gif', 'map', 'ico', 'wav'],
     },
-    minifyCSS: { enabled: process.env.NODE_ENV !== 'development' },
-    minifyJS: { enabled: process.env.NODE_ENV !== 'development' },
+    // minifyCSS: { enabled: process.env.NODE_ENV !== 'development' },
+    // minifyJS: { enabled: process.env.NODE_ENV !== 'development' },
     autoprefixer: {
       // https://github.com/ai/browserslist#queries
       browsers: ['> 1% in US', 'last 3 versions', 'Safari >= 8']
