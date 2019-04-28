@@ -7,15 +7,11 @@ export default Route.extend({
   session: service(),
 
   beforeModel() {
-    const randomSlug =
-      Math.random()
-        .toString(36)
-        .substring(2, 15) +
-      Math.random()
-        .toString(36)
-        .substring(2, 15);
-    
-    this.createProject(randomSlug, true, true);
+    let hash = Math.random()
+      .toString(36)
+      .substring(5);
+    let name = `Untitled-${hash}`;
+    this.createProject(name, true, true);
   },
 
   async createProject(title, publicEditable, publicVisible) {

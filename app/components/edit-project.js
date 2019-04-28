@@ -22,27 +22,24 @@ export default Component.extend({
   }),
 
   actions: {
-    save(project) {
+    save() {
       let sessionName = get(this, 'session.currentUser.uid');
 
-      if (sessionName === project.get('creator.uid')) {
+      if (sessionName === this.project.get('creator.uid')) {
         set(this, 'isEditing', false);
-        get(this, 'onSaveProject')(project);
+        get(this, 'onSaveProject')(this.project);
       } else {
         alert('Sorry not authorized');
       }
     },
+
     edit() {
       set(this, 'isEditing', true);
     },
 
-    delete(project) {
-      this.send('delete', project);
+    deleteProject() {
+      this.onDelete(this.project);
       set(this, 'isEditing', false);
-    },
-
-    createComment(author, body, project) {
-      this.sendAction('createComment', author, body, project);
     },
   }
 });

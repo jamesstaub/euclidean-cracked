@@ -11,6 +11,10 @@ export default Component.extend({
   actions: {
     toggleMenu() {
       this.toggleProperty('isOpen');
+    }, 
+    async save(record) {
+      record.save();
+      this.set('isEditingTitle', false);
     }
   }
 });

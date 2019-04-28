@@ -1,14 +1,18 @@
 import Component from '@ember/component';
-import { task, waitForProperty } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { debug } from '@ember/debug';
 import { inject as service } from '@ember/service';
 
 export default Component.extend({
+  tagName: '',
+
   audioService: service(),
+
   init() {
     this._super(...arguments);
     this.set('gainSliderSize', [20, 100]);
     this.set('uiStepSize', 40);
+    this.set('visibleInterface', 'rhythm');
   },
 
   saveTrack: task(function* (track) {
@@ -36,9 +40,5 @@ export default Component.extend({
       }
       this.saveTrack.perform(track);
     },
-
-    switchInterface(name) {
-      this.set('visibleInterface', name);
-    }
   }
 });

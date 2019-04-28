@@ -1,39 +1,58 @@
-{{ui-slider
-  max=1
-  min=0
-  size=gainSliderSize
-  step=0.01
-  class="gain-slider"
-  onChangeValue=(action "updateSequenceParam" track "gain")
-  value=track.gain
-}}
+<footer class="flex bg-yellow absolute bottom-0 w-100 h5 items-center">
+  <div class="ba h-100 pv2 ph3">
+    {{ui-slider
+      max=1
+      min=0
+      size=gainSliderSize
+      step=0.01
+      class="gain-slider"
+      onChangeValue=(action "updateSequenceParam" track "gain")
+      value=track.gain
+    }}
+  </div>
 
-{{track-interface-switches switchInterface=(action "switchInterface")}}
-{{#if (eq visibleInterface "filePicker")}}
-  {{drum-file-picker
-    track=track
-    saveTrack=saveTrack
-    updateFilepath=(action "updateFilepath")
-  }}
-{{/if}}
-{{#if (eq visibleInterface "steps")}}
-  {{step-param-sliders
-    uiStepSize=uiStepSize
-    sequence=track.sequence
-    track=track
-    stepIndex=audioService.activeTrackStepIndex
-  }}
-{{/if}}
-{{#if (eq visibleInterface "rhythm")}}
-  {{ui-sequence-controls
-    hits=track.hits
-    steps=track.steps
-    offset=track.offset
-    onUpdateSequenceParam=(action "updateSequenceParam" track)
-  }}
-{{/if}}
-{{! TODO refactor to be nested in audio-track-sampler }}
-{{! and passs onApplyFunction as action instead}}
-{{#if (eq visibleInterface "function")}}
-  {{track-function-editor customFunction=track.customFunction sampler=sampler}}
-{{/if}}
+  <div class="ba flex flex-column w4 h-100">
+    {{#mdc-button class="ba h-auto flex-grow" click=(action (mut visibleInterface) "rhythm")}}
+      <svg src="/assets/icons/automation.svg"/>
+    {{/mdc-button}}
+    {{#mdc-button class="ba h-auto flex-grow" click=(action (mut visibleInterface) "script")}}
+      <svg src="/assets/icons/script.svg"/>
+    {{/mdc-button}}
+  </div>
+
+  <div class="ba flex-grow flex-basis-auto h-100">
+    {{#if (eq visibleInterface "filePicker")}}
+      {{drum-file-picker
+        track=track
+        saveTrack=saveTrack
+        updateFilepath=(action "updateFilepath")
+      }}
+    {{/if}}
+
+    {{#if (eq visibleInterface "rhythm")}}
+      <div class="flex justify-between flex-grow flex-basis-auto">
+        <StepParamSliders
+          @uiStepSize={{uiStepSize}}
+          @sequence={{track.sequence}}
+          @track={{track}}
+          @stepIndex={{audioService.activeTrackStepIndex}}
+        />
+
+        <UiSequenceControls
+          @hits={{track.hits}}
+          @steps={{track.steps}}
+          @offset={{track.offset}}
+          @onUpdateSequenceParam={{action "updateSequenceParam" track}}
+        />
+      </div>
+    {{/if}}
+
+    {{#if (eq visibleInterface "script")}}
+      {{track-function-editor 
+        customFunction=track.customFunction 
+        sampler=sampler
+      }}
+    {{/if}}
+  </div>
+
+</footer>

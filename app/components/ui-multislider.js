@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { set, computed } from "@ember/object";
-
 import $ from "jquery";
 
 export default Component.extend(NexusMixin, {
@@ -15,8 +14,7 @@ export default Component.extend(NexusMixin, {
   didInsertElement() {
     this._super(...arguments);
     this._nexusInit();
-    this.
-    _styleInit();
+    this._styleInit();
   },
 
   ElementName: 'Multislider',

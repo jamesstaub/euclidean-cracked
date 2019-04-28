@@ -1,8 +1,9 @@
 {{nav-bar session=session 
   onLogin=(route-action "login") 
   onLogout=(route-action "logout")
+  currentProject=currentProject
 }}
 
-{{#mdc-content}}
-{{outlet}}
+{{#mdc-content class="pt5"}}
+  {{outlet}}
 {{/mdc-content}}

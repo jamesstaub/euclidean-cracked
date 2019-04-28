@@ -3,8 +3,7 @@
     project=model
     session=session
     onSaveProject=(action "save")
-    delete="delete"
-    createComment="createComment"
+    onDelete=(action "delete")
   }}
     {{#audio-project-sequencer project=model}}
       <button
@@ -12,17 +11,14 @@
         type="button"
         onclick={{action "createTrack" model}}
       >
-        add track (
-        <span>
-          {{model.tracks.length}}
-        </span>
-        )
+        add track (<span>{{model.tracks.length}}</span>)
       </button>
     {{/audio-project-sequencer}}
     
     <div class='tracks'>
-      {{#each model.tracks as |track|}}
+      {{#each model.tracks as |track idx|}}
         {{track-container
+          idx=idx
           isActive=(eq track.id activeTrack.id) 
           track=track
           onDeleteTrack=(action "deleteTrack")
@@ -34,5 +30,5 @@
     </div>
 
   {{/edit-project}}
-  {{current-track-footer track=activeTrack}}
+  {{current-track-footer track=activeTrack sampler=activeSampler}}
 {{/if}}

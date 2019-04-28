@@ -5,7 +5,7 @@ import { get, set, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
 
 export default Component.extend(SequenceHelper,{
-  classNames: ['step-param-sliders'],
+
   audioService: service(),
 
   gainStepDefault: Array.from(new Array(16), () => 0.5),
@@ -40,10 +40,6 @@ export default Component.extend(SequenceHelper,{
 
     switchInterface(name) {
       set(this, 'visibleInterface', name);
-      this.$()
-        .find('.interface-switches .btn')
-        .removeClass('active');
-      this.$(`.interface-switches .${name}`).addClass('active');
     }
   }
 });

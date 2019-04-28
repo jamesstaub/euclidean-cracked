@@ -21,6 +21,11 @@ export default Route.extend({
     }
   },
 
+  setupController(controller, model) {
+    this._super(...arguments);
+    this.controllerFor('user').set('currentProject', model);
+  },
+
   async createDefaultTrack(project, transition) {
     await transition;
     this.controllerFor('user.creator.project').send('createTrack', project);
@@ -53,6 +58,7 @@ export default Route.extend({
 
   actions: {
     willTransition() {
+      this.controllerFor('user').set('currentProject', null);
       this.removeUser();
     }
   }

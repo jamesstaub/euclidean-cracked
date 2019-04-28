@@ -1,12 +1,13 @@
 {{#mdc-top-app-bar}}
   {{#mdc-top-app-bar-row}}
-    {{#mdc-top-app-bar-section position="alignStart"}}
-      {{mdc-top-app-bar-navigation-icon}}
+    {{#mdc-top-app-bar-section class="flex-grow-0 mr3" position="alignStart"}}
       {{#mdc-top-app-bar-title}}
-        {{#link-to "user" class="link white"}}
+        {{#link-to "user" class="link white" alt="Euclip Drum Console"}}
           EUCLIP
         {{/link-to}}
       {{/mdc-top-app-bar-title}}
+    {{/mdc-top-app-bar-section}}
+    {{#mdc-top-app-bar-section}}
     {{/mdc-top-app-bar-section}}
     {{#mdc-top-app-bar-section position="alignEnd" role="toolbar"}}
       {{#mdc-button-linkto "user.new" style="unelevated" class="ml4"}}

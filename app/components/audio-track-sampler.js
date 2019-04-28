@@ -1,7 +1,7 @@
 import SequenceHelper from 'euclidean-cracked/mixins/sequence-helper';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import { task, waitForProperty, timeout } from 'ember-concurrency';
+import { task, waitForProperty } from 'ember-concurrency';
 import { get, set, computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
@@ -99,6 +99,7 @@ export default Component.extend(SequenceHelper, {
 
   init() {
     this._super(...arguments);
+    this.setSamplerOnContainer(this); // pass this scope up
     this.set('stepIndex', 0);
     // set(this, 'isLooping', false);/
   },

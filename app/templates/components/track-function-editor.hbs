@@ -14,9 +14,9 @@
         name="button"
       >
         {{#if functionIsLoaded }}
-          {{fa-icon "check"}}
+          {{!-- {{fa-icon "check"}} --}}
         {{else if applyFunction.isRunning}}
-          {{fa-icon "spinner"}}
+          {{!-- {{fa-icon "spinner"}} --}}
         {{else}}
           load script
         {{/if}} 
@@ -39,7 +39,8 @@
         revert changes
       </button>
     </div>
-    {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
+    {{!-- TODO material option select --}}
+    {{!-- {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
       {{#dd.button class="btn-xs"}}
         Example Scripts <span class="caret"></span>
       {{/dd.button}}
@@ -64,7 +65,7 @@
         {{/each}}
 
       {{/dd.menu}}
-    {{/bs-dropdown}}
+    {{/bs-dropdown}} --}}
   </div>
   <div>
     {{#if illegalTokens}}

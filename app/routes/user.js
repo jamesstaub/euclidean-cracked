@@ -27,6 +27,7 @@ export default Route.extend({
     fetch('https://drumserver.herokuapp.com/');
     try {
       await this.session.fetch();
+      // console.log(this.session.currentUser);
     } catch (error) {
       await this.openSession('anonymous');
     }
@@ -116,7 +117,8 @@ export default Route.extend({
         set(this, 'session.currentUserModel.online', false);
         await userRecord.save();
       }
-      this.session.close();
+      await this.session.close();
+      this.refresh();
     },
   }
 });

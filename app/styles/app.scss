@@ -1,10 +1,14 @@
 @import 'ember-cli-tachyons-sass';
+
+.min-width-12 {
+  min-width: 12rem;
+}
+
 @import 'variables';
 @import 'mixins';
+@import 'colors';
 
 @import 'components/nav-bar';
-
-@import 'components/ui-dial';
 
 @import 'components/edit-project';
 @import 'components/edit-track';
@@ -15,6 +19,13 @@
 @import 'components/drum-file-picker';
 @import 'components/track-interface-switches';
 
+.flex-basis-auto {
+  flex-basis: auto;
+}
+.flex-grow {
+  flex-grow: 1;
+}
+
 .comments {
   border-radius: 5px;
   border: 2px solid black;
@@ -22,38 +33,3 @@
   margin: 20px;
   padding: 20px;
 }
-
-.add-track {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    margin: 0px auto;
-    background-color: #333;
-    border-radius: 100%;  
-    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
-    animation: sk-scaleout 1.0s infinite ease-in-out;
-  }
-
-  @-webkit-keyframes sk-scaleout {
-    0% { -webkit-transform: scale(0) }
-    100% {
-      -webkit-transform: scale(1.0);
-      opacity: 0;
-    }
-  }
-
-  @keyframes sk-scaleout {
-    0% { 
-      -webkit-transform: scale(0);
-      transform: scale(0);
-    } 100% {
-      -webkit-transform: scale(1.0);
-      transform: scale(1.0);
-      opacity: 0;
-    }
-  }
