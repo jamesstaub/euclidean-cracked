@@ -6,12 +6,12 @@
 
   {{#audio-track-sampler
     class="flex justify-between w-100"
+    isActive=isActive
     sequence=track.sequence
     directory=directory
     track=track
     gain=track.gain
     isLooping=track.isLooping
-    isActive=isActive
     filepath=track.filepath
     outputNodeSelector="#master-compressor"
     setSamplerOnContainer=(action "setSamplerOnContainer")

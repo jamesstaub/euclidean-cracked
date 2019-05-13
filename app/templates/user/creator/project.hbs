@@ -23,7 +23,7 @@
       {{#each model.tracks as |track idx|}}
         {{#track-container
           idx=idx
-          isActive=(eq track.id activeTrack.id) 
+          isActive=(eq track.id activeTrack.id)
           track=track
           saveTrackTask=saveTrackTask
           onDeleteTrack=(action "deleteTrack")

@@ -1,3 +1,4 @@
+import DidChangeAttrs from 'ember-did-change-attrs';
 import SequenceHelper from 'euclidean-cracked/mixins/sequence-helper';
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
@@ -5,7 +6,7 @@ import { task, waitForProperty } from 'ember-concurrency';
 import { get, set, computed } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
-export default Component.extend(SequenceHelper, {
+export default Component.extend(SequenceHelper, DidChangeAttrs, {
   audioService: service(),
 
   classNames: ['audio-track-sampler'],
@@ -103,8 +104,13 @@ export default Component.extend(SequenceHelper, {
     this.set('stepIndex', 0);
     // set(this, 'isLooping', false);/
   },
+  
+  // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
+  didChangeAttrsConfig: {
+    attrs: ['sequence', 'directory', 'gain', 'isLooping', 'filepath']
+  },
 
-  didReceiveAttrs() {
+  didChangeAttrs(changes) {
     this._super(...arguments);
     this.initializeSampler.perform();
   },

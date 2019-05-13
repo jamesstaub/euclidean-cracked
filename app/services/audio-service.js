@@ -24,6 +24,7 @@ export default Service.extend({
   },
 
   bindTrackSamplers() {
+    console.log('bind samplers');
     this.tracks.forEach(track => {
       __(track.selector).unbind('step');
 
