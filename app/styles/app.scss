@@ -4,9 +4,11 @@
   min-width: 12rem;
 }
 
+@import 'type';
 @import 'variables';
 @import 'mixins';
 @import 'colors';
+@import 'helpers';
 
 @import 'components/nav-bar';
 
@@ -17,7 +19,6 @@
 @import 'components/index-project-item.scss';
 @import 'components/track-function-editor';
 @import 'components/drum-file-picker';
-@import 'components/track-interface-switches';
 
 .flex-basis-auto {
   flex-basis: auto;
@@ -26,10 +27,7 @@
   flex-grow: 1;
 }
 
-.comments {
-  border-radius: 5px;
-  border: 2px solid black;
-  width: 560px;
-  margin: 20px;
-  padding: 20px;
+.flex-0 {
+  flex-grow: 0;
+  flex-shrink: 0;
 }

@@ -5,7 +5,7 @@ import { get, set, computed } from "@ember/object";
 import { alias } from "@ember/object/computed";
 
 export default Component.extend(SequenceHelper,{
-
+  tagName: '',
   audioService: service(),
 
   gainStepDefault: Array.from(new Array(16), () => 0.5),

@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  classNames: ['track-container', 'pa4', 'flex','pointer'],
+  classNames: ['track-container'],
   classNameBindings: ['isActive:bg-light-silver'],
 
   didInsertElement() {
@@ -9,7 +9,6 @@ export default Component.extend({
     // activate the first track on load
     if (this.idx === 0) {
       this.selectActiveTrack(this.track, this.sampler);
-      console.log(this.track, this.sampler);
     }
   },
   click(e) {
@@ -20,12 +19,13 @@ export default Component.extend({
     }
     this.selectActiveTrack(this.track, this.sampler);
   },
+
   actions: {
     async deleteTrack(track) {
       this.onDeleteTrack(track);
     },
     setSamplerOnContainer(sampler) {
       this.set('sampler', sampler);
-    }
+    },
   }
 });

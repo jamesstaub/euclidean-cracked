@@ -2,10 +2,20 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import cleanURI from 'euclidean-cracked/utils/clean';
 import { debug } from "@ember/debug";
+import { task } from 'ember-concurrency';
 
 export default Controller.extend({
   session: service(),
   store: service(),
+
+  saveTrackTask: task(function* (track) {
+    try {
+      yield track.save();
+    } catch (e) {
+      debug(`error saving track:  ${e}`);
+      track.rollbackAttributes();
+    }
+  }),
 
   actions: {
     save(project) {
@@ -79,6 +89,6 @@ export default Controller.extend({
         .then(() => {
           debug('project saved successfuly');
         });
-    }
+    },
   }
 });

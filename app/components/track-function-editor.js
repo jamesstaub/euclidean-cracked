@@ -7,11 +7,11 @@ import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
   audioService: service(),
   classNames: ['track-function-editor'],
-
+  tagName:'',
   // stringified code that gets run in audio service on submit
   function: reads('customFunction.function'),
-  // code in text editor
   illegalTokens: reads('customFunction.illegalTokens'),
+  // code in text editor
   editorContent: reads('customFunction.editorContent'),
   canSubmit: and('editorContent.length'),
   cantSubmit: or('!canSubmit', 'functionIsLoaded'),

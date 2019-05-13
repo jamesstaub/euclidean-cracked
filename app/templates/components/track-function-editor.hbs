@@ -1,6 +1,5 @@
 {{yield}}
-
-<form class="function-editor" {{action "submitCode" on="submit"}}>
+<form class="function-editor" ...attributes {{action "submitCode" on="submit"}}>
   {{! <legend>
       <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
       <p>script will be called on each step of the step sequencer.</p>
@@ -75,7 +74,8 @@
     {{/if}}
   </div>
   {{ember-ace
-    lines=20
+    lines=8
+    editorClass="ace-editor"
     value=editorContent
     mode="ace/mode/javascript"
     theme="ace/theme/ambiance"

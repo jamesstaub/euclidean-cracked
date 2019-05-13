@@ -1,27 +1,21 @@
 {{yield}}
-<div class="flex flex-column pv3">
+<div class="step-param-sliders flex flex-column" ...attributes>
   <div
     class="flex"
     role="group"
     aria-label="toggle-interface"
   >
-    <button
-      type="button"
-      class="btn btn-default gain active"
+    <button type="button" class="btn btn-default gain active"
       {{action "switchInterface" "gain"}}
     >
       volume
     </button>
-    <button
-      type="button"
-      class="btn btn-default speed"
+    <button type="button" class="btn btn-default speed"
       {{action "switchInterface" "speed"}}
     >
       playback speed
     </button>
-    <button
-      type="button"
-      class="btn btn-default loopEnd"
+    <button type="button" class="btn btn-default loopEnd"
       {{action "switchInterface" "loopEnd"}}
     >
       loop length

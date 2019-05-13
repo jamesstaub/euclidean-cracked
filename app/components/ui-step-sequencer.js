@@ -79,5 +79,5 @@ export default Component.extend(NexusMixin, {
 
   afterInitNexus(NexusElement) {
     NexusElement.colorize('mediumLight', '#d9534f');
-  }
+  },
 });

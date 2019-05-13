@@ -12,12 +12,12 @@ export default Component.extend({
     }
     
     next(()=> {
+      // TODO handle if none selected condition (tho shouldnt happen)
       let selector = this.$('.selected').get();
       if (selector.length) {
         selector[0].scrollIntoView();
       }
     })
-
   },
   actions: {
     onSelect(dir, choice,) {

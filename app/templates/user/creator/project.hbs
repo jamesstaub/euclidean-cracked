@@ -14,21 +14,31 @@
         add track (<span>{{model.tracks.length}}</span>)
       </button>
     {{/audio-project-sequencer}}
-    
+    <DrumFilePicker
+      @isOpen={{drumMenuOpen}}
+      @track={{activeTrack}}
+      @saveTrackTask={{saveTrackTask}}
+    />
     <div class='tracks'>
       {{#each model.tracks as |track idx|}}
-        {{track-container
+        {{#track-container
           idx=idx
           isActive=(eq track.id activeTrack.id) 
           track=track
+          saveTrackTask=saveTrackTask
           onDeleteTrack=(action "deleteTrack")
           selectActiveTrack=(action "selectActiveTrack")
         }}
+          {{#mdc-button click=(action (mut drumMenuOpen) true)}}
+            {{track.filename}} 
+          {{/mdc-button}}
+
+        {{/track-container}}
       {{else}}
         <h4> No tracks</h4>
       {{/each}}
     </div>
 
   {{/edit-project}}
-  {{current-track-footer track=activeTrack sampler=activeSampler}}
+  {{current-track-footer track=activeTrack sampler=activeSampler saveTrackTask=saveTrackTask}}
 {{/if}}

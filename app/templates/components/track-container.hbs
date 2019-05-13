@@ -1,27 +1,32 @@
-{{#audio-track-sampler
-  class="flex justify-between w-100"
-  sequence=track.sequence
-  directory=directory
-  track=track
-  gain=track.gain
-  isLooping=track.isLooping
-  isActive=isActive
-  filepath=track.filepath
-  outputNodeSelector="#master-compressor"
-  setSamplerOnContainer=(action "setSamplerOnContainer")
-  as |sampler|
-}}
-  {{ui-step-sequencer 
-    sequence=track.sequence 
-    stepIndex=sampler.stepIndex
-  }}
-  <button 
-    type="delete" 
-    class="btn btn-danger delete-track-btn" 
-    {{action "deleteTrack" track}}
-  >
-    ✕
-  </button>
-{{/audio-track-sampler}}
+{{!-- <div class="pv4 flex justify-start pointer"> --}}
+{{#mdc-list-item}}
+  <div class="w4">
+    {{yield}}
+  </div>
 
-{{yield}}
+  {{#audio-track-sampler
+    class="flex justify-between w-100"
+    sequence=track.sequence
+    directory=directory
+    track=track
+    gain=track.gain
+    isLooping=track.isLooping
+    isActive=isActive
+    filepath=track.filepath
+    outputNodeSelector="#master-compressor"
+    setSamplerOnContainer=(action "setSamplerOnContainer")
+    as |sampler|
+  }}
+    {{ui-step-sequencer 
+      sequence=track.sequence 
+      stepIndex=sampler.stepIndex
+    }}
+    <button 
+      type="delete" 
+      class="btn btn-danger delete-track-btn" 
+      {{action "deleteTrack" track bubbles=false}}
+    >
+      ✕
+    </button>
+  {{/audio-track-sampler}}
+{{/mdc-list-item}}
