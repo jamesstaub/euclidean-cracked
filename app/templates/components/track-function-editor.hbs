@@ -1,95 +1,106 @@
-{{yield}}
-<form class="function-editor" ...attributes {{action "submitCode" on="submit"}}>
-  {{! <legend>
-      <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
-      <p>script will be called on each step of the step sequencer.</p>
-    </legend> }}
-  <div class="function-controls">
-    <div class="load-buttons">
-      <button
-        class="btn btn-xs btn-primary run-code-btn"
-        disabled={{cantSubmit}}
-        type="submit"
-        name="button"
-      >
-        {{#if functionIsLoaded }}
-          {{!-- {{fa-icon "check"}} --}}
-        {{else if applyFunction.isRunning}}
-          {{!-- {{fa-icon "spinner"}} --}}
-        {{else}}
-          load script
-        {{/if}} 
-      </button>
+<section>
+  {{yield}}
+  <form class="function-editor" ...attributes {{action "submitCode" on="submit"}}>
+    {{! <legend>
+        <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
+        <p>script will be called on each step of the step sequencer.</p>
+      </legend> }}
+    <div class="function-controls">
+      <div class="load-buttons">
+        <button
+          class="btn btn-xs btn-primary run-code-btn"
+          disabled={{cantSubmit}}
+          type="submit"
+          name="button"
+        >
+          {{#if functionIsLoaded }}
+            {{!-- {{fa-icon "check"}} --}}
+          {{else if applyFunction.isRunning}}
+            {{!-- {{fa-icon "spinner"}} --}}
+          {{else}}
+            load script
+          {{/if}} 
+        </button>
 
-      <button
-        class="btn btn-xs disable-code-btn"
-        type="button"
-        disabled={{not functionIsLoaded}}
-        {{action "disableFunction"}}
-      >
-        {{if functionIsLoaded "disable" "no script loaded"}}
-      </button>
-      <button
-        class="btn btn-xs disable-code-btn"
-        disabled={{functionIsLoaded}}
-        type="button"
-        {{action "discardChanges"}}
-      >
-        revert changes
-      </button>
-    </div>
-    {{!-- TODO material option select --}}
-    {{!-- {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
-      {{#dd.button class="btn-xs"}}
-        Example Scripts <span class="caret"></span>
-      {{/dd.button}}
-      {{#dd.menu as |menu|}}
-        {{#each exampleFunctions as |exampleGroup| }}
-          {{#menu.item}}
-            <span class="dropdown-header">
-              {{exampleGroup.sectionName}}
-            </span>
-          {{/menu.item}}
-          {{#each exampleGroup.examples as |example|}}
-            {{#menu.item}}
-              <a
-                class="dropdown-item"
-                onclick={{perform injectExample example.code}}
-              >
-                {{example.name}}
-              </a>
-            {{/menu.item}}
-          {{/each}}
-          {{menu.divider}}
-        {{/each}}
-
-      {{/dd.menu}}
-    {{/bs-dropdown}} --}}
-  </div>
-  <div>
-    {{#if illegalTokens}}
-      <div class="alert alert-danger" role="alert">
-        <span>remove unsupported keywords: <span class="danger">{{illegalTokens}}</span></span>
+        <button
+          class="btn btn-xs disable-code-btn"
+          type="button"
+          disabled={{not functionIsLoaded}}
+          {{action "disableFunction"}}
+        >
+          {{if functionIsLoaded "disable" "no script loaded"}}
+        </button>
+        <button
+          class="btn btn-xs disable-code-btn"
+          disabled={{functionIsLoaded}}
+          type="button"
+          {{action "discardChanges"}}
+        >
+          revert changes
+        </button>
+        <div>
+          {{#mdc-button style="unelevated" click=(action (mut exampleMenuOpen) true)}}examples{{/mdc-button}}
+          {{#mdc-menu
+            open=exampleMenuOpen
+            anchor="parent"
+            quickOpen=true
+            position="fixed"
+            anchorCorner="bottomLeft"
+          }}
+            {{#each exampleFunctions as |exampleGroup| }}
+              {{mdc-menu-item exampleGroup.sectionName}}
+              {{#each exampleGroup.examples as |example|}}
+                {{mdc-menu-item example.name click=(perform injectExample example.code)}}
+              {{/each}}
+              {{mdc-list-divider}}
+            {{/each}}
+          {{/mdc-menu}}
+        </div>
       </div>
-    {{/if}}
-  </div>
-  {{ember-ace
-    lines=8
-    editorClass="ace-editor"
-    value=editorContent
-    mode="ace/mode/javascript"
-    theme="ace/theme/ambiance"
-    update=(action "onUpdateEditor")
-  }}
-</form>
-<div class="code-info">
-  <p>
-    <strong>
-      note:
-    </strong>
-    this code will be called repeatedly, so creating new objects or audio nodes is not recommended.
-  </p>
-  <p>
-    instead, use the global code editor (coming soon) (which is only called once on initialization) to create audio nodes, or other objects. you can then access and modify those nodes with this code.
-  </p>
-</div>
+      
+      {{!-- TODO material option select --}}
+      {{!-- {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
+        {{#dd.button class="btn-xs"}}
+          Example Scripts <span class="caret"></span>
+        {{/dd.button}}
+        {{#dd.menu as |menu|}}
+          {{#each exampleFunctions as |exampleGroup| }}
+            {{#menu.item}}
+              <span class="dropdown-header">
+                {{exampleGroup.sectionName}}
+              </span>
+            {{/menu.item}}
+            {{#each exampleGroup.examples as |example|}}
+              {{#menu.item}}
+                <a
+                  class="dropdown-item"
+                  onclick={{perform injectExample example.code}}
+                >
+                  {{example.name}}
+                </a>
+              {{/menu.item}}
+            {{/each}}
+            {{menu.divider}}
+          {{/each}}
+
+        {{/dd.menu}}
+      {{/bs-dropdown}} --}}
+    </div>
+    <div>
+      {{#if illegalTokens}}
+        <div class="alert alert-danger" role="alert">
+          <span>remove unsupported keywords: <span class="danger">{{illegalTokens}}</span></span>
+        </div>
+      {{/if}}
+    </div>
+    {{ember-ace
+      lines=8
+      editorClass="ace-editor"
+      value=editorContent
+      mode="ace/mode/javascript"
+      theme="ace/theme/ambiance"
+      update=(action "onUpdateEditor")
+    }}
+  </form>
+</section>
+

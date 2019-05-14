@@ -1,6 +1,6 @@
 <footer class="track-footer ba flex bg-yellow absolute bottom-0 w-100 h12 items-center">
   <div class="flex-0 bl br h-100 pv2 ph3 w3">
-    <img src="/assets/icons/volume.svg" alt="volume">
+    <img alt="Volume" src="/assets/icons/volume.svg" alt="volume">
     {{ui-slider
       max=1
       min=0
@@ -14,10 +14,10 @@
 
   <div class="flex-0 br flex flex-column w3 h-100">
     {{#mdc-button class="bb b--black br0 h-auto flex-grow" click=(action (mut visibleInterface) "rhythm")}}
-      <img src="/assets/icons/automation.svg"/>
+      <img alt="Rhythm and Automation editor" src="/assets/icons/automation.svg"/>
     {{/mdc-button}}
     {{#mdc-button class="br0 h-auto flex-grow" click=(action (mut visibleInterface) "script")}}
-      <img src="/assets/icons/script.svg"/>
+      <img alt="Script Editor" src="/assets/icons/script.svg"/>
     {{/mdc-button}}
   </div>
 
@@ -30,7 +30,9 @@
           @sequence={{track.sequence}}
           @track={{track}}
           @stepIndex={{audioService.activeTrackStepIndex}}
-        />
+        >
+          <h3>Step Automation</h3>
+        </StepParamSliders>
 
         <UiSequenceControls
           class="pa3 bl h-100 w18"
@@ -38,7 +40,9 @@
           @steps={{track.steps}}
           @offset={{track.offset}}
           @onUpdateSequenceParam={{action "updateSequenceParam" track}}
-        />
+        >
+          <h3>Euclidean Rhythm</h3>
+        </UiSequenceControls>
       </div>
     {{/if}}
 
@@ -47,7 +51,9 @@
         class="w-100 h-100 overflow-scroll absolute bottom-0 bg-yellow pa3"
         @customFunction={{track.customFunction}}
         @sampler={{sampler}}
-      />
+      >
+        <h3>Script Editor</h3>
+      </TrackFunctionEditor>
     {{/if}}
   </div>
 
