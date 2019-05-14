@@ -1,16 +1,14 @@
-{{#mdc-top-app-bar}}
+{{#mdc-top-app-bar class="bg-dark-gray" style="fixed"}}
   {{#mdc-top-app-bar-row}}
     {{#mdc-top-app-bar-section class="flex-grow-0 mr3" position="alignStart"}}
-      {{#mdc-top-app-bar-title}}
-        {{#link-to "user" class="link white" alt="Euclip Drum Console"}}
-          <img src="/assets/icons/logo.svg">
-        {{/link-to}}
-      {{/mdc-top-app-bar-title}}
+      {{#link-to "user" class="link white" alt="Euclip Drum Console"}}
+        <img width="200px" src="/assets/icons/logo-250.svg">
+      {{/link-to}}
     {{/mdc-top-app-bar-section}}
     {{#mdc-top-app-bar-section}}
     {{/mdc-top-app-bar-section}}
     {{#mdc-top-app-bar-section position="alignEnd" role="toolbar"}}
-      {{#mdc-button-linkto "user.new" style="unelevated" class="ml4"}}
+      {{#mdc-button-linkto "user.new" style="unelevated" class="mh4 bg-dark-gray"}}
         New Project
       {{/mdc-button-linkto}}
       <div>

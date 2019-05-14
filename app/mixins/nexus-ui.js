@@ -31,7 +31,7 @@ export default Mixin.create({
     let ElementOptions = get(this, 'ElementOptions');
     let ElementName = get(this, 'ElementName');
     let NexusElement =  new Nexus[ElementName](`#${get(this, 'nexusId')}`, ElementOptions);
-
+    
     set(this, 'NexusElement', NexusElement);
 
     if (get(this, 'onChangeValue')) {

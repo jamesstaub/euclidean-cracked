@@ -1,44 +1,44 @@
 {{#if model}}
-  {{#edit-project
+  {{edit-project
     project=model
     session=session
     onSaveProject=(action "save")
     onDelete=(action "delete")
   }}
-    {{#audio-project-sequencer project=model}}
-      <button
-        class="btn btn-primary"
-        type="button"
-        onclick={{action "createTrack" model}}
-      >
-        add track (<span>{{model.tracks.length}}</span>)
-      </button>
-    {{/audio-project-sequencer}}
-    <DrumFilePicker
-      @isOpen={{drumMenuOpen}}
-      @track={{activeTrack}}
-      @saveTrackTask={{saveTrackTask}}
-    />
-    <div class='tracks'>
-      {{#each model.tracks as |track idx|}}
-        {{#track-container
-          idx=idx
-          isActive=(eq track.id activeTrack.id)
-          track=track
-          saveTrackTask=saveTrackTask
-          onDeleteTrack=(action "deleteTrack")
-          selectActiveTrack=(action "selectActiveTrack")
-        }}
-          {{#mdc-button click=(action (mut drumMenuOpen) true)}}
-            {{track.filename}} 
-          {{/mdc-button}}
 
-        {{/track-container}}
-      {{else}}
-        <h4> No tracks</h4>
-      {{/each}}
-    </div>
+  {{#audio-project-sequencer project=model}}
+    <button
+      class="btn btn-primary"
+      type="button"
+      onclick={{action "createTrack" model}}
+    >
+      add track (<span>{{model.tracks.length}}</span>)
+    </button>
+  {{/audio-project-sequencer}}
+  <DrumFilePicker
+    @isOpen={{drumMenuOpen}}
+    @track={{activeTrack}}
+    @saveTrackTask={{saveTrackTask}}
+  />
+  <div class="tracks overflow-container h-100">
+    {{#each model.tracks as |track idx|}}
+      {{#track-container
+        idx=idx
+        isActive=(eq track.id activeTrack.id)
+        track=track
+        saveTrackTask=saveTrackTask
+        onDeleteTrack=(action "deleteTrack")
+        selectActiveTrack=(action "selectActiveTrack")
+      }}
+        {{#mdc-button class="w4" click=(action (mut drumMenuOpen) true)}}
+          {{track.filename}} 
+        {{/mdc-button}}
 
-  {{/edit-project}}
+      {{/track-container}}
+    {{else}}
+      <h4> No tracks</h4>
+    {{/each}}
+  </div>
+
   {{current-track-footer track=activeTrack sampler=activeSampler saveTrackTask=saveTrackTask}}
 {{/if}}

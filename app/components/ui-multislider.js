@@ -8,8 +8,9 @@ export default Component.extend(NexusMixin, {
   classNames: ['ui-multislider'],
   tagName: 'span',
 
+  //FIXME why cant this change
   sliderColor: '#2bb', // TODO: pass this in from main slider config
-  sliderBgColor: '#eee',
+  sliderBgColor: '#eeeeee',
 
   didInsertElement() {
     this._super(...arguments);

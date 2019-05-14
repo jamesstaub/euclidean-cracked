@@ -1,9 +1,3 @@
-@import 'ember-cli-tachyons-sass';
-
-.min-width-12 {
-  min-width: 12rem;
-}
-
 @import 'type';
 @import 'variables';
 @import 'mixins';
@@ -20,14 +14,26 @@
 @import 'components/track-function-editor';
 @import 'components/drum-file-picker';
 
-.flex-basis-auto {
-  flex-basis: auto;
-}
-.flex-grow {
-  flex-grow: 1;
+@import 'ember-cli-tachyons-sass';
+
+/*material overrides*/
+:root {
+  --mdc-theme-primary: #{$yellow};
+  --mdc-theme-on-primary: #{$dark-gray};
+  --mdc-theme-secondary: #{$light-blue};
 }
 
-.flex-0 {
-  flex-grow: 0;
-  flex-shrink: 0;
+html, body {
+  height: 100%;
+  overflow: hidden;
+
+  > div {
+    height: 100%;
+  }
+}
+
+/*move this somewehre and probably redesign to better height solution*/
+.tracks {
+  height: calc(100% - 19.5rem);
+
 }

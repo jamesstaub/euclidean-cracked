@@ -78,6 +78,8 @@ export default Component.extend(NexusMixin, {
   },
 
   afterInitNexus(NexusElement) {
+    NexusElement.colorize('accent', '#52ebff');
+    NexusElement.colorize('fill', '#ffffff');
     NexusElement.colorize('mediumLight', '#d9534f');
   },
 });

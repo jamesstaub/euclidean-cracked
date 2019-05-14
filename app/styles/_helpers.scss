@@ -1,3 +1,23 @@
+.w18 {
+  width: 18rem;
+}
+
 .h12 {
   height: 12rem;
+}
+
+.min-width-12 {
+  min-width: 12rem;
+}
+
+.flex-basis-auto {
+  flex-basis: auto;
+}
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-0 {
+  flex-grow: 0;
+  flex-shrink: 0;
 }
