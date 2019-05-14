@@ -14,7 +14,7 @@ export default Component.extend({
     next(()=> {
       // TODO handle if none selected condition (tho shouldnt happen)
       let selector = this.$('.selected');
-      if (selector.length) {
+      if (selector && selector.length) {
         selector = this.$('.selected').get();
         selector[0].scrollIntoView();
       }

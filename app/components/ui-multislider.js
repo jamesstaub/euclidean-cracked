@@ -8,9 +8,13 @@ export default Component.extend(NexusMixin, {
   classNames: ['ui-multislider'],
   tagName: 'span',
 
-  //FIXME why cant this change
-  sliderColor: '#2bb', // TODO: pass this in from main slider config
-  sliderBgColor: '#eeeeee',
+  init() {
+    this._super(...arguments);
+    this.setProperties({
+      sliderColor: '#52ebff',
+      sliderBgColor: '#eeeeee',
+    });    
+  },
 
   didInsertElement() {
     this._super(...arguments);
@@ -25,10 +29,14 @@ export default Component.extend(NexusMixin, {
     this._styleOnStep();
   },
 
+  afterInitNexus(NexusElement) {
+    NexusElement.colorize('accent', '#52ebff');
+    NexusElement.colorize('fill', '#eeeeee');
+  },
+
   defaultValues: computed({
     get() {
       let len = 16; // max possible steps in sequence
-
       return Array.from(new Array(len),(val, idx)=> {
         let jitter = idx % 2 ? .05 : 0;
         return 0.7 + jitter;
@@ -37,6 +45,7 @@ export default Component.extend(NexusMixin, {
   }),
 
   ElementOptions: computed('max', 'step', 'value', 'size',{
+    // eslint-disable-next-line complexity
     get() {
       let values = this.values || this.defaultValues;
       values = values.slice(0, this.numberOfSliders);

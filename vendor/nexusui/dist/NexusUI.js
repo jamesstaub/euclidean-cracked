@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["NexusUI"] = factory();
+		exports["Nexus"] = factory();
 	else
-		root["NexusUI"] = factory();
+		root["Nexus"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -56,14 +56,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 	
-	var NexusUI = __webpack_require__(1);
-	var Nexus = new NexusUI();
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	if (window) {
-	  window.Nexus = Nexus;
-	}
+	var NexusUI = _interopRequire(__webpack_require__(1));
 	
-	module.exports = Nexus;
+	module.exports = NexusUI;
 
 /***/ }),
 /* 1 */
@@ -79,25 +76,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 	
+	exports.colors = colors;
+	exports.context = context;
+	exports.clock = clock;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	"use strict";
+	
 	var Interfaces = _interopRequire(__webpack_require__(2));
 	
 	var math = _interopRequire(__webpack_require__(5));
 	
-	var Rack = _interopRequire(__webpack_require__(38));
+	var Rack = _interopRequire(__webpack_require__(37));
 	
-	var Tune = _interopRequire(__webpack_require__(40));
+	var Tune = _interopRequire(__webpack_require__(39));
 	
-	var Transform = _interopRequireWildcard(__webpack_require__(39));
+	var Transform = _interopRequireWildcard(__webpack_require__(38));
 	
 	var Counter = __webpack_require__(28);
-	var Radio = __webpack_require__(41);
+	var Radio = __webpack_require__(40);
 	var Drunk = __webpack_require__(27);
 	var Sequence = __webpack_require__(26);
 	var Matrix = __webpack_require__(25);
 	
-	var WAAClock = _interopRequire(__webpack_require__(42));
+	var WAAClock = _interopRequire(__webpack_require__(41));
 	
-	var Interval = _interopRequire(__webpack_require__(45));
+	var Interval = _interopRequire(__webpack_require__(44));
 	
 	/**
 	NexusUI => created as Nexus
@@ -111,8 +116,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this[key] = Interfaces[key];
 	    }
 	
-	    for (var _key in math) {
-	      this[_key] = math[_key];
+	    for (var key in math) {
+	      this[key] = math[key];
 	    }
 	
 	    var Core = {
@@ -127,12 +132,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      Matrix: Matrix
 	    };
 	
-	    for (var _key2 in Models) {
-	      this[_key2] = Models[_key2];
+	    for (var key in Models) {
+	      this[key] = Models[key];
 	    }
 	
-	    for (var _key3 in Core) {
-	      this[_key3] = Core[_key3];
+	    for (var key in Core) {
+	      this[key] = Core[key];
 	    }
 	
 	    var DefaultContext = window.AudioContext || window.webkitAudioContext;
@@ -156,6 +161,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.transform = Transform;
 	    this.add = Transform.add;
+	
+	    this.Add = {};
+	    for (var key in Interfaces) {
+	      this.Add[key] = Transform.add.bind(this, key);
+	    }
+	
+	    /* create default component size */
+	    /* jshint ignore:start */
+	    var existingStylesheets = document.getElementsByTagName("style");
+	    var defaultSizeDeclaration = "[nexus-ui]{height:5000px;width:5000px}";
+	    var defaultStyleNode = document.createElement("style");
+	    defaultStyleNode.type = "text/css";
+	    defaultStyleNode.innerHTML = defaultSizeDeclaration;
+	    if (existingStylesheets.length > 0) {
+	      var parent = existingStylesheets[0].parentNode;
+	      parent.insertBefore(defaultStyleNode, existingStylesheets[0]);
+	    } else {
+	      document.write("<style>" + defaultSizeDeclaration + "</style>");
+	    }
+	    /* jshint ignore:end */
 	  }
 	
 	  _createClass(NexusUI, {
@@ -175,7 +200,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return NexusUI;
 	})();
 	
-	module.exports = NexusUI;
+	var Nexus = new NexusUI();
+	
+	function colors() {
+	  return Nexus.colors;
+	}
+	
+	function context() {
+	  return Nexus.context;
+	}
+	
+	function clock() {
+	  return Nexus.clock;
+	}
+	
+	exports["default"] = Nexus;
 
 /***/ }),
 /* 2 */
@@ -187,8 +226,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Position: __webpack_require__(3),
 	  Slider: __webpack_require__(14),
 	  Toggle: __webpack_require__(15),
-	  //  Range: require('./range'),
-	  //  Waveform: require('./waveform'),
+	  /*  Range: require('./rangeslider'),
+	    Waveform: require('./waveform'), */
 	  Button: __webpack_require__(16),
 	  TextButton: __webpack_require__(18),
 	  RadioButton: __webpack_require__(19),
@@ -200,11 +239,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Pan2D: __webpack_require__(29),
 	  Tilt: __webpack_require__(30),
 	  Multislider: __webpack_require__(31),
-	  Pan: __webpack_require__(33),
-	  Envelope: __webpack_require__(34),
-	  Spectrogram: __webpack_require__(35),
-	  Meter: __webpack_require__(36),
-	  Oscilloscope: __webpack_require__(37)
+	  Pan: __webpack_require__(32),
+	  Envelope: __webpack_require__(33),
+	  Spectrogram: __webpack_require__(34),
+	  Meter: __webpack_require__(35),
+	  Oscilloscope: __webpack_require__(36)
 	};
 
 /***/ }),
@@ -845,6 +884,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var touch = __webpack_require__(9);
 	var EventEmitter = __webpack_require__(10);
 	
+	var colors = __webpack_require__(1).colors;
+	
 	/**
 	Interface
 	*/
@@ -859,7 +900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.mouse = {};
 	    this.wait = false;
 	    this.colors = {};
-	    var defaultColors = Nexus.colors; // jshint ignore:line
+	    var defaultColors = colors(); // jshint ignore:line
 	    this.colors.accent = defaultColors.accent;
 	    this.colors.fill = defaultColors.fill;
 	    this.colors.light = defaultColors.light;
@@ -922,57 +963,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        // size
+	
 	        if (settings.size && Array.isArray(settings.size) && settings.snapWithParent) {
 	          this.width = settings.size[0];
 	          this.height = settings.size[1];
 	          this.parent.style.width = this.width + "px";
 	          this.parent.style.height = this.height + "px";
-	        } else if (settings.snapWithParent) {
-	          this.width = parseFloat(this.parent.style.width);
-	          this.height = parseFloat(this.parent.style.height);
+	        } else if (settings.snapWithParent && !settings.component) {
 	
-	          if (!this.width) {
-	            this.width = parseFloat(this.parent.width);
-	          }
-	          if (!this.height) {
-	            this.height = parseFloat(this.parent.height);
-	          }
+	          this.width = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue("width").replace("px", ""));
+	          this.height = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue("height").replace("px", ""));
 	
-	          if (this.parent.style.width) {
-	            if (this.parent.style.width.indexOf("%") > 0) {
-	              this.width = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue("width").replace("px", ""));
-	            }
-	          }
-	          if (this.parent.width) {
-	            if (this.parent.width.indexOf("%") > 0) {
-	              this.width = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue("width").replace("px", ""));
-	            }
-	          }
-	
-	          if (this.parent.style.height) {
-	            if (this.parent.style.height.indexOf("%") > 0) {
-	              this.height = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue("height").replace("px", ""));
-	            }
-	          }
-	          if (this.parent.height) {
-	            if (this.parent.height.indexOf("%") > 0) {
-	              this.height = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue("height").replace("px", ""));
-	            }
-	          }
-	
-	          /*  if (this.parent.style.height.indexOf("%")>0 || this.parent.height.indexOf("%")>0) {
-	              this.height = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue('height').replace('px',''));
-	            } */
-	
-	          //    this.width = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue('width').replace('px',''));
-	          //    this.height = parseFloat(window.getComputedStyle(this.parent, null).getPropertyValue('height').replace('px',''));
-	          if (!this.width) {
+	          if (this.width == 5000) {
 	            this.width = settings.defaultSize[0];
-	            this.parent.style.width = this.width + "px";
+	            this.parent.style.width = this.parent.width = this.width + "px";
 	          }
-	          if (!this.height) {
+	          if (this.height == 5000) {
 	            this.height = settings.defaultSize[1];
-	            this.parent.style.height = this.height + "px";
+	            this.parent.style.height = this.parent.height = this.height + "px";
 	          }
 	        } else {
 	          settings.size = settings.defaultSize;
@@ -1066,6 +1074,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.click();
 	        this.moveEvent = document.addEventListener("mousemove", this.boundPreMove);
 	        this.releaseEvent = document.addEventListener("mouseup", this.boundPreRelease);
+	        this.emit("click");
 	        e.preventDefault();
 	        e.stopPropagation();
 	      }
@@ -1091,6 +1100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.mouse = dom.locateMouse(e, this.offset);
 	        this.clicked = false;
 	        this.release();
+	        this.emit("release");
 	        document.removeEventListener("mousemove", this.boundPreMove);
 	        document.removeEventListener("mouseup", this.boundPreRelease);
 	        e.preventDefault();
@@ -1118,6 +1128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.mouse = dom.locateTouch(e, this.offset);
 	        this.clicked = true;
 	        this.touch(e);
+	        this.emit("click");
 	        e.preventDefault();
 	        e.stopPropagation();
 	      }
@@ -1137,6 +1148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.mouse = dom.locateTouch(e, this.offset);
 	        this.clicked = false;
 	        this.touchRelease();
+	        this.emit("release");
 	        e.preventDefault();
 	        e.stopPropagation();
 	      }
@@ -1190,7 +1202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      * Remove the interface from the page and cancel its event listener(s).
 	      *
 	      * @example
-	      * button.destroy());
+	      * button.destroy();
 	      */
 	
 	      value: function destroy() {
@@ -2502,9 +2514,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _get(Object.getPrototypeOf(Button.prototype), "constructor", this).call(this, arguments, options, defaults);
 	
 	    /**
-	    Interaction mode
-	    @type {string}
-	    @example button.mode = 'toggle';
+	    * Interaction mode: supports "button", "aftertouch", "impulse", or "toggle"
+	    * @type {string}
+	    * @example button.mode = 'toggle';
 	    */
 	    this.mode = this.settings.mode;
 	
@@ -2871,9 +2883,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	* @example
 	* var textbutton = new Nexus.TextButton('#target',{
 	*     'size': [150,50],
-	*     'state': true,
+	*     'state': false,
 	*     'text': 'Play',
-	*     'alternate': false
+	*     'alternateText': 'Stop'
 	* })
 	*
 	* @output
@@ -2896,16 +2908,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var defaults = {
 	      size: [150, 50],
-	      state: true,
-	      text: "Play",
-	      alternate: false
+	      state: false,
+	      text: "Play"
 	    };
 	
 	    _get(Object.getPrototypeOf(TextButton.prototype), "constructor", this).call(this, arguments, options, defaults);
 	
 	    this._text = this.settings.text;
-	    this._alternateText = this.settings.alternate;
 	
+	    if (this.settings.alternate) {
+	      //TODO: Remove this conditional in a breaking-changes release
+	      this.settings.alternateText = this.settings.alternate;
+	      console.warn("'alternate' initiator is deprecated. Use 'alternateText' instead.");
+	    }
+	    this._alternateText = this.settings.alternateText;
+	    this.mode = this.settings.alternateText ? "toggle" : "button";
 	    this.init();
 	    this.render();
 	
@@ -3239,7 +3256,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*   'size': [60,30],
 	*   'value': 0,
 	*   'min': 0,
-	*   'max': 10,
+	*   'max': 20000,
 	*   'step': 1
 	* })
 	*
@@ -3266,7 +3283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      size: [60, 30],
 	      value: 0,
 	      min: 0,
-	      max: 10,
+	      max: 20000,
 	      step: 1
 	    };
 	
@@ -3371,9 +3388,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.hasMoved = false;
 	        this.element.readOnly = true;
 	        this.actual = this.value;
-	        //  this.element.style.backgroundColor = '#d18';
-	        //  this.element.style.color = '#fff';
 	        this.initial = { y: this.mouse.y };
+	        this.changeFactor = math.invert(this.mouse.x / this.width);
+	        console.log(this.changeFactor);
 	      }
 	    },
 	    move: {
@@ -3381,7 +3398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.hasMoved = true;
 	        if (this.clicked) {
 	
-	          var newvalue = this.actual - (this.mouse.y - this.initial.y) / 200 * (this.max - this.min);
+	          var newvalue = this.actual - (this.mouse.y - this.initial.y) * (math.clip(this.max - this.min, 0, 1000) / 200) * Math.pow(this.changeFactor, 2);
 	          this.value = newvalue;
 	
 	          this.render();
@@ -3640,11 +3657,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	       */
 	
 	      value: function defineOptions(options) {
+	
+	        /*  function removeOptions(selectbox)
+	          {
+	              var i;
+	              for(i = selectbox.options.length - 1 ; i >= 0 ; i--)
+	              {
+	                  selectbox.remove(i);
+	              }
+	          }
+	          //using the function:
+	          removeOptions(document.getElementById("mySelectObject")); */
+	
 	        if (options) {
 	          this._options = options;
 	        }
 	
-	        for (var i = 0; i < this.element.options.length; i++) {
+	        for (var i = this.element.options.length - 1; i >= 0; i--) {
 	          this.element.remove(i);
 	        }
 	
@@ -4322,7 +4351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      high: this.settings.highNote
 	    };
 	
-	    this.range.size = this.range.high - this.range.low;
+	    this.range.size = this.range.high - this.range.low + 1;
 	
 	    this.keys = [];
 	
@@ -4351,7 +4380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        this.keys = [];
 	
-	        for (var i = 0; i < this.range.high - this.range.low; i++) {
+	        for (var i = 0; i < this.range.size; i++) {
 	
 	          var container = document.createElement("span");
 	          var scaleIndex = (i + this.range.low) % this.keyPattern.length;
@@ -4388,7 +4417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var keyPositions = [];
 	
-	        for (var i = 0; i < this.range.high - this.range.low; i++) {
+	        for (var i = 0; i < this.range.size; i++) {
 	
 	          keyPositions.push(keyX);
 	
@@ -4751,7 +4780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	* @output
 	* step
 	* Fires any time the sequencer steps to the next column, in sequece mode. <br>
-	* The event data is an <i>array<i> containing all values in the column, top first.
+	* The event data is an <i>array</i> containing all values in the column, <i>bottom row first</i>.
 	*
 	* @outputexample
 	* sequencer.on('step',function(v) {
@@ -4776,24 +4805,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.active = -1;
 	
+	    /**
+	    * Button interaction mode: see Button
+	    * @type {string}
+	    * @example button.mode = 'toggle';
+	    */
 	    this.mode = this.settings.mode;
 	
 	    /**
-	     * The interval object which controls timing and sequence scheduling.
-	     * @type {interval}
-	     */
+	    * The interval object which controls timing and sequence scheduling.
+	    * @type {interval}
+	    */
 	    this.interval = new Nexus.Interval(200, function () {}, false); // jshint ignore:line
 	
 	    /**
-	    A Matrix model containing methods for manipulating the sequencer's array of values. To learn how to manipulate the matrix, read about the matrix model.
-	    @type {matrix}
+	    * A Matrix model containing methods for manipulating the sequencer's array of values. To learn how to manipulate the matrix, read about the matrix model.
+	    * @type {matrix}
 	    */
 	    this.matrix = new MatrixModel(this.settings.rows, this.settings.columns);
 	    this.matrix.ui = this;
 	
 	    /**
-	    A Counter model which the sequencer steps through. For example, you could use this model to step through the sequencer in reverse, randomly, or in a drunk walk.
-	    @type {counter}
+	    * A Counter model which the sequencer steps through. For example, you could use this model to step through the sequencer in reverse, randomly, or in a drunk walk.
+	    * @type {counter}
 	    */
 	    this.stepper = new CounterModel(0, this.columns);
 	
@@ -6353,134 +6387,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 	
-	var dom = __webpack_require__(7);
 	var math = __webpack_require__(5);
+	var svg = __webpack_require__(4);
 	var Interface = __webpack_require__(6);
-	var SliderTemplate = __webpack_require__(32);
-	var touch = __webpack_require__(9);
-	
-	var SingleSlider = (function (_SliderTemplate) {
-	  function SingleSlider() {
-	    var _this = this;
-	
-	    _classCallCheck(this, SingleSlider);
-	
-	    var options = ["scale", "value"];
-	
-	    var defaults = {
-	      size: [120, 20],
-	      orientation: "vertical",
-	      mode: "absolute",
-	      scale: [0, 1],
-	      step: 0,
-	      value: 0,
-	      hasKnob: true
-	    };
-	
-	    _get(Object.getPrototypeOf(SingleSlider.prototype), "constructor", this).call(this, arguments, options, defaults);
-	
-	    /* events */
-	
-	    if (!touch.exists) {
-	
-	      this.click = function () {
-	        _this.multislider.interacting = true;
-	        _this.multislider.interpolation = {
-	          index: _this.index,
-	          value: _this.value
-	        };
-	        _this.down();
-	        _this.multislider.values[_this.index] = _this.value;
-	      };
-	      this.element.addEventListener("mouseover", function (e) {
-	        if (_this.multislider.interacting) {
-	          if (!_this.offset) {
-	            _this.offset = dom.findPosition(_this.element);
-	          }
-	          _this.mouse = dom.locateMouse(e, _this.offset);
-	          _this.down();
-	          _this.multislider.values[_this.index] = _this.value;
-	          if (_this.multislider.interpolation) {
-	            var distance = Math.abs(_this.multislider.interpolation.index - _this.index);
-	            if (distance > 1) {
-	              var low = Math.min(_this.multislider.interpolation.index, _this.index);
-	              var high = Math.max(_this.multislider.interpolation.index, _this.index);
-	              var lowValue = _this.multislider.sliders[low].value;
-	              var highValue = _this.multislider.sliders[high].value;
-	              for (var i = low; i < high; i++) {
-	                _this.multislider.sliders[i].value = math.interp((i - low) / distance, lowValue, highValue);
-	              }
-	            }
-	          }
-	
-	          _this.multislider.interpolation = {
-	            index: _this.index,
-	            value: _this.value
-	          };
-	        }
-	      });
-	
-	      this.move = function () {};
-	      this.element.addEventListener("mousemove", function (e) {
-	        if (_this.multislider.interacting) {
-	          if (!_this.offset) {
-	            _this.offset = dom.findPosition(_this.element);
-	          }
-	          _this.mouse = dom.locateMouse(e, _this.offset);
-	          _this.slide();
-	          _this.multislider.values[_this.index] = _this.value;
-	        }
-	      });
-	
-	      this.release = function () {
-	        _this.multislider.interacting = false;
-	        _this.multislider.interpolation = false;
-	      };
-	      this.element.addEventListener("mouseup", function () {
-	        if (_this.multislider.interacting) {
-	          _this.up();
-	          _this.multislider.interpolation = false;
-	          _this.multislider.values[_this.index] = _this.value;
-	        }
-	      });
-	      this.element.addEventListener("mouseout", function () {
-	        if (_this.multislider.interacting) {
-	          _this.up();
-	          _this.multislider.values[_this.index] = _this.value;
-	        }
-	      });
-	    }
-	
-	    this.customStyle();
-	  }
-	
-	  _inherits(SingleSlider, _SliderTemplate);
-	
-	  _createClass(SingleSlider, {
-	    customStyle: {
-	      value: function customStyle() {
-	
-	        /* style changes */
-	
-	        this.bar.setAttribute("x", 0);
-	        this.bar.setAttribute("transform", "translate(0,0)");
-	        this.bar.setAttribute("rx", 0); // corner radius
-	        this.bar.setAttribute("ry", 0);
-	        this.bar.setAttribute("width", this.width);
-	        this.bar.setAttribute("height", this.height);
-	
-	        this.fillbar.setAttribute("x", 0);
-	        this.fillbar.setAttribute("transform", "translate(0,0)");
-	        this.fillbar.setAttribute("rx", 0); // corner radius
-	        this.fillbar.setAttribute("ry", 0);
-	        this.fillbar.setAttribute("width", this.width);
-	        this.fillbar.setAttribute("height", this.height);
-	      }
-	    }
-	  });
-	
-	  return SingleSlider;
-	})(SliderTemplate);
 	
 	/**
 	* Multislider
@@ -6499,25 +6408,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	*  'min': 0,
 	*  'max': 1,
 	*  'step': 0,
-	*  'values': [0.7,0.7,0.7,0.7,0.7]
-	* })
+	*  'candycane': 3,
+	*  'values': [0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1],
+	*  'smoothing': 0,
+	*  'mode': 'bar'  // 'bar' or 'line'
+	*})
 	*
 	* @output
 	* change
 	* Fires any time the interface's value changes. <br>
-	* The event data an object containing <i>index</i> and <i>value</i> properties
+	* The event data is an object containing <i>index</i> and <i>value</i> properties
 	*
 	* @outputexample
 	* multislider.on('change',function(v) {
 	*   console.log(v);
 	* })
 	*
-	*/
-	
-	/*
-	Properties
-	.values
-	
 	*/
 	
 	var Multislider = (function (_Interface) {
@@ -6532,180 +6438,325 @@ return /******/ (function(modules) { // webpackBootstrap
 	      min: 0,
 	      max: 1,
 	      step: 0,
-	      values: [0.7, 0.7, 0.7, 0.7, 0.7]
+	      candycane: 3,
+	      values: [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1],
+	      smoothing: 0,
+	      mode: "bar" // 'bar', 'line'
 	    };
 	
 	    _get(Object.getPrototypeOf(Multislider.prototype), "constructor", this).call(this, arguments, options, defaults);
 	
 	    this._numberOfSliders = this.settings.numberOfSliders;
+	    this._min = this.settings.min;
+	    this._max = this.settings.max;
+	    this._step = this.settings.step;
+	
+	    this._mode = this.settings.mode;
+	
+	    /**
+	    The current values of the slider. NOTE: Use this only to get the current values. Setting this array will not update the multislider. To set the multislider's values, use setSlider() or setAllSliders()
+	    @type {Array}
+	    */
 	    this.values = this.settings.values;
 	
-	    this.sliders = [];
+	    this.candycane = this.settings.candycane;
 	
-	    this.interacting = false;
+	    this.sliderWidth = this.width / this.values.length;
+	
+	    /**
+	    Applies a simple low-pass filter to the multislider as it is interacted with. A smoothing of 0 will be no smoothing. A smoothing of 1 will smooth 1 slider on each side of the interaction. A smoothing of 2 will smooth 2 sliders on each side, and so on.
+	    @type {Number}
+	    */
+	    this.smoothing = this.settings.smoothing;
 	
 	    this.init();
+	    this.render();
 	  }
 	
 	  _inherits(Multislider, _Interface);
 	
 	  _createClass(Multislider, {
-	    buildFrame: {
-	      value: function buildFrame() {
-	        this.element = document.createElement("div");
-	        this.parent.appendChild(this.element);
-	      }
-	    },
 	    buildInterface: {
 	      value: function buildInterface() {
 	
-	        var min = this.settings.min;
-	        var max = this.settings.max;
-	        var step = this.settings.step;
+	        if (this._mode == "line") {
 	
-	        if (this.sliders.length) {
-	          min = this.sliders[0].min;
-	          max = this.sliders[0].max;
-	          step = this.sliders[0].step;
+	          this.line = svg.create("polyline");
+	          this.line.setAttribute("stroke-width", 2);
+	          this.line.setAttribute("fill", "none");
+	
+	          this.element.appendChild(this.line);
+	
+	          this.fill = svg.create("polyline");
+	          this.fill.setAttribute("fill-opacity", "0.2");
+	
+	          this.element.appendChild(this.fill);
+	
+	          this.nodes = [];
+	
+	          this.values.forEach((function (value, index) {
+	
+	            var node = svg.create("circle");
+	
+	            node.setAttribute("cx", this.getX(index));
+	            node.setAttribute("cy", this.getY(value));
+	
+	            this.element.appendChild(node);
+	            this.nodes.push(node);
+	          }).bind(this));
+	        } else {
+	
+	          this.bars = [];
+	          this.caps = [];
+	
+	          this.values.forEach((function (value, index) {
+	
+	            var bar = svg.create("rect");
+	
+	            var x = this.getBarX(index);
+	            var y = this.getY(value);
+	
+	            bar.setAttribute("x", x - 0.1);
+	            bar.setAttribute("y", y);
+	            bar.setAttribute("width", this.sliderWidth + 0.2);
+	            bar.setAttribute("height", this.height);
+	            bar.setAttribute("opacity", 1 - (index % this.candycane + 1) / (this.candycane + 1));
+	
+	            this.element.appendChild(bar);
+	            this.bars.push(bar);
+	
+	            var cap = svg.create("rect");
+	
+	            cap.setAttribute("x", x - 0.1);
+	            cap.setAttribute("y", y);
+	            cap.setAttribute("width", this.sliderWidth + 0.2);
+	            cap.setAttribute("height", 5);
+	
+	            this.element.appendChild(cap);
+	            this.caps.push(cap);
+	          }).bind(this));
 	        }
-	
-	        this.sliders = [];
-	
-	        for (var i = 0; i < this._numberOfSliders; i++) {
-	          var container = document.createElement("span");
-	
-	          var slider = new SingleSlider(container, {
-	            scale: [min, max],
-	            step: step,
-	            mode: "absolute",
-	            orientation: "vertical",
-	            value: this.values[i],
-	            hasKnob: false,
-	            component: true }, this.update.bind(this, i));
-	          slider.multislider = this;
-	
-	          slider.index = i;
-	          if (touch.exists) {
-	            slider.bar.index = i;
-	            slider.fillbar.index = i;
-	            slider.preClick = slider.preMove = slider.preRelease = function () {};
-	            slider.click = slider.move = slider.release = function () {};
-	            slider.preTouch = slider.preTouchMove = slider.preTouchRelease = function () {};
-	            slider.touch = slider.touchMove = slider.touchRelease = function () {};
-	          }
-	
-	          this.sliders.push(slider);
-	          this.element.appendChild(container);
+	      }
+	    },
+	    getBarX: {
+	      value: function getBarX(index) {
+	        return this.getX(index) - this.sliderWidth / 2;
+	      }
+	    },
+	    getX: {
+	      value: function getX(index) {
+	        //return Math.floor( index * this.sliderWidth + this.sliderWidth/2 );
+	        return index * this.sliderWidth + this.sliderWidth / 2;
+	      }
+	    },
+	    getY: {
+	      value: function getY(value) {
+	        return math.scale(value, this._min, this._max, this.height, 0); //(1 - value) * this.height;
+	      }
+	    },
+	    getValueFromY: {
+	      value: function getValueFromY(y) {
+	        var scaleAdjusted = math.scale(y, this.height, 0, this._min, this._max);
+	        return this.adjustValueToStep(scaleAdjusted);
+	      }
+	    },
+	    getIndexFromX: {
+	      value: function getIndexFromX(x) {
+	        return math.clip(Math.floor(x / this.width * this.values.length), 0, this.values.length - 1);
+	      }
+	    },
+	    adjustValueToStep: {
+	      value: function adjustValueToStep(value) {
+	        if (!this._step) {
+	          return value;
 	        }
-	        if (touch.exists) {
-	          this.addTouchListeners();
+	        var offset = value % this._step;
+	        value = value - value % this._step;
+	        if (offset > this._step / 2) {
+	          value += this._step;
 	        }
+	        return value;
+	      }
+	    },
+	    adjustAllValues: {
+	      value: function adjustAllValues() {
+	        this.values.forEach((function (value, index) {
+	          value = this.adjustValueToStep(value);
+	          this.values[index] = math.clip(value, this._min, this._max);
+	        }).bind(this));
+	      }
+	    },
+	    getNormalizedValues: {
+	      value: function getNormalizedValues() {
+	        this.normalizedValues = [];
+	        this.values.forEach((function (value) {
+	          this.normalizedValues.push(math.scale(value, this._min, this._max, 0, 1));
+	        }).bind(this));
 	      }
 	    },
 	    colorInterface: {
 	      value: function colorInterface() {
-	        for (var i = 0; i < this.sliders.length; i++) {
-	          this.sliders[i].colors = this.colors;
-	          this.sliders[i].colorInterface();
+	        var _this = this;
+	
+	        this.element.style.backgroundColor = this.colors.fill;
+	
+	        if (this._mode == "line") {
+	          this.line.setAttribute("stroke", this.colors.accent);
+	          this.fill.setAttribute("fill", this.colors.accent);
+	          this.nodes.forEach(function (node) {
+	            node.setAttribute("fill", _this.colors.accent);
+	          });
+	        } else {
+	          this.bars.forEach(function (bar) {
+	            bar.setAttribute("fill", _this.colors.accent);
+	          });
+	          this.caps.forEach(function (cap) {
+	            cap.setAttribute("fill", _this.colors.accent);
+	          });
 	        }
 	      }
 	    },
 	    sizeInterface: {
 	      value: function sizeInterface() {
 	
-	        var sliderWidth = this.width / this.sliders.length;
-	        var sliderHeight = this.height;
+	        this.sliderWidth = this.width / this.values.length;
 	
-	        for (var i = 0; i < this.sliders.length; i++) {
-	          this.sliders[i].resize(sliderWidth, sliderHeight);
-	          this.sliders[i].customStyle();
+	        if (this._mode == "line") {
+	          this.nodes.forEach((function (node) {
+	            var r = ~ ~(Math.min(this.width, this.height) / 50) + 2;
+	            r = Math.min(this.sliderWidth, r);
+	            node.setAttribute("r", r);
+	          }).bind(this));
+	        }
+	
+	        this.render();
+	      }
+	    },
+	    render: {
+	      value: function render() {
+	        var _this = this;
+	
+	        if (this._mode == "line") {
+	          (function () {
+	
+	            var data = "0 " + _this.getY(_this.values[0]) + ", ";
+	
+	            _this.values.forEach(function (value, index) {
+	              var x = _this.getX(index);
+	              var y = _this.getY(value);
+	              data += x + " " + y + ", ";
+	              _this.nodes[index].setAttribute("cx", _this.getX(index));
+	              _this.nodes[index].setAttribute("cy", _this.getY(value));
+	            });
+	
+	            data += _this.width + " " + _this.getY(_this.values[_this.values.length - 1]);
+	
+	            _this.line.setAttribute("points", data);
+	
+	            // fill data
+	            // add bottom corners
+	
+	            data += ", " + _this.width + " " + _this.height + ", ";
+	            data += "0 " + _this.height;
+	
+	            _this.fill.setAttribute("points", data);
+	          })();
+	        } else {
+	
+	          this.values.forEach(function (value, index) {
+	            _this.bars[index].setAttribute("y", _this.getY(value));
+	            _this.caps[index].setAttribute("y", _this.getY(value));
+	          });
 	        }
 	      }
 	    },
+	    click: {
+	      value: function click() {
+	        this.hasMoved = false;
+	        this.previousSlider = false;
+	        this.move();
+	      }
+	    },
+	    move: {
+	      value: function move() {
+	        if (this.clicked) {
+	          this.mouse.x = math.clip(this.mouse.x, 0, this.width);
+	          this.mouse.y = math.clip(this.mouse.y, 0, this.height);
+	          this.hasMoved = true;
+	
+	          this.selectedSlider = this.getIndexFromX(this.mouse.x);
+	
+	          this.values[this.selectedSlider] = this.getValueFromY(this.mouse.y);
+	
+	          /* handle interpolation for in-between sliders */
+	
+	          if (this.previousSlider !== false) {
+	            var distance = Math.abs(this.previousSlider - this.selectedSlider);
+	            if (distance > 1) {
+	              var low = Math.min(this.previousSlider, this.selectedSlider);
+	              var high = Math.max(this.previousSlider, this.selectedSlider);
+	              var lowValue = this.values[low];
+	              var highValue = this.values[high];
+	              for (var _i = low; _i < high; _i++) {
+	                this.values[_i] = math.interp((_i - low) / distance, lowValue, highValue);
+	                this.values[_i] = this.adjustValueToStep(this.values[_i]);
+	              }
+	            }
+	          }
+	
+	          if (this.smoothing > 0) {
+	
+	            for (var i = 1; i <= this.smoothing; i++) {
+	              var downCenter = this.selectedSlider - i;
+	              var upCenter = this.selectedSlider + i;
+	
+	              if (downCenter >= 1) {
+	                var downLowerNeighbor = downCenter - 1 >= 0 ? downCenter - 1 : 0;
+	                var downUpperNeighbor = downCenter + 1;
+	                this.values[downCenter] = (this.values[downLowerNeighbor] + this.values[downUpperNeighbor]) / 2;
+	                this.values[downCenter] = this.adjustValueToStep(this.values[downCenter]);
+	              }
+	
+	              if (upCenter < this.values.length - 1) {
+	                var upLowerNeighbor = upCenter - 1;
+	                var upUpperNeighbor = upCenter + 1 < this.values.length ? upCenter + 1 : this.values.length - 1;
+	                this.values[upCenter] = (this.values[upLowerNeighbor] + this.values[upUpperNeighbor]) / 2;
+	                this.values[upCenter] = this.adjustValueToStep(this.values[upCenter]);
+	              }
+	            }
+	          }
+	
+	          this.previousSlider = this.selectedSlider;
+	
+	          this.emit("change", this.values);
+	          this.render();
+	        }
+	      }
+	    },
+	    scan: {
+	
+	      // would be a cool API call to have for later...
+	
+	      value: function scan() {}
+	    },
 	    update: {
 	      value: function update(index, value) {
+	        this.values[index] = this.adjustValueToStep(value);
 	        this.emit("change", {
 	          index: index,
 	          value: value
 	        });
 	      }
 	    },
-	    addTouchListeners: {
-	      value: function addTouchListeners() {
-	        var _this = this;
-	
-	        this.preClick = this.preMove = this.preRelease = function () {};
-	        this.click = this.move = this.release = function () {};
-	        this.preTouch = this.preTouchMove = this.preTouchRelease = function () {};
-	        this.touch = this.touchMove = this.touchRelease = function () {};
-	
-	        this.currentElement = false;
-	
-	        this.element.addEventListener("touchstart", function (e) {
-	          var element = document.elementFromPoint(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
-	          var slider = _this.sliders[element.index];
-	          if (!slider.offset) {
-	            slider.offset = dom.findPosition(slider.element);
-	          }
-	          slider.mouse = dom.locateMouse(e, slider.offset);
-	          slider.down();
-	          _this.currentElement = element.index;
-	          e.preventDefault();
-	          e.stopPropagation();
-	        });
-	
-	        this.element.addEventListener("touchmove", function (e) {
-	          var element = document.elementFromPoint(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
-	          var slider = _this.sliders[element.index];
-	          if (!slider.offset) {
-	            slider.offset = dom.findPosition(slider.element);
-	          }
-	          slider.mouse = dom.locateMouse(e, slider.offset);
-	          if (element.index !== _this.currentElement) {
-	            if (_this.currentElement >= 0) {
-	              var pastslider = _this.sliders[_this.currentElement];
-	              pastslider.up();
-	            }
-	            slider.down();
-	          } else {
-	            slider.slide();
-	          }
-	          _this.currentElement = element.index;
-	          e.preventDefault();
-	          e.stopPropagation();
-	        });
-	
-	        this.element.addEventListener("touchend", function (e) {
-	          // no touches to calculate because none remaining
-	          var slider = _this.sliders[_this.currentElement];
-	          slider.up();
-	          _this.interacting = false;
-	          _this.currentElement = false;
-	          e.preventDefault();
-	          e.stopPropagation();
-	        });
-	      }
-	    },
 	    numberOfSliders: {
 	
 	      /**
-	      Get or set the number of sliders
+	      Get the number of sliders
 	      @type {Number}
 	      */
 	
 	      get: function () {
-	        return this.sliders.length;
-	      },
-	      set: function (v) {
-	        if (v === this.sliders.length) {
-	          return;
-	        }
-	        this.sliders.forEach(function (slider) {
-	          slider.destroy();
-	        });
-	        this.empty();
-	        this._numberOfSliders = v;
-	        this.buildInterface();
+	        return this.values.length;
 	      }
 	    },
 	    min: {
@@ -6717,12 +6768,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      */
 	
 	      get: function () {
-	        return this.sliders[0].min;
+	        return this._min;
 	      },
 	      set: function (v) {
-	        this.sliders.forEach(function (slider) {
-	          slider.min = v;
-	        });
+	        this._min = v;
+	        this.adjustAllValues();
+	        this.render();
 	      }
 	    },
 	    max: {
@@ -6734,12 +6785,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      */
 	
 	      get: function () {
-	        return this.sliders[0].max;
+	        return this._max;
 	      },
 	      set: function (v) {
-	        this.sliders.forEach(function (slider) {
-	          slider.max = v;
-	        });
+	        this._max = v;
+	        this.adjustAllValues();
+	        this.render();
 	      }
 	    },
 	    step: {
@@ -6751,12 +6802,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      */
 	
 	      get: function () {
-	        return this.sliders[0].step;
+	        return this._step;
 	      },
 	      set: function (v) {
-	        this.sliders.forEach(function (slider) {
-	          slider.step = v;
-	        });
+	        this._step = v;
+	        this.adjustAllValues();
+	        this.render();
 	      }
 	    },
 	    setSlider: {
@@ -6771,7 +6822,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      */
 	
 	      value: function setSlider(index, value) {
-	        this.sliders[index].value = value;
+	        this.values[index] = this.adjustValueToStep(value);
+	        this.values[index] = math.clip(this.values[index], this._min, this._max);
 	        this.emit("change", {
 	          index: index,
 	          value: value
@@ -6788,16 +6840,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      */
 	
 	      value: function setAllSliders(values) {
-	        var _this = this;
-	
+	        var previousLength = this.values.length;
+	        var newLength = values.length;
 	        this.values = values;
-	        this.sliders.forEach(function (slider, i) {
-	          slider.value = values[i % values.length];
-	          _this.emit("change", {
-	            index: i,
-	            value: slider.value
-	          });
-	        });
+	        this.adjustAllValues();
+	        if (previousLength != newLength) {
+	          this.empty();
+	          this.buildInterface();
+	          this.colorInterface();
+	        }
+	        this.sizeInterface();
 	      }
 	    }
 	  });
@@ -6809,297 +6861,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-	
-	var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
-	
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-	
-	var svg = __webpack_require__(4);
-	var Interface = __webpack_require__(6);
-	var Step = __webpack_require__(11);
-	
-	var Interaction = _interopRequireWildcard(__webpack_require__(12));
-	
-	var SliderTemplate = (function (_Interface) {
-	  function SliderTemplate(args, options, defaults) {
-	    _classCallCheck(this, SliderTemplate);
-	
-	    _get(Object.getPrototypeOf(SliderTemplate.prototype), "constructor", this).call(this, args, options, defaults);
-	
-	    this.orientation = this.settings.orientation;
-	
-	    //  this.mode = this.settings.mode;
-	
-	    this.hasKnob = this.settings.hasKnob;
-	
-	    // this.step should eventually be get/set
-	    // updating it will update the _value step model
-	    //  this.step = this.settings.step; // float
-	
-	    this._value = new Step(this.settings.scale[0], this.settings.scale[1], this.settings.step, this.settings.value);
-	
-	    this.init();
-	
-	    this.position = new Interaction.Handle(this.settings.mode, this.orientation, [0, this.width], [this.height, 0]);
-	    this.position.value = this._value.normalized;
-	
-	    this.value = this._value.value;
-	
-	    this.emit("change", this.value);
-	  }
-	
-	  _inherits(SliderTemplate, _Interface);
-	
-	  _createClass(SliderTemplate, {
-	    buildInterface: {
-	      value: function buildInterface() {
-	
-	        this.bar = svg.create("rect");
-	        this.fillbar = svg.create("rect");
-	        this.knob = svg.create("circle");
-	
-	        this.element.appendChild(this.bar);
-	        this.element.appendChild(this.fillbar);
-	        this.element.appendChild(this.knob);
-	
-	        this.sizeInterface();
-	      }
-	    },
-	    sizeInterface: {
-	      value: function sizeInterface() {
-	
-	        if (!this.settings.orientation) {
-	          if (this.width < this.height) {
-	            this.orientation = "vertical";
-	          } else {
-	            this.orientation = "horizontal";
-	          }
-	        }
-	
-	        var x = undefined,
-	            y = undefined,
-	            w = undefined,
-	            h = undefined,
-	            barOffset = undefined,
-	            cornerRadius = undefined;
-	        this.knobData = {
-	          level: 0,
-	          r: 0
-	        };
-	
-	        if (this.orientation === "vertical") {
-	          this.thickness = this.width / 2;
-	          x = this.width / 2;
-	          y = 0;
-	          w = this.thickness;
-	          h = this.height;
-	          this.knobData.r = this.thickness * 0.8;
-	          this.knobData.level = h - this.normalized * h;
-	          barOffset = "translate(" + this.thickness * -1 / 2 + ",0)";
-	          cornerRadius = w / 2;
-	        } else {
-	          this.thickness = this.height / 2;
-	          x = 0;
-	          y = this.height / 2;
-	          w = this.width;
-	          h = this.thickness;
-	          this.knobData.r = this.thickness * 0.8;
-	          this.knobData.level = this.normalized * w;
-	          barOffset = "translate(0," + this.thickness * -1 / 2 + ")";
-	          cornerRadius = h / 2;
-	        }
-	
-	        this.bar.setAttribute("x", x);
-	        this.bar.setAttribute("y", y);
-	        this.bar.setAttribute("transform", barOffset);
-	        this.bar.setAttribute("rx", cornerRadius); // corner radius
-	        this.bar.setAttribute("ry", cornerRadius);
-	        this.bar.setAttribute("width", w);
-	        this.bar.setAttribute("height", h);
-	
-	        if (this.orientation === "vertical") {
-	          this.fillbar.setAttribute("x", x);
-	          this.fillbar.setAttribute("y", this.knobData.level);
-	          this.fillbar.setAttribute("width", w);
-	          this.fillbar.setAttribute("height", h - this.knobData.level);
-	        } else {
-	          this.fillbar.setAttribute("x", 0);
-	          this.fillbar.setAttribute("y", y);
-	          this.fillbar.setAttribute("width", this.knobData.level);
-	          this.fillbar.setAttribute("height", h);
-	        }
-	        this.fillbar.setAttribute("transform", barOffset);
-	        this.fillbar.setAttribute("rx", cornerRadius);
-	        this.fillbar.setAttribute("ry", cornerRadius);
-	
-	        if (this.orientation === "vertical") {
-	          this.knob.setAttribute("cx", x);
-	          this.knob.setAttribute("cy", this.knobData.level);
-	        } else {
-	          this.knob.setAttribute("cx", this.knobData.level);
-	          this.knob.setAttribute("cy", y);
-	        }
-	        this.knob.setAttribute("r", this.knobData.r);
-	
-	        if (this.position) {
-	          this.position.resize([0, this.width], [this.height, 0]);
-	        }
-	      }
-	    },
-	    colorInterface: {
-	      value: function colorInterface() {
-	
-	        this.bar.setAttribute("fill", this.colors.fill);
-	        this.fillbar.setAttribute("fill", this.colors.accent);
-	        this.knob.setAttribute("fill", this.colors.accent);
-	        if (!this.hasKnob) {
-	          this.knob.setAttribute("fill", "none");
-	        }
-	      }
-	    },
-	    render: {
-	      value: function render() {
-	        if (!this.clicked) {
-	          this.knobData.r = this.thickness * 0.75;
-	        }
-	        this.knob.setAttribute("r", this.knobData.r);
-	
-	        if (this.orientation === "vertical") {
-	          this.knobData.level = this._value.normalized * this.height;
-	          this.knob.setAttribute("cy", this.height - this.knobData.level);
-	          this.fillbar.setAttribute("y", this.height - this.knobData.level);
-	          this.fillbar.setAttribute("height", this.knobData.level);
-	        } else {
-	          this.knobData.level = this._value.normalized * this.width;
-	          this.knob.setAttribute("cx", this.knobData.level);
-	          this.fillbar.setAttribute("x", 0);
-	          this.fillbar.setAttribute("width", this.knobData.level);
-	        }
-	      }
-	    },
-	    down: {
-	      value: function down() {
-	        this.clicked = true;
-	        this.knobData.r = this.thickness * 0.9;
-	        this.position.anchor = this.mouse;
-	        this.slide();
-	      }
-	    },
-	    slide: {
-	      value: function slide() {
-	        if (this.clicked) {
-	          this.position.update(this.mouse);
-	          this.value = this._value.updateNormal(this.position.value);
-	          this.emit("change", this.value);
-	        }
-	      }
-	    },
-	    up: {
-	      value: function up() {
-	        this.clicked = false;
-	        this.render();
-	      }
-	    },
-	    normalized: {
-	      get: function () {
-	        return this._value.normalized;
-	      }
-	    },
-	    value: {
-	
-	      /**
-	      The slider's current value. If set manually, will update the interface and trigger the output event.
-	      @type {number}
-	      @example slider.value = 10;
-	      */
-	
-	      get: function () {
-	        return this._value.value;
-	      },
-	      set: function (v) {
-	        this._value.update(v);
-	        this.position.value = this._value.normalized;
-	        this.render();
-	      }
-	    },
-	    min: {
-	
-	      /**
-	      Lower limit of the sliders's output range
-	      @type {number}
-	      @example slider.min = 1000;
-	      */
-	
-	      get: function () {
-	        return this._value.min;
-	      },
-	      set: function (v) {
-	        this._value.min = v;
-	      }
-	    },
-	    max: {
-	
-	      /**
-	      Upper limit of the slider's output range
-	      @type {number}
-	      @example slider.max = 1000;
-	      */
-	
-	      get: function () {
-	        return this._value.max;
-	      },
-	      set: function (v) {
-	        this._value.max = v;
-	      }
-	    },
-	    step: {
-	
-	      /**
-	      The increment that the slider's value changes by.
-	      @type {number}
-	      @example slider.step = 5;
-	      */
-	
-	      get: function () {
-	        return this._value.step;
-	      },
-	      set: function (v) {
-	        this._value.step = v;
-	      }
-	    },
-	    mode: {
-	
-	      /**
-	      Absolute mode (slider's value jumps to mouse click position) or relative mode (mouse drag changes value relative to its current position). Default: "relative".
-	      @type {string}
-	      @example slider.mode = "relative";
-	      */
-	
-	      get: function () {
-	        return this.position.mode;
-	      },
-	      set: function (v) {
-	        this.position.mode = v;
-	      }
-	    }
-	  });
-	
-	  return SliderTemplate;
-	})(Interface);
-	
-	module.exports = SliderTemplate;
-
-/***/ }),
-/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7349,7 +7110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Pan;
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7370,6 +7131,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  this.x = point.x;
 	  this.y = point.y;
+	
+	  this.xMin = point.xMin || 0;
+	  this.xMax = point.xMax || 1;
+	  this.yMin = point.yMin || 0;
+	  this.yMax = point.yMax || 1;
+	
 	  this.envelope = envelope;
 	
 	  this.element = svg.create("circle");
@@ -7396,13 +7163,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var nextNode = this.envelope.nodes[nextIndex];
 	
 	      var lowX = prevIndex >= 0 ? prevNode.x : 0;
+	      lowX = lowX < this.xMin ? this.xMin : lowX;
+	
 	      var highX = nextIndex < this.envelope.nodes.length ? nextNode.x : 1;
+	      highX = highX > this.xMax ? this.xMax : highX;
 	
 	      if (this.x < lowX) {
 	        this.x = lowX;
 	      }
 	      if (this.x > highX) {
 	        this.x = highX;
+	      }
+	
+	      if (this.y < this.yMin) {
+	        this.y = this.yMin;
+	      }
+	      if (this.y > this.yMax) {
+	        this.y = this.yMax;
 	      }
 	    }
 	
@@ -7418,11 +7195,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	  };
 	
-	  this.move(this.x, this.y);
+	  this.move(this.x, this.y, true);
 	  this.resize();
 	
 	  this.destroy = function () {
 	    this.envelope.element.removeChild(this.element);
+	    this.envelope.nodes.splice(this.envelope.nodes.indexOf(this), 1);
 	  };
 	};
 	
@@ -7439,6 +7217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	* @example
 	* var envelope = new Nexus.Envelope('#target',{
 	*   'size': [300,150],
+	*   'noNewPoints': false,
 	*   'points': [
 	*     {
 	*       x: 0.1,
@@ -7479,6 +7258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    var defaults = {
 	      size: [300, 150],
+	      noNewPoints: false,
 	      points: [{
 	        x: 0.1,
 	        y: 0.4
@@ -7633,7 +7413,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        if (!this.hasMoved) {
 	          this.nodes[this.selected].destroy();
-	          this.nodes.splice(this.selected, 1);
 	        }
 	
 	        this.calculatePoints();
@@ -7667,7 +7446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        // if not very close to any node, create a node
-	        if (nearestDist > 0.07) {
+	        if (!this.settings.noNewPoints && nearestDist > 0.07) {
 	
 	          nearestIndex = this.getIndexFromX(this.mouse.x / this.width);
 	
@@ -7724,7 +7503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      */
 	
 	      value: function addPoint(x, y) {
-	        var index = 0;
+	        var index = this.nodes.length;
 	
 	        this.sortPoints();
 	
@@ -7831,9 +7610,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      value: function setPoints(allPoints) {
 	        var _this = this;
 	
-	        this.nodes.forEach(function (point) {
-	          point.destroy();
-	        });
+	        while (this.nodes.length) {
+	          this.nodes[0].destroy();
+	        }
 	        allPoints.forEach(function (point) {
 	          _this.addPoint(point.x, point.y);
 	        });
@@ -7850,7 +7629,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Envelope;
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7888,6 +7667,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	*
 	*/
 	
+	var context = __webpack_require__(1).context;
+	
 	var Spectrogram = (function (_Interface) {
 	  function Spectrogram() {
 	    _classCallCheck(this, Spectrogram);
@@ -7900,7 +7681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _get(Object.getPrototypeOf(Spectrogram.prototype), "constructor", this).call(this, arguments, options, defaults);
 	
-	    this.context = Nexus.context; // jshint ignore:line
+	    this.context = context(); // jshint ignore:line
 	
 	    this.analyser = this.context.createAnalyser();
 	    this.analyser.fftSize = 2048;
@@ -7971,8 +7752,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    connect: {
 	
 	      /**
-	      Equivalent to "patching in" an audio node to visualize.
+	      Equivalent to "patching in" an audio node to visualize. NOTE: You cannot connect audio nodes across two different audio contexts. NexusUI runs its audio analysis on its own audio context, Nexus.context. If the audio node you are visualizing is created on a different audio context, you will need to tell NexusUI to use that context instead: i.e. Nexus.context = YourAudioContextName. For example, in ToneJS projects, the line would be: Nexus.context = Tone.context . We recommend that you write that line of code only once at the beginning of your project.
 	      @param node {AudioNode} The audio node to visualize
+	      @example Nexus.context = Tone.context // or another audio context you have created
+	      spectrogram.connect( Tone.Master );
 	      */
 	
 	      value: function connect(node) {
@@ -8014,7 +7797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Spectrogram;
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8052,6 +7835,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	*
 	*/
 	
+	var context = __webpack_require__(1).context;
+	
 	var Meter = (function (_Interface) {
 	  function Meter() {
 	    _classCallCheck(this, Meter);
@@ -8064,7 +7849,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _get(Object.getPrototypeOf(Meter.prototype), "constructor", this).call(this, arguments, options, defaults);
 	
-	    this.context = Nexus.context; // jshint ignore:line
+	    this.context = context(); // jshint ignore:line
 	
 	    this.channels = 2;
 	
@@ -8173,9 +7958,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    connect: {
 	
 	      /**
-	      Equivalent to "patching in" an audio node to visualize.
+	      Equivalent to "patching in" an audio node to visualize. NOTE: You cannot connect audio nodes across two different audio contexts. NexusUI runs its audio analysis on its own audio context, Nexus.context. If the audio node you are visualizing is created on a different audio context, you will need to tell NexusUI to use that context instead: i.e. Nexus.context = YourAudioContextName. For example, in ToneJS projects, the line would be: Nexus.context = Tone.context . We recommend that you write that line of code only once at the beginning of your project.
 	      @param node {AudioNode} The audio node to visualize
 	      @param channels {number} (optional) The number of channels in the source node to watch. If not specified, the interface will look for a .channelCount property on the input node. If it does not exist, the interface will default to 1 channel.
+	      @example Nexus.context = Tone.context // or another audio context you have created
+	      meter.connect( Tone.Master, 2 );
 	      */
 	
 	      value: function connect(node, channels) {
@@ -8232,7 +8019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Meter;
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8269,6 +8056,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	*
 	*/
 	
+	var context = __webpack_require__(1).context;
+	
 	var Oscilloscope = (function (_Interface) {
 	  function Oscilloscope() {
 	    _classCallCheck(this, Oscilloscope);
@@ -8281,7 +8070,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _get(Object.getPrototypeOf(Oscilloscope.prototype), "constructor", this).call(this, arguments, options, defaults);
 	
-	    this.context = Nexus.context; // jshint ignore:line
+	    this.context = context(); // jshint ignore:line
 	
 	    this.analyser = this.context.createAnalyser();
 	    this.analyser.fftSize = 2048;
@@ -8363,8 +8152,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    connect: {
 	
 	      /**
-	      Equivalent to "patching in" an audio node to visualize.
+	      Equivalent to "patching in" an audio node to visualize. NOTE: You cannot connect audio nodes across two different audio contexts. NexusUI runs its audio analysis on its own audio context, Nexus.context. If the audio node you are visualizing is created on a different audio context, you will need to tell NexusUI to use that context instead: i.e. Nexus.context = YourAudioContextName. For example, in ToneJS projects, the line would be: Nexus.context = Tone.context . We recommend that you write that line of code only once at the beginning of your project.
 	      @param node {AudioNode} The audio node to visualize
+	      @example Nexus.context = Tone.context // or another audio context you have created
+	      oscilloscope.connect( Tone.Master );
 	      */
 	
 	      value: function connect(node) {
@@ -8411,7 +8202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Oscilloscope;
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8462,21 +8253,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	*/
 	
-	var transform = _interopRequireWildcard(__webpack_require__(39));
+	var transform = _interopRequireWildcard(__webpack_require__(38));
 	
 	var dom = _interopRequire(__webpack_require__(7));
 	
+	var colors = __webpack_require__(1).colors;
+	
 	var Rack = (function () {
-	  function Rack(target, name, open) {
+	  function Rack(target, settings) {
 	    _classCallCheck(this, Rack);
 	
 	    this.meta = {};
 	    this.meta.target = target;
-	    this.meta.parent = dom.parseElement(target); // should be a generic function for parsing a "target" argument that checks for string/DOM/jQUERY
-	    this.meta.title = name;
-	    this.meta.open = open;
+	    this.meta.parent = dom.parseElement(target); // should be a generic function for parsing a 'target' argument that checks for string/DOM/jQUERY
 	    this.meta.colors = {};
-	    var defaultColors = Nexus.colors; // jshint ignore:line
+	
+	    if (settings) {
+	      this.meta.attribute = settings.attribute || "nexus-ui";
+	      this.meta.title = settings.name || false;
+	      this.meta.open = settings.open || false;
+	    } else {
+	      this.meta.attribute = "nexus-ui";
+	      this.meta.title = false;
+	      this.meta.open = false;
+	    }
+	
+	    var defaultColors = colors(); // jshint ignore:line
 	    this.meta.colors.accent = defaultColors.accent;
 	    this.meta.colors.fill = defaultColors.fill;
 	    this.meta.colors.light = defaultColors.light;
@@ -8549,7 +8351,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //  var width = this.meta.parent.style.width = getComputedStyle(this.meta.parent).getPropertyValue('width');
 	        //    this.meta.parent.style.width = width;
 	
-	        var ui = transform.section(this.meta.target);
+	        var ui = transform.section(this.meta.target, this.meta.attribute);
 	        for (var key in ui) {
 	          this[key] = ui[key];
 	        }
@@ -8606,7 +8408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Rack;
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8648,7 +8450,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return widget;
 	};
 	
-	var section = function (parent) {
+	var section = function (parent, keyword) {
+	
+	  keyword = keyword || "nexus-ui";
 	
 	  var interfaceIDs = {};
 	
@@ -8662,7 +8466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    elements.push(htmlElements[i]);
 	  }
 	  for (var i = 0; i < elements.length; i++) {
-	    var type = elements[i].getAttribute("nexus-ui");
+	    var type = elements[i].getAttribute(keyword);
 	    if (type) {
 	      var formattedType = false;
 	      for (var key in Interfaces) {
@@ -8684,15 +8488,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return ui;
 	};
 	
-	var add = function (type, options) {
+	var add = function (type, parent, options) {
 	  var target = document.createElement("div");
-	  var parent = document.body;
-	  if (options) {
-	    parent = options.parent;
+	  options = options || {};
+	  if (parent) {
+	    parent = dom.parseElement(parent);
 	  } else {
-	    options = {};
+	    parent = document.body;
 	  }
-	  parent = dom.parseElement(parent);
 	  parent.appendChild(target);
 	  options.target = target;
 	  if (options.size) {
@@ -8707,7 +8510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.add = add;
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8915,7 +8718,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Tune;
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -9041,17 +8844,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Radio;
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var WAAClock = __webpack_require__(43)
+	var WAAClock = __webpack_require__(42)
 	
 	module.exports = WAAClock
 	if (typeof window !== 'undefined') window.WAAClock = WAAClock
 
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var isBrowser = (typeof window !== 'undefined')
@@ -9288,10 +9091,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	WAAClock.prototype._relTime = function(absTime) {
 	  return absTime - this.context.currentTime
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(44)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(43)))
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 	// shim for using process in browser
@@ -9481,8 +9284,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 45 */
-/***/ (function(module, exports) {
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
@@ -9490,13 +9293,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 	
+	var clock = __webpack_require__(1).clock;
+	
 	var Interval = (function () {
 	  function Interval(rate, func, on) {
 	    _classCallCheck(this, Interval);
 	
 	    this.rate = rate;
 	    this.on = on;
-	    this.clock = Nexus.clock; // jshint ignore:line
+	    this.clock = clock(); // jshint ignore:line
 	
 	    this.pattern = [1];
 	    this.index = 0;
