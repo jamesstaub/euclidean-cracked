@@ -8,33 +8,33 @@
     <div class="function-controls flex justify-between items-center">
       <div class="flex flex-column justify-between">
         <div class="flex items-center">
-          {{#mdc-button click=(action "submitCode") disabled=functionIsLoaded style="unelevated" title="Function is loaded" class="black mr2"}}
+          {{#mdc-button click=(action "submitCode") disabled=functionIsLoaded style="outlined" title="Function is loaded" class="black mr2 f7"}}
             {{#if functionIsLoaded}}
-              Script is loaded {{mdc-icon "done" class="ml1"}}
+              {{mdc-icon "done" class="mr1"}} Script Loaded
             {{else}}
-              Load Script {{mdc-icon "arrow_upward" class="ml1"}}
+              {{mdc-icon "arrow_upward" class="mr1"}} Load Script
             {{/if}}
           {{/mdc-button}}
 
           {{#if functionIsLoaded}}
-            {{#mdc-button click=(action "disableFunction") style="unelevated" class="black mr2"}}
-                disable {{mdc-icon "cancel" class="ml1"}}
+            {{#mdc-button click=(action "disableFunction") style="outlined" class="black mr2 f7"}}
+                {{mdc-icon "cancel" class="mr1"}} disable
             {{/mdc-button}}
           {{else}}
-            {{#mdc-button click=(action "discardChanges") style="unelevated" class="black "}}
-              discard changes {{mdc-icon "settings_backup_restore" class="ml1"}}
+            {{#mdc-button click=(action "discardChanges") style="outlined" class="black mr2 f7"}}
+              {{mdc-icon "settings_backup_restore" class="mr1"}} discard changes 
             {{/mdc-button}}
           {{/if}}
           {{#if (not functionIsLoaded)}}
-            <small class="mb2 flex-0">
+            <span class="dark-gray flex-0">
               No script loaded.
-            </small>
+            </span>
           {{/if}}
         
         </div>
       </div>
       <div>
-        {{#mdc-button style="unelevated" click=(action (mut exampleMenuOpen) true)}}examples{{/mdc-button}}
+        {{#mdc-button style="outlined" click=(action (mut exampleMenuOpen) true) class="f7"}}examples{{/mdc-button}}
         {{#mdc-menu
           open=exampleMenuOpen
           anchor="parent"

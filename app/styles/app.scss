@@ -18,9 +18,10 @@
 
 /*material overrides*/
 :root {
-  --mdc-theme-primary: #{$yellow};
-  --mdc-theme-on-primary: #{$dark-gray};
+  --mdc-theme-primary: #{$dark-gray};
+  --mdc-theme-on-primary: #{$yellow};
   --mdc-theme-secondary: #{$light-blue};
+  --mdc-theme-on-secondary: #{$mid-gray};
 }
 
 html, body {
@@ -38,7 +39,13 @@ html, body {
 
 }
 
+/*MATERIAL*/
 .mdc-fab--mini {
   width: 2rem;
   height: 2rem;
+}
+
+
+.mdc-button--outlined:not(:disabled) {
+  border-radius: 0;
 }
