@@ -2,4 +2,7 @@
   .ace-editor {
     flex: 1 1 auto;
   }
+  .mdc-button--raised:disabled, .mdc-button--unelevated:disabled {
+    background-color: transparent;
+  }
 }

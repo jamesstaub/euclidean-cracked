@@ -6,34 +6,18 @@ This project is in development.
 
 After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/sequencer) euclidean rhythm sequencer, the aim of this rebuild is to deal with application concerns such as authentication, and data modeling as a foundation, then to reimplement the web audio components.
 
-## to do list
-### user concurrency features
-
-* Presets
-  - save project state 
-    - interface for user to easily sequence or trigger presets
-  
-
-* sidebar chat window
-* flash of color on a given track when another user has made a change.
-  - centralize all track.save() calls to call a single route-action so, then trigger visual feedback any track data is saved
-
-
-### audio processing features
-* implement a code editor for writing custom cracked audio scripts.
-
-  - a global level script editor will allow for other scripting outside of the sequencer events
 
 * add a track field `custom class` (for cracked audio nodes), so users can write macro controls
   - eg. multiple tracks with class `bass-drum` can be selected in the code editor like so:  `__('.bass-drum').connect('reverb');`
  
-
-### rhythm composition
-* implement "bars",  a system for extending a given track's rhythm beyond a single euclidean pattern
-  - ability to set the number of loops for a given bar, before advancing to the next
-  - eg. `[1, 0, 1, 0], [1, 1, 0, 0](x2), [1, 0, 1]`
+ * users can add arbitrary UI controls (multisliders, XY slider, matrixctrl) and access them in track script editors
+    - step-wise arrays that are controlled by the rhythm sequence length
+        - provide `onChange` hooks so moving slider can change cracked `attrs` in real time.
+    - arbitrary arrays for creating patterns (musical scales, breakpoint envelopes)
 
 * ability to duplicate a track, to make iteration easier
+
+
 
 
 ### data authorization (in progress)

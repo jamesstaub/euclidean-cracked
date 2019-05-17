@@ -129,7 +129,6 @@ __(this.sampler).attr({speed: speed});
   }
 ];
 
-
 export default [
   {
     sectionName: 'tutorial',

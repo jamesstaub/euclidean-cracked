@@ -1,90 +1,56 @@
 <section>
   {{yield}}
-  <form class="function-editor" ...attributes {{action "submitCode" on="submit"}}>
+  <div class="function-editor" ...attributes>
     {{! <legend>
         <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
         <p>script will be called on each step of the step sequencer.</p>
       </legend> }}
-    <div class="function-controls">
-      <div class="load-buttons">
-        <button
-          class="btn btn-xs btn-primary run-code-btn"
-          disabled={{cantSubmit}}
-          type="submit"
-          name="button"
-        >
-          {{#if functionIsLoaded }}
-            {{!-- {{fa-icon "check"}} --}}
-          {{else if applyFunction.isRunning}}
-            {{!-- {{fa-icon "spinner"}} --}}
-          {{else}}
-            load script
-          {{/if}} 
-        </button>
+    <div class="function-controls flex justify-between items-center">
+      <div class="flex flex-column justify-between">
+        <div class="flex items-center">
+          {{#mdc-button click=(action "submitCode") disabled=functionIsLoaded style="unelevated" title="Function is loaded" class="black mr2"}}
+            {{#if functionIsLoaded}}
+              Script is loaded {{mdc-icon "done" class="ml1"}}
+            {{else}}
+              Load Script {{mdc-icon "arrow_upward" class="ml1"}}
+            {{/if}}
+          {{/mdc-button}}
 
-        <button
-          class="btn btn-xs disable-code-btn"
-          type="button"
-          disabled={{not functionIsLoaded}}
-          {{action "disableFunction"}}
-        >
-          {{if functionIsLoaded "disable" "no script loaded"}}
-        </button>
-        <button
-          class="btn btn-xs disable-code-btn"
-          disabled={{functionIsLoaded}}
-          type="button"
-          {{action "discardChanges"}}
-        >
-          revert changes
-        </button>
-        <div>
-          {{#mdc-button style="unelevated" click=(action (mut exampleMenuOpen) true)}}examples{{/mdc-button}}
-          {{#mdc-menu
-            open=exampleMenuOpen
-            anchor="parent"
-            quickOpen=true
-            position="fixed"
-            anchorCorner="bottomLeft"
-          }}
-            {{#each exampleFunctions as |exampleGroup| }}
-              {{mdc-menu-item exampleGroup.sectionName}}
-              {{#each exampleGroup.examples as |example|}}
-                {{mdc-menu-item example.name click=(perform injectExample example.code)}}
-              {{/each}}
-              {{mdc-list-divider}}
-            {{/each}}
-          {{/mdc-menu}}
+          {{#if functionIsLoaded}}
+            {{#mdc-button click=(action "disableFunction") style="unelevated" class="black mr2"}}
+                disable {{mdc-icon "cancel" class="ml1"}}
+            {{/mdc-button}}
+          {{else}}
+            {{#mdc-button click=(action "discardChanges") style="unelevated" class="black "}}
+              discard changes {{mdc-icon "settings_backup_restore" class="ml1"}}
+            {{/mdc-button}}
+          {{/if}}
+          {{#if (not functionIsLoaded)}}
+            <small class="mb2 flex-0">
+              No script loaded.
+            </small>
+          {{/if}}
+        
         </div>
       </div>
-      
-      {{!-- TODO material option select --}}
-      {{!-- {{#bs-dropdown tagName="span" class="examples-menu" as |dd|}}
-        {{#dd.button class="btn-xs"}}
-          Example Scripts <span class="caret"></span>
-        {{/dd.button}}
-        {{#dd.menu as |menu|}}
+      <div>
+        {{#mdc-button style="unelevated" click=(action (mut exampleMenuOpen) true)}}examples{{/mdc-button}}
+        {{#mdc-menu
+          open=exampleMenuOpen
+          anchor="parent"
+          quickOpen=true
+          position="fixed"
+          anchorCorner="bottomLeft"
+        }}
           {{#each exampleFunctions as |exampleGroup| }}
-            {{#menu.item}}
-              <span class="dropdown-header">
-                {{exampleGroup.sectionName}}
-              </span>
-            {{/menu.item}}
+            {{mdc-menu-item exampleGroup.sectionName disabled=true}}
             {{#each exampleGroup.examples as |example|}}
-              {{#menu.item}}
-                <a
-                  class="dropdown-item"
-                  onclick={{perform injectExample example.code}}
-                >
-                  {{example.name}}
-                </a>
-              {{/menu.item}}
+              {{mdc-menu-item example.name click=(perform injectExample example.code)}}
             {{/each}}
-            {{menu.divider}}
+            {{mdc-list-divider}}
           {{/each}}
-
-        {{/dd.menu}}
-      {{/bs-dropdown}} --}}
+        {{/mdc-menu}}
+      </div>
     </div>
     <div>
       {{#if illegalTokens}}
@@ -101,6 +67,6 @@
       theme="ace/theme/ambiance"
       update=(action "onUpdateEditor")
     }}
-  </form>
+  </div>
 </section>
 
