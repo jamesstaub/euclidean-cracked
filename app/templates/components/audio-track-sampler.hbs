@@ -1,9 +1,4 @@
 {{#if initializeSampler.isRunning}}
-  <small class='absolute right-0'>
-    changes will apply in:
-    <strong>
-      {{stepsUntilStart}}
-    </strong>
-  </small>
+  {{mdc-linear-progress indeterminate=true class="absolute top-0"}}
 {{/if}}
 {{yield this}}

@@ -1,0 +1,26 @@
+<div class="flex flex-column flex-auto pa3 relative w-100 overflow-scroll">
+  <div class="absolute top-0 right-0 h-100 w2">
+    <div class="h-100 w2 bg-yellow o-50"></div>
+    {{mdc-fab
+      class="absolute right-0 top-0"
+      icon="add"
+      title="Add new parameter control" 
+      mini=true
+      click=(action (mut menuOpen) true) 
+    }}
+
+    {{#mdc-menu
+      class="w5"
+      anchor="parent"
+      open=menuOpen
+    }}
+      {{#mdc-menu-item click=(action "newControl" "slider")}}slider{{/mdc-menu-item }}
+      {{#mdc-menu-item click=(action "newControl" "multislider")}}multislider{{/mdc-menu-item }}
+    {{/mdc-menu}}
+  </div>
+  <div class="flex h-100">
+    {{#each track.trackControls as |trackControl|}}
+      <TrackControlWrapper @sequence={{track.sequence}} @trackControl={{trackControl}}/>
+    {{/each}}
+  </div>
+</div>

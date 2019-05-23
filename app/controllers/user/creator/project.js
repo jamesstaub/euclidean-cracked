@@ -37,6 +37,7 @@ export default Controller.extend({
     },
 
     async deleteTrack(track) {
+      this.setDefaultActiveTrack();
       const customFunction = await track.get('customFunction');
       // TODO: delete customFunction with cloud Function
       // since readOnly validation prevents deletion

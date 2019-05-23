@@ -11,6 +11,7 @@ export default Component.extend({
       this.selectActiveTrack(this.track, this.sampler);
     }
   },
+
   click(e) {
     const isDeleteClick = e.target.className.indexOf('delete-track-btn') > -1
     if (isDeleteClick) {

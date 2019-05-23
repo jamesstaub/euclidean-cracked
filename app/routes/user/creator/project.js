@@ -14,8 +14,9 @@ export default Route.extend({
     });
   },
 
-  afterModel(model, transition) {
+  async afterModel(model, transition) {
     this.addProjectActiveUser(model);
+    await model.get('tracks');
     if (!model.tracks.length) {
       this.createDefaultTrack(model, transition);
     }

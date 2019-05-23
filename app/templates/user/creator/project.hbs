@@ -39,6 +39,7 @@
       <h4> No tracks</h4>
     {{/each}}
   </div>
-
-  {{current-track-footer track=activeTrack sampler=activeSampler saveTrackTask=saveTrackTask}}
+  {{#if activeTrack}}
+    {{current-track-footer track=activeTrack sampler=activeSampler saveTrackTask=saveTrackTask}}
+  {{/if}}
 {{/if}}

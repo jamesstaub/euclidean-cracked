@@ -6,6 +6,10 @@
   height: 14rem;
 }
 
+.min-width-6 {
+  min-width: 6rem;
+}
+
 .min-width-12 {
   min-width: 12rem;
 }
@@ -15,6 +19,10 @@
 }
 .flex-grow {
   flex-grow: 1;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
 }
 
 .flex-0 {

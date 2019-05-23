@@ -192,6 +192,7 @@ export default Component.extend(SequenceHelper, DidChangeAttrs, {
   },
 
   // callback functions to be called on each step of sequencer
+  // eslint-disable-next-line complexity
   onStepCallback(index, data, array) {
     set(this, 'stepIndex', index);
     let serviceTracks = get(this, 'audioService.tracks');

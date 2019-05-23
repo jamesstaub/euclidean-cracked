@@ -4,6 +4,7 @@ import E from 'euclidean-cracked/utils/euclidean';
 
 export default DS.Model.extend({
   project: DS.belongsTo('project'),
+  trackControls: DS.hasMany('track-control'),
 
   // belongs on project model but used here as
   // convenience for firebase .write rules
