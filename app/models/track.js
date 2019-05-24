@@ -65,6 +65,14 @@ export default DS.Model.extend({
     }
   }),
 
+  multisliderSize: computed('sequence', {
+    get() {
+      let width = (this.uiStepSize * .85) * this.sequence.length;
+      let height = 100;
+      return [width, height];
+    }
+  }),
+
   gain: DS.attr('number', {
     defaultValue() {
       return 0.5;
