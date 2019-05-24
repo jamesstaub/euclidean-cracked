@@ -13,6 +13,11 @@
         ".write": "auth.uid == data.child('projectCreatorUid').val() || auth.uid == newData.child('projectCreatorUid').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
       }
     },
+    "trackControls": {
+      "$trackControl": {
+        ".write": true
+      }
+    },
     "customFunctions": {
       "$customFunction": {
         "projectCreatorUid": {

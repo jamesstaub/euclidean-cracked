@@ -53,6 +53,7 @@ export default Component.extend(NexusMixin, {
         'size': this.size || [400, 100],
         'min': this.min || 0,
         'max': this.max || 1,
+        'candycane': 0,
         'numberOfSliders': this.numberOfSliders || 4,
         'step': this.step || 0,
         'values': values,

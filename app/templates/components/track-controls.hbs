@@ -20,7 +20,7 @@
 
   <div class="flex h-100 w-100 overflow-scroll">
     {{#each track.trackControls as |trackControl|}}
-      <TrackControlWrapper @sequence={{track.sequence}} @trackControl={{trackControl}}/>
+      <TrackControlWrapper @track={{track}} @sequence={{track.sequence}} @trackControl={{trackControl}}/>
     {{/each}}
   </div>
 </section>

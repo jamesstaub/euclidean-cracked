@@ -1,7 +1,7 @@
 <div class="flex flex-column mr3 h-100">
   {{#if (eq trackControl.interfaceName "ui-multislider")}}
     {{ui-multislider
-      size=40
+      size=uiSize
       stepIndex=stepIndex
       sequence=sequence
       numberOfSliders=dataLength
@@ -14,7 +14,7 @@
     {{ui-slider
       max=1
       min=0
-      size=[20 120]
+      size=uiSize
       step=0.01
       class="center"
       onChangeValue=(action "onChangeValue")

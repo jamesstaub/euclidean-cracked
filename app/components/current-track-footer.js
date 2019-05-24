@@ -10,7 +10,6 @@ export default Component.extend({
   init() {
     this._super(...arguments);
     this.set('gainSliderSize', [20, 120]);
-    this.set('uiStepSize', 40);
     this.set('visibleInterface', 'rhythm');
   },
 
