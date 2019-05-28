@@ -30,7 +30,6 @@
         />
         {{!-- <StepParamSliders
           class="pa3"
-          @uiStepSize={{uiStepSize}}
           @sequence={{track.sequence}}
           @track={{track}}
           @stepIndex={{audioService.activeTrackStepIndex}}
@@ -53,8 +52,7 @@
     {{#if (eq visibleInterface "script")}}
       <TrackFunctionEditor
         class="w-100 h-100 overflow-scroll absolute bottom-0 bg-yellow pa3"
-        @customFunction={{track.customFunction}}
-        @sampler={{sampler}}
+        @track={{track}}
       >
         <h3>Script Editor</h3>
       </TrackFunctionEditor>

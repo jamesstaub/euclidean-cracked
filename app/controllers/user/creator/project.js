@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import cleanURI from 'euclidean-cracked/utils/clean';
 import { debug } from "@ember/debug";
+import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
 
 export default Controller.extend({
@@ -17,6 +18,12 @@ export default Controller.extend({
     }
   }),
 
+  activeTrack: computed('model.tracks.[]', {
+    get() {
+      return this.model.get('tracks').firstObject;
+    }
+  }),
+
   actions: {
     save(project) {
       let slug = cleanURI(project.get('title'));
@@ -29,15 +36,12 @@ export default Controller.extend({
 
     // when a user clicks a track in the list,
     //  set footer controls to that track
-    selectActiveTrack(track, sampler) {
+    selectActiveTrack(track) {
       // instance of track model
       this.set('activeTrack', track);
-      // instance of audio-track-sampler component for this track
-      this.set('activeSampler', sampler);
     },
 
     async deleteTrack(track) {
-      this.setDefaultActiveTrack();
       const customFunction = await track.get('customFunction');
       // TODO: delete customFunction with cloud Function
       // since readOnly validation prevents deletion
@@ -67,6 +71,7 @@ export default Controller.extend({
 
       // TODO: instead of setting defaults here, just use
       // defaults on the model
+      // or better yet, uses a post-create cloud function to setup default tracks, track custom controls
       let track = this.store.createRecord('track', {
         projectCreatorUid: project.get('creator.uid'),
         publicEditable: project.publicEditable,

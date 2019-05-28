@@ -62,13 +62,13 @@ export default Component.extend({
 
       switch (action) {
         case 'start':
-          audio.startLoop();
+          audio.startLoop(this.project);
           // terrible hack
           audio.setInterval(interval + 1);
           this.toggleProperty('isPlaying');
           break;
         case 'reset':
-          audio.resetLoop(interval);
+          audio.resetLoop(this.project, interval);
           break;
         case 'stop':
           audio.stopLoop();

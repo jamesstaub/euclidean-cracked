@@ -1,15 +1,14 @@
 import Component from '@ember/component';
-import { computed, get, set } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import { reads, not, and, or } from '@ember/object/computed';
 import { task, waitForProperty } from 'ember-concurrency';
 import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
-  audioService: service(),
+
   classNames: ['track-function-editor'],
   tagName:'',
-  // stringified code that gets run in audio service on submit
-  function: reads('customFunction.function'),
+  customFunction: reads('track.customFunction'), // the model that saves custom function as string
+  function: reads('track.onStepFunction'), // the actual function that gets called on each step
   illegalTokens: reads('customFunction.illegalTokens'),
   // code in text editor
   editorContent: reads('customFunction.editorContent'),
@@ -24,14 +23,6 @@ export default Component.extend({
   }),
 
   showDiscardBtn: not('hasUnloadedCode'),
-
-  serviceTrackRef: computed('audioService.tracks.@each.trackId', {
-    get() {
-      return get(this, 'audioService').findOrCreateTrackRef(
-        get(this, 'track.id')
-      );
-    }
-  }),
 
   init() {
     this._super(...arguments);
@@ -59,7 +50,7 @@ export default Component.extend({
     yield waitForProperty(this, 'customFunction.functionPreCheck', null);
     // the cloud function check succeeded if function + editor are identical
     if (this.function === this.editorContent) {
-      yield this.sampler.initializeSampler.perform();
+      yield this.track.initializeSampler.perform();
     }
 
     /**
@@ -97,7 +88,7 @@ export default Component.extend({
     disableFunction() {
       // TODO: fix
       this.saveFunctionTask.perform('functionPreCheck', '');
-      set(this.serviceTrackRef, 'customFunction', null);
+      this.track.set('onStepFunction', null);
     }
   }
 });

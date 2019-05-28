@@ -1,26 +1,36 @@
-import DS from 'ember-data';
-import { computed } from '@ember/object';
 import E from 'euclidean-cracked/utils/euclidean';
 
-export default DS.Model.extend({
-  project: DS.belongsTo('project'),
-  trackControls: DS.hasMany('track-control'),
+import { computed } from '@ember/object';
+import attr from 'ember-data/attr';
+import { belongsTo, hasMany } from 'ember-data/relationships';
+import TrackSamplerInstance from './track-sampler-instance';
+
+export default TrackSamplerInstance.extend({
+  project: belongsTo('project'),
+  trackControls: hasMany('track-control'),
 
   // belongs on project model but used here as
   // convenience for firebase .write rules
-  projectCreatorUid: DS.attr('string'),
+  projectCreatorUid: attr('string'),
 
   // written only by same property on project
   // again, convenience for firebase auth rules
-  publicEditable: DS.attr('boolean'),
+  publicEditable: attr('boolean'),
 
-  isLooping: DS.attr('boolean'),
+  isLooping: attr('boolean'),
 
-  filepath: DS.attr('string', {
+  filepath: attr('string', {
     // TODO request file server api
     // labelled categories for random kick, snare, hat etc
     defaultValue() {
-      return "/Ace Tone Rhythm Ace/KICK1.mp3";
+      const files = [
+        '/Ace Tone Rhythm Ace/KICK1.mp3',
+        '/Ace Tone Rhythm Ace/SNARE1.mp3',
+        '/Ace Tone Rhythm Ace/HHCL.mp3',
+        '/Ace Tone Rhythm Ace/HHOP.mp3',
+      ];
+      const idx = __.random(0, files.length);
+      return files[idx];
     }
   }),
 
@@ -35,21 +45,21 @@ export default DS.Model.extend({
     }
   }),
 
-  customFunction: DS.belongsTo('customFunction'),
+  customFunction: belongsTo('customFunction'),
 
-  hits: DS.attr('number', {
+  hits: attr('number', {
     defaultValue() {
-      return 3;
+      return __.random(1,4);
     }
   }),
 
-  steps: DS.attr('number', {
+  steps: attr('number', {
     defaultValue() {
       return 8;
     }
   }),
 
-  offset: DS.attr('number', {
+  offset: attr('number', {
     defaultValue() {
       return 0;
     }
@@ -65,7 +75,11 @@ export default DS.Model.extend({
     }
   }),
 
-  multisliderSize: computed('sequence', {
+  /* 
+    this could move to a track UI subclass
+    params to fit multislider to same width as sequence
+  */ 
+  multisliderSize: computed('sequence.length', {
     get() {
       let uiStepSize = 40;
       let width = (uiStepSize * .85) * this.sequence.length;
@@ -74,13 +88,13 @@ export default DS.Model.extend({
     }
   }),
 
-  gain: DS.attr('number', {
+  gain: attr('number', {
     defaultValue() {
       return 0.5;
     }
   }),
 
-  gainStepSeq: DS.attr('string'),
-  speedStepSeq: DS.attr('string'),
-  loopStepArray: DS.attr('string')
+  // TODO serialize/normalize to string for firebase
+  // gainStepSeq: attr('firestore.array'),
+
 });

@@ -8,26 +8,13 @@ import { get, set, computed } from "@ember/object";
  * from the track record
  */
 
-function arraySequenceComputed(stringKey) {
-  // reusable computed property template
-  // to serialize/normalize sequence from string ("1,0,0" )to array [1,0,1]
-  return {
-    get() {
-      return this.stringToArray(stringKey);
-    },
-    set(key, value) {
-      this.setParamsAudioService(key, value);
-      this.saveArrayAsString(stringKey, value);
-      return value;
-    }
-  };
-}
+
 
 export default Mixin.create({
 
-  gainStepArray: computed('track.gainStepSeq', arraySequenceComputed('gainStepSeq')),
-  speedStepArray: computed('track.speedStepSeq', arraySequenceComputed('speedStepSeq')),
-  loopEndStepArray: computed('track.loopEndStepSeq', arraySequenceComputed('loopEndStepSeq')),
+  // gainStepArray: computed('track.gainStepSeq', arraySequenceComputed('gainStepSeq')),
+  // speedStepArray: computed('track.speedStepSeq', arraySequenceComputed('speedStepSeq')),
+  // loopEndStepArray: computed('track.loopEndStepSeq', arraySequenceComputed('loopEndStepSeq')),
 
 
   stringToArray(stringKey) {

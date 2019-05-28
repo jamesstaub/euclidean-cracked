@@ -1,5 +1,4 @@
 import Service from '@ember/service';
-import { set } from "@ember/object";
 
 /**
  * This service is a global singleton for web audio node parameters and state.
@@ -12,38 +11,16 @@ import { set } from "@ember/object";
  * 
  */
 export default Service.extend({
-  tracks: [],
 
-  findOrCreateTrackRef(trackId) {
-    let trackRef = this.tracks.findBy('trackId', trackId);
-    if (!trackRef) {
-      trackRef = { trackId: trackId };
-      this.tracks.push(trackRef);
-    }
-    return trackRef;
-  },
-
-  bindTrackSamplers() {
-    this.tracks.forEach(track => {
-      __(track.selector).unbind('step');
-
-      __(track.selector).bind(
-        'step', // on every crack sequencer step
-        track.callback, // call this function (bound to component scope)
-        track.sequence // passing in array value at position
-      );
-    });
-  },
-
-  startLoop() {
-    this.bindTrackSamplers();
+  startLoop(project) {
+    project.bindTrackSamplers();
     __.loop('start');
   },
 
   stopLoop() {
     // disable the looping of individual samples
     this.tracks.forEach(track => {
-      __(track.selector).attr({ loop: false });
+      __(track.samplerSelector).attr({ loop: false });
     });
     // disable the "loop" aka global sequencer
     __.loop('stop');
@@ -61,15 +38,4 @@ export default Service.extend({
     __.loop('start');
   },
 
-  applyTrackFunction(serviceTrackRef, functionString, scope) {
-    try {
-      let onStep = new Function('index', 'data', 'array', functionString).bind(
-        scope
-      );
-
-      set(serviceTrackRef, 'customFunction', onStep);
-    } catch (e) {
-      alert('problem with function', e);
-    }
-  }
 });

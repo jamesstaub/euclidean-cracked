@@ -25,4 +25,15 @@ export default DS.Model.extend({
     publicVisible: DS.attr('boolean'),
     publicEditable: DS.attr('boolean'),
 
+    init() {
+      this._super(...arguments);
+      this.set('outputNodeSelector', '#master-compressor');
+    },
+
+    bindTrackSamplers() {
+      this.tracks.forEach(track => {
+        track.bindTrackSampler();
+      });
+    },
+
 });

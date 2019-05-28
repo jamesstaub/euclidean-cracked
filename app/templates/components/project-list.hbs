@@ -1,18 +1,7 @@
 {{#if currentProject}}
   {{audio-project-sequencer project=currentProject readOnly=true}}
 {{/if}}
-  
-{{#each currentProject.tracks as |track|}}
-  {{audio-track-sampler
-    sequence=track.sequence
-    directory=directory
-    track=track
-    gain=track.gain
-    isLooping=track.isLooping
-    filepath=track.filepath
-    outputNodeSelector="#master-compressor"
-  }}
-{{/each}}
+
 
 {{#each projects as |project|}}
   {{#index-project-item project=project}}

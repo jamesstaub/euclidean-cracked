@@ -33,13 +33,15 @@
         {{#mdc-button class="w4" click=(action (mut drumMenuOpen) true)}}
           {{track.filename}} 
         {{/mdc-button}}
-
       {{/track-container}}
     {{else}}
       <h4> No tracks</h4>
     {{/each}}
   </div>
   {{#if activeTrack}}
-    {{current-track-footer track=activeTrack sampler=activeSampler saveTrackTask=saveTrackTask}}
+    {{current-track-footer 
+      track=activeTrack
+      saveTrackTask=saveTrackTask
+    }}
   {{/if}}
 {{/if}}
