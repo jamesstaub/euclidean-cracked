@@ -34,7 +34,7 @@ const selectorFor = (type, dependency) => {
         return `${types[type]}${this.get(dependency)}`;
       }
     }
-  })
+  });
 }
 
 export default Model.extend({
@@ -69,23 +69,6 @@ export default Model.extend({
     }
   }),
 
-  /* cracked node attribute setters */
-  // track gain slider
-  gain: computed({
-    set(key, val) {
-      __(`#${this.gainId}`).attr({ gain: val });
-      return val;
-    }
-  }),
-  
-  // value of #gainId-onstep node at any given moment 
-  gainOnStep: computed({
-    set(key, val) {
-      __(this.gainOnStepSelector).attr({ gain: val });
-      return val;
-    }
-  }),
-
   stepsUntilStart: computed('sequence.length', 'stepIndex', {
     get() {
       if (this.sequence) {
@@ -110,6 +93,7 @@ export default Model.extend({
     yield waitForProperty(this, 'stepIndex', 0);
 
     if (this.sequence.length) {
+      console.log('remove and build');
       this.removeAllNodes();
       this.buildNodes();
     }
@@ -117,7 +101,6 @@ export default Model.extend({
 
   // TODO: cracked: how to set new filepath without rebuilding node?
   buildNodes() {
-    console.log('node class', this.trackNodeClass);
     __()
       .sampler({
         id: this.samplerId,
@@ -151,7 +134,6 @@ export default Model.extend({
     let selectors = [this.trackNodeSelector];
 
     selectors.forEach(selector => {
-      console.log('remove selector', selector);
       __(selector).remove();
     });
   },

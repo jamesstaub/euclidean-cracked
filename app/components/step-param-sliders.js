@@ -1,12 +1,10 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
 import SequenceHelper from  'euclidean-cracked/mixins/sequence-helper';
 import { get, set } from "@ember/object";
 import { alias } from "@ember/object/computed";
 
 export default Component.extend(SequenceHelper,{
   tagName: '',
-  audioService: service(),
 
   gainStepDefault: Array.from(new Array(16), () => 0.5),
   // speedStepSeq: Array.from(new Array(16), ()=> .5).toString(),

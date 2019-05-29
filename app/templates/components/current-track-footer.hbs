@@ -7,7 +7,7 @@
       size=gainSliderSize
       step=0.01
       class="gain-slider"
-      onChangeValue=(action "updateSequenceParam" track "gain")
+      onChangeValue=(action "updateSequenceParam" "gain")
       value=track.gain
     }}
   </div>
@@ -26,7 +26,7 @@
       <div class="flex justify-between flex-grow flex-basis-auto h-100">
         <TrackControls
           @track={{track}}
-          @stepIndex={{audioService.activeTrackStepIndex}}
+          @stepIndex={{track.stepIndex}}
         />
         {{!-- <StepParamSliders
           class="pa3"
@@ -42,7 +42,7 @@
           @hits={{track.hits}}
           @steps={{track.steps}}
           @offset={{track.offset}}
-          @onUpdateSequenceParam={{action "updateSequenceParam" track}}
+          @onUpdateSequenceParam={{action "updateSequenceParam"}}
         >
           <h3>Euclidean Rhythm</h3>
         </UiSequenceControls>

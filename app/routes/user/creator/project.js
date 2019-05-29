@@ -16,11 +16,6 @@ export default Route.extend({
 
   async afterModel(model, transition) {
     this.addProjectActiveUser(model);
-    try {
-      await model.get('tracks');
-    } catch(e) {
-      console.error('NO TRACKS');
-    }
     if (!model.tracks.length) {
       this.createDefaultTrack(model, transition);
     }

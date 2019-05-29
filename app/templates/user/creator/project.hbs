@@ -22,7 +22,12 @@
   />
   <div class="tracks overflow-container h-100">
     {{#each tracks as |track idx|}}
-      {{#track-container
+      <AudioSamplerTrack
+        @initializeSampler={{track.initializeSampler}}
+        @gain={{track.gain}} 
+        @gainSelector={{track.gainSelector}}
+      />
+      {{#track-container-ui
         idx=idx
         isActive=(eq track.id activeTrack.id)
         track=track
@@ -33,7 +38,7 @@
         {{#mdc-button class="w4" click=(action (mut drumMenuOpen) true)}}
           {{track.filename}} 
         {{/mdc-button}}
-      {{/track-container}}
+      {{/track-container-ui}}
     {{else}}
       <h4> No tracks</h4>
     {{/each}}

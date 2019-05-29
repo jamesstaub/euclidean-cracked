@@ -4,11 +4,6 @@ export default Component.extend({
   classNames: ['track-container'],
   classNameBindings: ['isActive:bg-light-silver:bg-near-white'],
   
-  didInsertElement() {
-    this._super(...arguments);
-    this.track.initializeSampler.perform();
-  },
-
   willDestroyElement() {
     this._super(...arguments);
     this.track.removeAllNodes();

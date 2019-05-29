@@ -1,12 +1,10 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { get, set, computed, observer } from '@ember/object';
 import { waitForProperty } from 'ember-concurrency';
 
 export default Component.extend(NexusMixin, {
   classNames: ['ui-step-sequencer'],
-  audioService: service(),
 
   ElementName: 'Sequencer',
 

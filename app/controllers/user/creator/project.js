@@ -13,7 +13,7 @@ export default Controller.extend({
     try {
       yield track.save();
     } catch (e) {
-      debug(`error saving track:  ${e}`);
+      debug(`error saving track (project task):  ${e}`);
       track.rollbackAttributes();
     }
   }),
@@ -50,16 +50,10 @@ export default Controller.extend({
       track.destroyRecord();
     },
 
+    // TODO implement cloud function to delete tracks on project delete
     async delete(project) {
-      let tracks = await project.get('tracks');
-      if (tracks.length) {
-        tracks = tracks.toArray();
-        for (const track of tracks) {
-          await track.destroyRecord();
-        }
-        await project.destroyRecord();
-        this.transitionToRoute('user');
-      }
+      await project.destroyRecord();
+      this.transitionToRoute('user');
     },
 
     async createTrack(project) {
