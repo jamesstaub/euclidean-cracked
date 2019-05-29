@@ -30,10 +30,12 @@ export default DS.Model.extend({
       this.set('outputNodeSelector', '#master-compressor');
     },
 
-    bindTrackSamplers() {
-      this.tracks.forEach(track => {
+    // TODO: move to project controller
+    async bindTrackSamplers() {
+      const tracks = await this.get('tracks');
+      for (const track of tracks.toArray()) {
         track.bindTrackSampler();
-      });
+      }
     },
 
 });

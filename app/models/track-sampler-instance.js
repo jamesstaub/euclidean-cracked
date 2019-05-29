@@ -11,10 +11,13 @@ import { task, waitForProperty } from 'ember-concurrency';
 */
 
 /** computed macro for node classes and IDs */
-const nodeName = (dependency, suffix) => {
-  return computed({
+const nodeName = function (dependency, suffix) {
+  return computed(dependency, {
     get() {
-      return `${this.get(dependency)}-${suffix}`;
+      if (this.get(dependency)) {
+        const node = `${this.get(dependency)}-${suffix}`;
+        return node;
+      }
     }
   });
 }
@@ -26,8 +29,10 @@ const nodeName = (dependency, suffix) => {
 const selectorFor = (type, dependency) => {
   return computed(dependency, {
     get() {
-      const types = { id: '#', class: '.'};
-      return `${types[type]}${this.get(dependency)}`;
+      if (this.get(dependency)) {
+        const types = { id: '#', class: '.'};
+        return `${types[type]}${this.get(dependency)}`;
+      }
     }
   })
 }
@@ -37,11 +42,13 @@ export default Model.extend({
     this._super(...arguments);
     this.set('stepIndex', 0);
   },
+  /* class to add to all nodes on this track */
+  trackNodeClass: nodeName('id', 'node'),
 
   /** cracked webaudio node ids */
   samplerId: nodeName('id', 'sampler'),
   /* unique ID for track gain node */
-  gainId: nodeName('samplerId', 'sampler'),
+  gainId: nodeName('samplerId', 'gain'),
   
   gainOnstepId: nodeName('samplerId', 'gain-onstep'),
   
@@ -54,7 +61,7 @@ export default Model.extend({
   gainOnStepSelector: selectorFor('id', 'gainOnstepId'),
   
   /* Class selector for every node bound to this track */
-  trackNodeSelector: selectorFor('class', 'id'),
+  trackNodeSelector: selectorFor('class', 'trackNodeClass'),
 
   path: computed('directory', 'filepath', {
     get() {
@@ -94,7 +101,10 @@ export default Model.extend({
       s => typeof s !== 'undefined'
     );
 
+    yield waitForProperty(this, 'samplerId');
+
     yield waitForProperty(this, 'filepath');
+
     // wait until beginning of sequence to apply changes
     // prevents lots of concurrent disruptions
     yield waitForProperty(this, 'stepIndex', 0);
@@ -102,32 +112,32 @@ export default Model.extend({
     if (this.sequence.length) {
       this.removeAllNodes();
       this.buildNodes();
-      this.setSamplerData();
     }
   }).keepLatest(),
 
   // TODO: cracked: how to set new filepath without rebuilding node?
   buildNodes() {
+    console.log('node class', this.trackNodeClass);
     __()
       .sampler({
         id: this.samplerId,
         path: this.path,
-        class: this.trackNodeSelector
+        class: this.trackNodeClass
       })
       .lowpass({
         id: this.lowpassId,
         frequency: 10000,
         q: 0,
-        class: this.trackNodeSelector
+        class: this.trackNodeClass
       })
       .gain({
         id: this.gainId,
-        class: this.trackNodeSelector,
+        class: this.trackNodeClass,
         gain: this.gain
       })
       .gain({
         id: `${this.gainOnStepSelector}`,
-        class: this.trackNodeSelector
+        class: this.trackNodeClass
       })
       .connect(this.get('project.outputNodeSelector'));
   },
@@ -139,7 +149,9 @@ export default Model.extend({
     // for tear down here, otherwise lingering nodes will break
     // ability to select by ID
     let selectors = [this.trackNodeSelector];
+
     selectors.forEach(selector => {
+      console.log('remove selector', selector);
       __(selector).remove();
     });
   },
@@ -162,7 +174,6 @@ export default Model.extend({
     }
 
     // TODO: run all custom control logic  here
-
     if (this.onStepFunction) {
       this.onStepFunction(index, data, array);
     }
@@ -207,9 +218,4 @@ export default Model.extend({
       alert('problem with function', e);
     }
   },
-
-  onDelete() {
-    this.removeAllNodes();
-  },
-
 })

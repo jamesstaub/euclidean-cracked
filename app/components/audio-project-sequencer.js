@@ -51,31 +51,37 @@ export default Component.extend({
   },
 
   actions: {
-    setLoopInterval(project, interval) {
-      this.audioService.setInterval(interval);
-      project.save();
+    start() {
+      this.project.bindTrackSamplers();
+      __.loop('start');
+      const interval = get(this, 'project.interval');
+      this.send('setLoopInterval', interval + 1);
+      this.set('isPlaying', true);
     },
 
-    loopAction(action) {
-      const audio = this.audioService;
-      const interval = get(this, 'project.interval');
+    stop() {
+      // disable the looping of individual samples
+      this.project.get('tracks').forEach(track => {
+        __(track.samplerSelector).attr({ loop: false });
+      });
+      // disable the "loop" aka global sequencer
+      __.loop('stop');
+      this.set('isPlaying', false);
+    },
 
-      switch (action) {
-        case 'start':
-          audio.startLoop(this.project);
-          // terrible hack
-          audio.setInterval(interval + 1);
-          this.toggleProperty('isPlaying');
-          break;
-        case 'reset':
-          audio.resetLoop(this.project, interval);
-          break;
-        case 'stop':
-          audio.stopLoop();
-          this.toggleProperty('isPlaying');
-          break;
-      }
-    }
+    setLoopInterval() {
+      const interval = get(this, 'project.interval');
+      __.loop(interval);
+      this.project.save();
+    },
+
+    reset(project, interval) {
+      __.loop('stop');
+      __.loop('reset');
+      project.bindTrackSamplers();
+      __.loop(interval);
+      __.loop('start');
+    },
   },
 
 });

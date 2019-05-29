@@ -1,10 +1,10 @@
 <form class="controls">
   <fieldset class="transport">
-    {{mdc-icon-button icon="fast_rewind" type="button" click=(action "loopAction" "reset")}}
+    {{mdc-icon-button icon="fast_rewind" type="button" click=(action "reset")}}
     {{#if isPlaying}}
-      {{mdc-icon-button icon="stop" type="button" click=(action "loopAction" "stop")}}
+      {{mdc-icon-button icon="stop" type="button" click=(action "stop")}}
     {{else}}
-      {{mdc-icon-button icon="play_arrow" type="button" click=(action "loopAction" "start")}}
+      {{mdc-icon-button icon="play_arrow" type="button" click=(action "start")}}
     {{/if}}
   </fieldset>
   <label class="interval-container">

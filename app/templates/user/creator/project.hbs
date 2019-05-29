@@ -21,7 +21,7 @@
     @saveTrackTask={{saveTrackTask}}
   />
   <div class="tracks overflow-container h-100">
-    {{#each model.tracks as |track idx|}}
+    {{#each tracks as |track idx|}}
       {{#track-container
         idx=idx
         isActive=(eq track.id activeTrack.id)
