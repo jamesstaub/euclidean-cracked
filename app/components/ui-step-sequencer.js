@@ -4,7 +4,7 @@ import { get, set, computed, observer } from '@ember/object';
 import { waitForProperty } from 'ember-concurrency';
 
 export default Component.extend(NexusMixin, {
-  classNames: ['ui-step-sequencer'],
+  classNames: ['ui-step-sequencer', 'flex items-center'],
 
   ElementName: 'Sequencer',
 

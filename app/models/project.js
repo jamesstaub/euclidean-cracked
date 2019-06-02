@@ -29,13 +29,19 @@ export default DS.Model.extend({
       this._super(...arguments);
       this.set('outputNodeSelector', '#master-compressor');
     },
-
-    // TODO: move to project controller
-    async bindTrackSamplers() {
+    
+    async eachTrackAsync(asyncFn) {
       const tracks = await this.get('tracks');
       for (const track of tracks.toArray()) {
-        track.bindTrackSampler();
+        await asyncFn(track);
       }
     },
 
+    // TODO: move to project controller?
+    async initializeTrackSamplers() {
+      return this.eachTrackAsync((track) => {
+        track.set('stepIndex', 1);
+        track.initializeSampler.perform();
+      });  
+    },
 });

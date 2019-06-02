@@ -46,7 +46,9 @@ export default Controller.extend({
       // TODO: delete customFunction with cloud Function
       // since readOnly validation prevents deletion
       // customFunction.destroyRecord();
-      this.model.get('tracks').removeObject(track);
+      const projectTracks = await this.model.get('tracks');
+      projectTracks.removeObject(track);
+      await this.model.save();
       track.destroyRecord();
     },
 

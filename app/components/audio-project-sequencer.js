@@ -48,36 +48,36 @@ export default Component.extend({
   },
 
   actions: {
-    start() {
-      this.project.bindTrackSamplers();
+    async start() {
       __.loop('start');
-      const interval = get(this, 'project.interval');
+      const interval = await this.get('project.interval');
+      // + 1 hack to 
       this.send('setLoopInterval', interval + 1);
       this.set('isPlaying', true);
     },
 
     stop() {
-      // disable the looping of individual samples
-      this.project.get('tracks').forEach(track => {
+      this.project.eachTrackAsync((track)=>{
+        // track.initializeSampler.cancelAll();
+        // disable the looping of individual samples
         __(track.samplerSelector).attr({ loop: false });
       });
+
       // disable the "loop" aka global sequencer
       __.loop('stop');
       this.set('isPlaying', false);
     },
 
-    setLoopInterval() {
-      const interval = get(this, 'project.interval');
+    setLoopInterval(interval) {
       __.loop(interval);
       this.project.save();
     },
 
-    reset(project, interval) {
-      __.loop('stop');
+    reset() {
       __.loop('reset');
-      project.bindTrackSamplers();
-      __.loop(interval);
-      __.loop('start');
+      this.set('isPlaying', false);
+      this.project.initializeTrackSamplers();
+      // const interval = get(this, 'project.interval');
     },
   },
 

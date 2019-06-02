@@ -1,6 +1,7 @@
 import Model from 'ember-data/model';
 import { computed } from '@ember/object';
-import { task, waitForProperty } from 'ember-concurrency';
+import { task, waitForProperty, timeout } from 'ember-concurrency';
+
 
 /* 
   Module  to be extended by the track model 
@@ -77,27 +78,6 @@ export default Model.extend({
     }
   }),
 
-  initializeSampler: task(function* () {
-    yield waitForProperty(
-      this,
-      'sequence',
-      s => typeof s !== 'undefined'
-    );
-
-    yield waitForProperty(this, 'samplerId');
-
-    yield waitForProperty(this, 'filepath');
-
-    // wait until beginning of sequence to apply changes
-    // prevents lots of concurrent disruptions
-    yield waitForProperty(this, 'stepIndex', 0);
-
-    if (this.sequence.length) {
-      console.log('remove and build');
-      this.removeAllNodes();
-      this.buildNodes();
-    }
-  }).keepLatest(),
 
   // TODO: cracked: how to set new filepath without rebuilding node?
   buildNodes() {
@@ -161,6 +141,27 @@ export default Model.extend({
     }
   },
 
+  initializeSampler: task(function* () {
+    timeout(300);
+    yield waitForProperty(
+      this,
+      'sequence',
+      s => typeof s !== 'undefined'
+    );
+
+
+    yield waitForProperty(this, 'samplerId');
+    yield waitForProperty(this, 'filepath');
+    // wait until beginning of sequence to apply changes
+    // prevents lots of concurrent disruptions
+
+    if (this.sequence.length) {
+      this.removeAllNodes();
+      this.buildNodes();
+      this.bindTrackSampler();
+    }
+  }).keepLatest(),
+
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
     let callback = this.onStepCallback.bind(this);
@@ -180,7 +181,7 @@ export default Model.extend({
     // customFunction.function can only be written by a cloud function
     // that filters out dangerous tokens
     let customFunction = this.get('customFunction.function');
-    let isSafe = !this.customFunction.illegalTokens;
+    let isSafe = !this.customFunction.get('illegalTokens');
     if (isSafe && customFunction) {
       this.applyCustomFunction(this.get('customFunction'));
     }

@@ -1,11 +1,11 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-
 /* This component updates the cracked audio nodes as track model properties are passed in through the template */
 export default Component.extend({
-  didInsertElement() {
+  // replace this with didChangeAttrs
+  didReceiveAttrs() {
     this._super(...arguments);
-    this.initializeSampler.perform();
+    this.track.initializeSampler.perform();
   },
 
   /* cracked node attribute setters */
@@ -16,4 +16,5 @@ export default Component.extend({
       return val;
     }
   }),
+
 });

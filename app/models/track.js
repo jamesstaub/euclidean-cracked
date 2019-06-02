@@ -37,7 +37,7 @@ export default TrackSamplerInstance.extend({
   filename: computed('filepath', {
     get() {
       if (this.filepath) {
-        let filename = this.filepath.replace(/^.*[\\\/]/, '');
+        let filename = this.filepath.replace(/^.*[\\/]/, '');
         filename = filename.split('.');
         filename.pop();
         return filename;

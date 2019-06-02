@@ -23,7 +23,9 @@
   <div class="tracks overflow-container h-100">
     {{#each tracks as |track idx|}}
       <AudioSamplerTrack
-        @initializeSampler={{track.initializeSampler}}
+        @track={{track}}
+        @filepath={{track.filepath}}
+        @sequence={{track.sequence}}
         @gain={{track.gain}} 
         @gainSelector={{track.gainSelector}}
       />
@@ -35,12 +37,12 @@
         onDeleteTrack=(action "deleteTrack")
         selectActiveTrack=(action "selectActiveTrack")
       }}
-        {{#mdc-button class="w4" click=(action (mut drumMenuOpen) true)}}
+        {{#mdc-button class="w4 h-100 mr2 bg-light-gray" click=(action (mut drumMenuOpen) true)}}
           {{track.filename}} 
         {{/mdc-button}}
       {{/track-container-ui}}
     {{else}}
-      <h4> No tracks</h4>
+      <p class="tc w-100">No Tracks</p>
     {{/each}}
   </div>
   {{#if activeTrack}}
