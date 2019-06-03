@@ -77,7 +77,6 @@ export default Component.extend({
       __.loop('reset');
       this.set('isPlaying', false);
       this.project.initializeTrackSamplers();
-      // const interval = get(this, 'project.interval');
     },
   },
 

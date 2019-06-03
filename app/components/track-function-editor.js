@@ -40,19 +40,18 @@ export default Component.extend({
   applyFunction: task(function*() {
     // apply the editor content to functionPreCheck
     // which then gets checked in cloud function
+
     yield this.saveFunctionTask.perform('functionPreCheck', this.editorContent);
     // after save is called, functionPreCheck has a value
     // until the function checker sets it null and either sets
     // the function property, or returns illegal keywords
-
-    // TODO: add a timeout here in case function is down;
     
     yield waitForProperty(this, 'customFunction.functionPreCheck', null);
+
     // the cloud function check succeeded if function + editor are identical
-    if (this.function === this.editorContent) {
+    if (this.customFunction.get('function') === this.editorContent) {
       yield this.track.initializeSampler.perform();
     }
-
     /**
      * TODO: set a timeout condition for this method
      * if the cloud function fails to respond, it can still set

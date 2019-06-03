@@ -164,15 +164,14 @@ export default Model.extend({
 
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
-    let callback = this.onStepCallback.bind(this);
-
+    let onStepCallback = this.onStepCallback.bind(this);
     this.verifyCustomFunction();
 
     __(this.samplerSelector).unbind('step');
 
     __(this.samplerSelector).bind(
       'step', // on every crack sequencer step
-      callback, // call this function (bound to component scope)
+      onStepCallback, // call this function (bound to component scope)
       this.sequence // passing in array value at position
     );
   },
@@ -191,10 +190,16 @@ export default Model.extend({
     Takes a function definition (string) from the customFunction model
     evaluates it as a Function, and binds it to the track as a method named onStepFunction
    */
-  applyCustomFunction(customFunction) {
+  applyCustomFunction(customFunctionModel) {
     try {
-      let onStepFunction = new Function('index', 'data', 'array', customFunction.get('function')).bind(
-        customFunction.get('scope')
+      let onStepFunction = new Function(
+        'index', 
+        'data', 
+        'array', 
+        customFunctionModel.get('function')
+      )
+      .bind(
+        customFunctionModel.get('scope')
       );
       this.set('onStepFunction', onStepFunction);
     } catch (e) {
