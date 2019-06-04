@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import { reads, not, and, or } from '@ember/object/computed';
+import { reads, not, and, or, alias } from '@ember/object/computed';
 import { task, waitForProperty } from 'ember-concurrency';
 import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
@@ -8,17 +8,16 @@ export default Component.extend({
   classNames: ['track-function-editor'],
   tagName:'',
   customFunction: reads('track.customFunction'), // the model that saves custom function as string
-  function: reads('track.onStepFunction'), // the actual function that gets called on each step
+  function: alias('customFunction.function'),
+  onStepFunction: reads('track.onStepFunction'), // the actual function that gets called on each step
   illegalTokens: reads('customFunction.illegalTokens'),
   // code in text editor
-  editorContent: reads('customFunction.editorContent'),
+  editorContent: alias('customFunction.editorContent'),
   canSubmit: and('editorContent.length'),
   cantSubmit: or('!canSubmit', 'functionIsLoaded'),
   functionIsLoaded: computed('function', 'editorContent', {
     get() {
-      const f = this.function;
-      const e = this.editorContent;
-      return f && f.length && f === e;
+      return this.function === this.editorContent && this.onStepFunction;
     }
   }),
 
