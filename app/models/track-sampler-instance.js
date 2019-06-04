@@ -78,6 +78,17 @@ export default Model.extend({
     }
   }),
 
+  customFunctionScope: computed('samplerSelector,gainOnstepSelector,lowpassSelector', {
+    get() {
+      // variables available for user defined track functions
+      return {
+        sampler: `${this.get('samplerSelector')}`,
+        gain: `${this.get('gainOnstepSelector')}`,
+        lowpass: `${this.get('lowpassSelector')}`
+      };
+    }
+  }),
+
 
   // TODO: cracked: how to set new filepath without rebuilding node?
   buildNodes() {
@@ -149,9 +160,9 @@ export default Model.extend({
       s => typeof s !== 'undefined'
     );
 
-
     yield waitForProperty(this, 'samplerId');
     yield waitForProperty(this, 'filepath');
+    yield waitForProperty(this, 'customFunction.content');
     // wait until beginning of sequence to apply changes
     // prevents lots of concurrent disruptions
 
@@ -165,7 +176,7 @@ export default Model.extend({
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
     let onStepCallback = this.onStepCallback.bind(this);
-    this.verifyCustomFunction();
+    this.applyCustomFunction();
 
     __(this.samplerSelector).unbind('step');
 
@@ -176,31 +187,30 @@ export default Model.extend({
     );
   },
 
-  verifyCustomFunction() {
-    // customFunction.function can only be written by a cloud function
-    // that filters out dangerous tokens
-    let customFunction = this.get('customFunction.function');
-    let isSafe = !this.customFunction.get('illegalTokens');
-    if (isSafe && customFunction) {
-      this.applyCustomFunction(this.get('customFunction'));
-    }
-  },
+  // verifyCustomFunction() {
+  //   // customFunction.function can only be written by a cloud function
+  //   // that filters out dangerous tokens
+  //   let customFunction = this.get('customFunction');
+  //   let isSafe = !this.customFunction.get('illegalTokens');
+  //   if (isSafe && customFunction) {
+  //     this.applyCustomFunction(this.get('customFunction'));
+  //   }
+  // },
 
   /* 
     Takes a function definition (string) from the customFunction model
     evaluates it as a Function, and binds it to the track as a method named onStepFunction
    */
-  applyCustomFunction(customFunctionModel) {
+  async applyCustomFunction() {
+    const functionDefinition = await this.get('customFunction.function');
     try {
       let onStepFunction = new Function(
         'index', 
         'data', 
         'array', 
-        customFunctionModel.get('function')
+        functionDefinition
       )
-      .bind(
-        customFunctionModel.get('scope')
-      );
+      .bind(this.customFunctionScope);
       this.set('onStepFunction', onStepFunction);
     } catch (e) {
       alert('problem with function', e);

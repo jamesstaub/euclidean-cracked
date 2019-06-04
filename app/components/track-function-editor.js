@@ -40,7 +40,6 @@ export default Component.extend({
   applyFunction: task(function*() {
     // apply the editor content to functionPreCheck
     // which then gets checked in cloud function
-
     yield this.saveFunctionTask.perform('functionPreCheck', this.editorContent);
     // after save is called, functionPreCheck has a value
     // until the function checker sets it null and either sets
@@ -58,6 +57,16 @@ export default Component.extend({
      * the track function locally for this user (also display an error message)
      */
   }),
+
+
+  verifyCustomFunction() {
+    // customFunction.function can only be written by a cloud function
+    // that filters out dangerous tokens
+    let isSafe = !this.get('illegalTokens');
+    if (isSafe && this.function) {
+      this.track.applyCustomFunction();
+    }
+  },
 
   injectExample: task(function*(code) {
     if (this.editorContent) {
