@@ -1,7 +1,7 @@
 <form class="controls">
   <fieldset class="transport">
     {{mdc-icon-button icon="fast_rewind" type="button" click=(action "reset")}}
-    {{#if isPlaying}}
+    {{#if project.isPlaying}}
       {{mdc-icon-button icon="stop" type="button" click=(action "stop")}}
     {{else}}
       {{mdc-icon-button icon="play_arrow" type="button" click=(action "start")}}

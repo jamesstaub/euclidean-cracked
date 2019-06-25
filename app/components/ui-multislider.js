@@ -27,6 +27,9 @@ export default Component.extend(NexusMixin, {
   didReceiveAttrs() {
     this._super(...arguments);
     this._styleOnStep();
+    if (this.values && this.NexusElement) {
+      this.NexusElement.setAllSliders(this.values);
+    }
   },
 
   afterInitNexus(NexusElement) {
@@ -44,7 +47,7 @@ export default Component.extend(NexusMixin, {
     }
   }),
 
-  ElementOptions: computed('max', 'step', 'value', 'size',{
+  ElementOptions: computed('max', 'step', 'values', 'size',{
     // eslint-disable-next-line complexity
     get() {
       let values = this.values || this.defaultValues;
@@ -65,11 +68,10 @@ export default Component.extend(NexusMixin, {
     // lookup rect elements by color match(not ideal)
     let fgColor = this.sliderColor;
 
+    // FIXME terible selector for the nexus ui right here. 
     let $rectElements = this.$(`#${this.nexusId}`)
-      .find(`rect[fill='${fgColor}']`);
-
+      .find(`rect[fill='${fgColor}'][height=120]`);
     set(this, '$rectElements', $rectElements);
-
     this.applyStyle();
   },
 

@@ -17,7 +17,8 @@ export default Component.extend({
   }),
   actions: {
     onChangeValue(value) {
-      console.log(value);
+      this.trackControl.set('controlData', value);
+      this.trackControl.save();
     },
 
     async delete() {

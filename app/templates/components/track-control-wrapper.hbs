@@ -5,7 +5,7 @@
       stepIndex=stepIndex
       sequence=sequence
       numberOfSliders=dataLength
-      values=data
+      values=trackControl.controlData
       onChangeValue=(action "onChangeValue")
     }}
   {{/if}}
@@ -18,32 +18,35 @@
       step=0.01
       class="center"
       onChangeValue=(action "onChangeValue")
-      value=data
+      value=controlData
     }}
   {{/if}}
 
   <div class="flex justify-between items-center">
     <span class="f7">{{trackControl.variableName}}</span>
-
     {{mdc-icon-button
       class="pa0"
       icon="more_vert"
       title="Track Controller Menu" 
       click=(action (mut menuOpen) true)
     }}
-
-    {{#mdc-menu
-        class="w5"
-        anchor="parent"
-        open=menuOpen
-      }}
-        {{#mdc-menu-item 
-          icon="cancel" 
-          click=(action "delete")
-          title="Delete control"
-        }} 
-          delete
-        {{/mdc-menu-item }}
-      {{/mdc-menu}}
   </div>
+  {{#if menuOpen}}
+    <div class="flex flex-column">
+      {{mdc-textfield
+        value=trackControl.min
+        label="min"
+        style="outlined"
+      }}
+      {{mdc-textfield
+        value=trackControl.max
+        label="max"
+        style="outlined"
+      }}
+      {{mdc-icon-button icon="close" title="Delete Track" class="dark-red" click=(action "delete")}}
+    </div>
+      
+
+
+  {{/if}}
 </div>

@@ -51,7 +51,7 @@ export default Model.extend({
   /* unique ID for track gain node */
   gainId: nodeName('samplerId', 'gain'),
   
-  gainOnstepId: nodeName('samplerId', 'gain-onstep'),
+  gainOnStepId: nodeName('samplerId', 'gain-onstep'),
   
   /** ID selector for track sampler node */
   samplerSelector: selectorFor('id','samplerId'),
@@ -59,7 +59,7 @@ export default Model.extend({
   /** ID selector for track sampler node */
   gainSelector: selectorFor('id', 'gainId'),
   
-  gainOnStepSelector: selectorFor('id', 'gainOnstepId'),
+  gainOnStepSelector: selectorFor('id', 'gainOnStepId'),
   
   /* Class selector for every node bound to this track */
   trackNodeSelector: selectorFor('class', 'trackNodeClass'),
@@ -78,12 +78,12 @@ export default Model.extend({
     }
   }),
 
-  customFunctionScope: computed('samplerSelector,gainOnstepSelector,lowpassSelector', {
+  customFunctionScope: computed('samplerSelector,gainOnStepSelector,lowpassSelector', {
     get() {
       // variables available for user defined track functions
       return {
         sampler: `${this.get('samplerSelector')}`,
-        gain: `${this.get('gainOnstepSelector')}`,
+        gain: `${this.get('gainOnStepSelector')}`,
         lowpass: `${this.get('lowpassSelector')}`
       };
     }
@@ -110,7 +110,7 @@ export default Model.extend({
         gain: this.gain
       })
       .gain({
-        id: `${this.gainOnStepSelector}`,
+        id: `${this.gainOnStepId}`,
         class: this.trackNodeClass
       })
       .connect(this.get('project.outputNodeSelector'));
@@ -140,13 +140,14 @@ export default Model.extend({
 
       __(this).attr({ loop: this.isLooping });
     } else {
-      __(this).stop();
+      // __(this).stop();
       // if (!get(this, 'isLegato')) {
       // __(this).attr({loop:false});
       // }
     }
 
-    // TODO: run all custom control logic  here
+    this.applyTrackControls(index);
+
     if (this.onStepFunction) {
       this.onStepFunction(index, data, array);
     }
@@ -167,9 +168,14 @@ export default Model.extend({
     // prevents lots of concurrent disruptions
 
     if (this.sequence.length) {
+      __.loop('stop');
       this.removeAllNodes();
       this.buildNodes();
       this.bindTrackSampler();
+      if (this.get('project.isPlaying')) {
+        timeout(300);
+        __.loop('start');
+      }
     }
   }).keepLatest(),
 
@@ -187,15 +193,24 @@ export default Model.extend({
     );
   },
 
-  // verifyCustomFunction() {
-  //   // customFunction.function can only be written by a cloud function
-  //   // that filters out dangerous tokens
-  //   let customFunction = this.get('customFunction');
-  //   let isSafe = !this.customFunction.get('illegalTokens');
-  //   if (isSafe && customFunction) {
-  //     this.applyCustomFunction(this.get('customFunction'));
-  //   }
-  // },
+  bindTrackControls() {
+    this.get('trackControls').forEach(()=> {
+
+    });
+  },
+
+  applyTrackControls(index) {
+    this.get('trackControls').forEach((control)=> {
+      const { nodeSelector, nodeAttr, controlData } = control.getProperties(
+        'nodeName', 'nodeSelector', 'nodeAttr', 'controlData'
+      );
+      const attrs = {};
+      if (nodeSelector, nodeAttr && controlData) {
+        attrs[nodeAttr] = controlData[index];
+        __(nodeSelector).attr(attrs);
+      }
+    });
+  },
 
   /* 
     Takes a function definition (string) from the customFunction model

@@ -53,7 +53,7 @@ export default Component.extend({
       const interval = await this.get('project.interval');
       // + 1 hack to 
       this.send('setLoopInterval', interval + 1);
-      this.set('isPlaying', true);
+      this.project.set('isPlaying', true);
     },
 
     stop() {
@@ -65,7 +65,7 @@ export default Component.extend({
 
       // disable the "loop" aka global sequencer
       __.loop('stop');
-      this.set('isPlaying', false);
+      this.project.set('isPlaying', false);
     },
 
     setLoopInterval(interval) {
@@ -75,7 +75,7 @@ export default Component.extend({
 
     reset() {
       __.loop('reset');
-      this.set('isPlaying', false);
+      this.project.set('isPlaying', false);
       this.project.initializeTrackSamplers();
     },
   },

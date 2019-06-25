@@ -24,6 +24,25 @@ export default Controller.extend({
     }
   }),
 
+  // create a multislider for the gain node
+  async createDefaultTrackControls(track) {
+    const gainCtrl = this.store.createRecord('track-control', {
+      interfaceName: 'ui-multislider',
+      nodeSelector: track.get('gainOnStepSelector'),
+      nodeAttr: 'threshold',
+      nodeName: 'gain'
+    });
+
+    track.trackControls.pushObject(gainCtrl);
+    try {
+      await gainCtrl.save();
+    } catch (error) {
+      // the model's attr() will throw a firebase error, but seems to work fine
+      debug(error);
+    }
+    await track.save();
+  },
+
   actions: {
     save(project) {
       let slug = cleanURI(project.get('title'));
@@ -80,8 +99,9 @@ export default Controller.extend({
 
       return track
         .save()
-        .then(() => {
+        .then((track) => {
           debug('track saved succesfully');
+          this.createDefaultTrackControls(track);
           return project.save();
         })
         .catch(error => {

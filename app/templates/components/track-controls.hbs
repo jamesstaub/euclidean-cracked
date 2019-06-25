@@ -1,6 +1,6 @@
 <section class="pa3 w-100 overflow-hidden mw7">
   <div class="flex justify-between items-center">
-    <h3>Custom Controls</h3>
+    <h3>Step Automation</h3>
     {{mdc-fab
       icon="add"
       title="Add new parameter control" 
@@ -20,7 +20,12 @@
 
   <div class="flex h-100 w-100 overflow-scroll">
     {{#each track.trackControls as |trackControl|}}
-      <TrackControlWrapper @track={{track}} @sequence={{track.sequence}} @trackControl={{trackControl}}/>
+      <TrackControlWrapper 
+        @track={{track}} 
+        @sequence={{track.sequence}} 
+        @trackControl={{trackControl}}
+        @stepIndex={{stepIndex}}
+      />
     {{/each}}
   </div>
 </section>
