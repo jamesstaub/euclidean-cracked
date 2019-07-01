@@ -1,52 +1,50 @@
-<div class="flex flex-column mr3 h-100">
+<div class="flex mr3 h-100">
   {{#if (eq trackControl.interfaceName "ui-multislider")}}
     {{ui-multislider
+      max=trackControl.max
+      min=trackControl.min
+      values=trackControl.controlDataArray
       size=uiSize
       stepIndex=stepIndex
       sequence=sequence
-      numberOfSliders=dataLength
-      values=trackControl.controlData
+      numberOfSliders=sequence.length
       onChangeValue=(action "onChangeValue")
     }}
   {{/if}}
 
   {{#if (eq trackControl.interfaceName "ui-slider")}}
     {{ui-slider
-      max=1
-      min=0
+      max=trackControl.max
+      min=trackControl.min
+      value=controlData
       size=uiSize
       step=0.01
       class="center"
       onChangeValue=(action "onChangeValue")
-      value=controlData
     }}
   {{/if}}
 
-  <div class="flex justify-between items-center">
-    <span class="f7">{{trackControl.variableName}}</span>
-    {{mdc-icon-button
-      class="pa0"
-      icon="more_vert"
-      title="Track Controller Menu" 
-      click=(action (mut menuOpen) true)
-    }}
-  </div>
-  {{#if menuOpen}}
-    <div class="flex flex-column">
-      {{mdc-textfield
-        value=trackControl.min
-        label="min"
-        style="outlined"
-      }}
+  <div class="flex flex-column w3 ml3">
+    {{#mdc-form validity=(action "updateParam") as |form|}}
       {{mdc-textfield
         value=trackControl.max
+        class="mv1 h2"
         label="max"
         style="outlined"
       }}
-      {{mdc-icon-button icon="close" title="Delete Track" class="dark-red" click=(action "delete")}}
-    </div>
-      
+      {{mdc-textfield
+        value=trackControl.min
+        class="mv1 h2"
+        label="min"
+        keyup=(action "updateParam")
+        style="outlined"
+      }}
+    {{/mdc-form}}
+    {{mdc-icon-button icon="close" title="Delete Track" class="dark-red" click=(action "delete")}}
+  </div>
 
 
-  {{/if}}
+  <div class="flex justify-between items-center">
+    <span class="f7">{{trackControl.variableName}}</span>
+  </div>
 </div>

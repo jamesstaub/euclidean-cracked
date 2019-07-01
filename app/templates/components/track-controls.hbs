@@ -18,7 +18,7 @@
     {{#mdc-menu-item click=(action "newControl" "multislider")}}multislider{{/mdc-menu-item }}
   {{/mdc-menu}}
 
-  <div class="flex h-100 w-100 overflow-scroll">
+  <div class="flex flex-column h-100 w-100 overflow-scroll">
     {{#each track.trackControls as |trackControl|}}
       <TrackControlWrapper 
         @track={{track}} 

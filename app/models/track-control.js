@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import { computed } from '@ember/object';
 /*
   Implementation notes on custom track controls:
   
@@ -14,13 +15,33 @@ export default DS.Model.extend({
   track: DS.belongsTo('track'),
   variableName: DS.attr('string'),
   interfaceName: DS.attr('string'),
-  controlData: DS.attr(), // this throws a firebase error but otherwise works
-  
+  controlData: DS.attr('string', {
+    defaultValue() {
+      return Array.from(new Array(16), () => {
+        return 0.5;
+      }).join(',');
+    }
+  }),
+
+  controlDataArray: computed('controlData', {
+    get() {
+      return this.controlData ? this.controlData.split(',').map((val) => Math.max(Math.min(+val, this.max), this.min)) : [];
+    }
+  }),
+
   nodeName: DS.attr('string'),
   nodeSelector: DS.attr('string'),
   nodeAttr: DS.attr('string'),
   
-  min: DS.attr('number'),
-  max: DS.attr('number'),
+  min: DS.attr('number', {
+    defaultValue() {
+      return 0;
+    }
+  }),
+  max: DS.attr('number', {
+    defaultValue() {
+      return 1;
+    }
+  }),
 
 });

@@ -1,9 +1,10 @@
 import Component from '@ember/component';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { set, computed } from "@ember/object";
+import DidChangeAttrs from 'ember-did-change-attrs';
 import $ from "jquery";
 
-export default Component.extend(NexusMixin, {
+export default Component.extend(NexusMixin, DidChangeAttrs, {
 
   classNames: ['ui-multislider'],
   tagName: 'span',
@@ -24,11 +25,26 @@ export default Component.extend(NexusMixin, {
 
   ElementName: 'Multislider',
 
-  didReceiveAttrs() {
+  // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
+  didChangeAttrsConfig: {
+    attrs: ['size', 'step', 'values', 'numberOfSliders', 'min', 'max']
+  },
+
+  // eslint-disable-next-line complexity
+  didChangeAttrs(changes) {
     this._super(...arguments);
-    this._styleOnStep();
-    if (this.values && this.NexusElement) {
+
+    if ((changes.size || changes.numberOfSliders) || (changes.min || changes.max)) {
+      this._nexusInit();
+      this._styleInit();
+    }
+
+    if ((changes.min || changes.max)) {
       this.NexusElement.setAllSliders(this.values);
+    }
+
+    if (changes.step) {
+      this._styleOnStep();
     }
   },
 
@@ -37,25 +53,15 @@ export default Component.extend(NexusMixin, {
     NexusElement.colorize('fill', '#eeeeee');
   },
 
-  defaultValues: computed({
-    get() {
-      let len = 16; // max possible steps in sequence
-      return Array.from(new Array(len),(val, idx)=> {
-        let jitter = idx % 2 ? .05 : 0;
-        return 0.7 + jitter;
-      });
-    }
-  }),
-
-  ElementOptions: computed('max', 'step', 'values', 'size',{
+  ElementOptions: computed('max', 'step', 'values', 'size', 'numberOfSliders',{
     // eslint-disable-next-line complexity
     get() {
-      let values = this.values || this.defaultValues;
+      let values = this.values;
       values = values.slice(0, this.numberOfSliders);
       return {
         'size': this.size || [400, 100],
-        'min': this.min || 0,
-        'max': this.max || 1,
+        'min': this.min,
+        'max': this.max,
         'candycane': 0,
         'numberOfSliders': this.numberOfSliders || 4,
         'step': this.step || 0,

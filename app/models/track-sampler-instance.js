@@ -201,12 +201,12 @@ export default Model.extend({
 
   applyTrackControls(index) {
     this.get('trackControls').forEach((control)=> {
-      const { nodeSelector, nodeAttr, controlData } = control.getProperties(
-        'nodeName', 'nodeSelector', 'nodeAttr', 'controlData'
+      let { nodeSelector, nodeAttr, controlDataArray } = control.getProperties(
+        'nodeName', 'nodeSelector', 'nodeAttr', 'controlDataArray'
       );
       const attrs = {};
-      if (nodeSelector, nodeAttr && controlData) {
-        attrs[nodeAttr] = controlData[index];
+      if (nodeSelector, nodeAttr && controlDataArray.length) {
+        attrs[nodeAttr] = controlDataArray[index];
         __(nodeSelector).attr(attrs);
       }
     });

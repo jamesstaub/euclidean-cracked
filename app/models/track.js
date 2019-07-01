@@ -55,7 +55,7 @@ export default TrackSamplerInstance.extend({
 
   steps: attr('number', {
     defaultValue() {
-      return 8;
+      return 16;
     }
   }),
 

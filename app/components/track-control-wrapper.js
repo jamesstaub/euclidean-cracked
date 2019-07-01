@@ -1,11 +1,9 @@
 import Component from '@ember/component';
-import { or } from '@ember/object/computed';
 import { computed } from '@ember/object';
 
 export default Component.extend({
   tagName: '',
-  dataLength: or('sequence.length', 'trackControl.data.length'),
-  uiSize: computed('trackControl.interfaceName', {
+  uiSize: computed('track.multisliderSize','trackControl.interfaceName', {
     get() {
       switch (this.trackControl.interfaceName) {
         case 'ui-slider': 
@@ -15,10 +13,17 @@ export default Component.extend({
       }
     }
   }),
+
   actions: {
     onChangeValue(value) {
-      this.trackControl.set('controlData', value);
+      this.trackControl.set('controlData', value.join(','));
       this.trackControl.save();
+    },
+
+    updateParam(isValid) {
+      if (isValid) {
+        this.trackControl.save();
+      }
     },
 
     async delete() {
