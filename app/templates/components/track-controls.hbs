@@ -1,24 +1,17 @@
 <section class="pa3 w-100 overflow-hidden mw7">
   <div class="flex justify-between items-center">
     <h3>Step Automation</h3>
-    {{mdc-fab
-      icon="add"
-      title="Add new parameter control" 
-      mini=true
-      click=(action (mut menuOpen) true) 
-    }}
+      {{#mdc-icon-button
+        icon="add"
+        title="Add new parameter control"
+        style="raised"
+        click=(action "newControl" "multislider") 
+      }}
+        New Control
+      {{/mdc-icon-button}}
   </div>
 
-  {{#mdc-menu
-    class="w5"
-    anchor="parent"
-    open=menuOpen
-  }}
-    {{#mdc-menu-item click=(action "newControl" "slider")}}slider{{/mdc-menu-item }}
-    {{#mdc-menu-item click=(action "newControl" "multislider")}}multislider{{/mdc-menu-item }}
-  {{/mdc-menu}}
-
-  <div class="flex flex-column h-100 w-100 overflow-scroll">
+  <div class="flex flex-column h-100 w-100 overflow-scroll mb4">
     {{#each track.trackControls as |trackControl|}}
       <TrackControlWrapper 
         @track={{track}} 
@@ -27,5 +20,6 @@
         @stepIndex={{stepIndex}}
       />
     {{/each}}
+    <div class="mb5">{{!-- spacer --}}</div>
   </div>
 </section>

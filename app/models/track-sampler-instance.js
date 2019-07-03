@@ -50,8 +50,10 @@ export default Model.extend({
   samplerId: nodeName('id', 'sampler'),
   /* unique ID for track gain node */
   gainId: nodeName('samplerId', 'gain'),
-  
+  /* separate gain node for on step (vs the track's volume slider) */
   gainOnStepId: nodeName('samplerId', 'gain-onstep'),
+  
+  lowpassId: nodeName('samplerId', 'lowpass'),
   
   /** ID selector for track sampler node */
   samplerSelector: selectorFor('id','samplerId'),
@@ -60,6 +62,8 @@ export default Model.extend({
   gainSelector: selectorFor('id', 'gainId'),
   
   gainOnStepSelector: selectorFor('id', 'gainOnStepId'),
+  
+  lowpassSelector: selectorFor('id', 'lowpassId'),
   
   /* Class selector for every node bound to this track */
   trackNodeSelector: selectorFor('class', 'trackNodeClass'),
