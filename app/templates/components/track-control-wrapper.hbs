@@ -1,5 +1,5 @@
-<div class="flex mr3 h-100">
-  <div class="mb2">
+<div class="flex mr3 h-100 track-control-wrapper">
+  <div class="mb2 multislider-wrapper bg-dark-blue">
     {{#if (eq trackControl.interfaceName "ui-multislider")}}
       {{ui-multislider
         max=trackControl.max
@@ -13,8 +13,68 @@
       }}
     {{/if}}
   </div>
-
-  <div class="flex flex-column w3 ml3">
+  <table>
+      <tr>
+        <td class="f7 dark-gray">node name</td>
+        <td class="f7 dark-gray">attribute</td>
+      </tr>
+      <tr>
+        <td>
+          <select name="nodeName" onchange={{action "setTargetNodeName" value="target.value"}}>
+            {{#each defaultNodeOptions as |opt|}}
+              <option value="{{opt.nodeName}}@@{{opt.nodeSelector}}" selected={{if (eq opt.nodeName trackControl.nodeName) 'true'}}>{{opt.nodeName}}</option>
+            {{/each}}
+          </select>
+        </td>
+        <td>
+          <select name="nodeAttr" onchange={{action "setTargetNodeAttr" value="target.value"}}>
+            {{#each nodeAttrOptions as |opt|}}
+              <option value={{opt.value}}>{{opt.value}}</option>
+            {{/each}}
+          </select>
+        </td>
+      </tr>
+    <tr>
+      <td class="f7 dark-gray">min</td>
+      <td class="f7 dark-gray">max</td>
+      <td class="f7 dark-gray">default</td>
+    </tr>
+    <tr>
+      <td>
+        {{input
+          value=trackControl.min
+          class="w3 bg-transparent bw1 b--black"
+          keyUp=(action "updateNumberParam")
+          type="number"
+        }}
+      </td>
+      <td>
+        {{input
+          value=trackControl.max
+          class="w3 bg-transparent bw1 b--black"
+          keyUp=(action "updateNumberParam")
+          type="number"
+        }}
+      </td>
+      <td>
+        {{input
+          value=trackControl.default
+          class="w3 bg-transparent bw1 b--black"
+          keyUp=(action "updateNumberParam")
+          type="number"
+        }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        {{#mdc-button title="Reset To Default" click=(action "setDefault")}}reset{{/mdc-button}}
+      </td>
+      <td>
+        {{#mdc-button title="Delete Control" click=(action "delete")}}delete{{/mdc-button}}
+      </td>
+    </tr>
+  </table>
+  <div class="flex flex-column w4 ml3">
     <div class="ma0 f6 flex items-center">
       {{#mdc-menu-surface
         class="w5"
@@ -32,32 +92,7 @@
           {{/each}}
         {{/mdc-list}}
       {{/mdc-menu-surface}}
-      <label class="flex flex-column">
-        <small class="tc">node name:</small>
-        {{#mdc-button click=(action "openNodeMenu" "name") }}{{trackControl.nodeName}}{{/mdc-button}}
-      </label>
-      -
-      <label class="flex flex-column">
-        <small class="tc">attribute</small>
-        {{#mdc-button click=(action "openNodeMenu" "attr") }}{{trackControl.nodeAttr}}{{/mdc-button}}
-      </label>
+
     </div>
- 
-    {{#mdc-form class="flex" validity=(action "updateParam") as |form|}}
-      {{mdc-textfield
-        value=trackControl.min
-        class="mv1 h2"
-        label="min"
-        style="outlined"
-      }}
-      {{mdc-textfield
-        value=trackControl.max
-        class="mv1 h2"
-        label="max"
-        style="outlined"
-      }}
-    {{/mdc-form}}
-    <span class="f7">{{trackControl.variableName}}</span>
-    {{#mdc-button title="Delete Control" class="dark-red" click=(action "delete")}}delete{{/mdc-button}}
   </div>
 </div>

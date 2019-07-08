@@ -13,7 +13,7 @@ export default Component.extend(NexusMixin, DidChangeAttrs, {
     this._super(...arguments);
     this.setProperties({
       sliderColor: '#52ebff',
-      sliderBgColor: '#eeeeee',
+      sliderBgColor: '#f7f7f7',
     });    
   },
 
@@ -39,7 +39,7 @@ export default Component.extend(NexusMixin, DidChangeAttrs, {
       this._styleInit();
     }
 
-    if ((changes.min || changes.max)) {
+    if ((changes.min || changes.max || changes.values)) {
       this.NexusElement.setAllSliders(this.values);
     }
 
@@ -50,7 +50,7 @@ export default Component.extend(NexusMixin, DidChangeAttrs, {
 
   afterInitNexus(NexusElement) {
     NexusElement.colorize('accent', '#52ebff');
-    NexusElement.colorize('fill', '#eeeeee');
+    NexusElement.colorize('fill', '#075f68');
   },
 
   ElementOptions: computed('max', 'step', 'values', 'size', 'numberOfSliders',{
@@ -101,7 +101,7 @@ export default Component.extend(NexusMixin, DidChangeAttrs, {
     let fgColor = this.sliderColor;
 
     $rectElements.each(function(idx) {
-      let stroke = sequence[idx] ? bgColor : fgColor;
+      let stroke = "#000";
       let fill = sequence[idx] ? fgColor : bgColor;
       $(this).attr('stroke', stroke);
       $(this).attr('fill', fill);

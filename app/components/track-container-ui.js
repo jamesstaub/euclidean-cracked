@@ -2,7 +2,7 @@ import Component from '@ember/component';
 
 export default Component.extend({
   classNames: ['track-container'],
-  classNameBindings: ['isActive:bg-light-silver:bg-near-white'],
+  classNameBindings: ['isActive:bg-dark-blue:bg-dark-gray'],
   
   willDestroyElement() {
     this._super(...arguments);

@@ -13,7 +13,6 @@ import { computed } from '@ember/object';
 */
 export default DS.Model.extend({
   track: DS.belongsTo('track'),
-  variableName: DS.attr('string'),
   interfaceName: DS.attr('string'),
   controlData: DS.attr('string', {
     defaultValue() {
@@ -23,22 +22,37 @@ export default DS.Model.extend({
     }
   }),
 
-  controlDataArray: computed('controlData', {
+  controlDataArray: computed('controlData.[]', {
     get() {
       return this.controlData ? this.controlData.split(',').map((val) => Math.max(Math.min(+val, this.max), this.min)) : [];
     }
   }),
 
-  nodeName: DS.attr('string'),
+  nodeName: DS.attr('string', {
+    defaultValue() {
+      return 'gain';
+    }
+  }),
   nodeSelector: DS.attr('string'),
-  nodeAttr: DS.attr('string'),
+  nodeAttr: DS.attr('string', {
+    defaultValue() {
+      return 'gain';
+    }
+  }),
   
   min: DS.attr('number', {
     defaultValue() {
       return 0;
     }
   }),
+
   max: DS.attr('number', {
+    defaultValue() {
+      return 1;
+    }
+  }),
+
+  default: DS.attr('number', {
     defaultValue() {
       return 1;
     }

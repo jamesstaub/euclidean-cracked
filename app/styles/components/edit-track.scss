@@ -2,4 +2,16 @@
   .step-param-sliders, .ui-step-sequencer {
     min-width: 36rem;
   }
+  .track-control-wrapper {
+    .multislider-wrapper {
+      width: 544px;
+      svg {
+        transform: translateY(5px);
+      }
+    }
+    table {
+      td:first-child {
+      }
+    }
+  }
 }

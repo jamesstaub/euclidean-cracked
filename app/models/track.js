@@ -26,8 +26,8 @@ export default TrackSamplerInstance.extend({
       const files = [
         '/Ace Tone Rhythm Ace/KICK1.mp3',
         '/Ace Tone Rhythm Ace/SNARE1.mp3',
+        '/Korg/Korg DDD5/DDD5 RIM.mp3',
         '/Ace Tone Rhythm Ace/HHCL.mp3',
-        '/Ace Tone Rhythm Ace/HHOP.mp3',
       ];
       const idx = __.random(0, files.length);
       return files[idx];

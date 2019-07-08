@@ -45,7 +45,13 @@ html, body {
   height: 2rem;
 }
 
-
 .mdc-button--outlined:not(:disabled) {
   border-radius: 0;
+}
+
+.bg-dark-blue {
+  background-color: $dark-blue;
+}
+.bg-dark-gray {
+  background-color: var(--mdc-theme-primary);
 }
