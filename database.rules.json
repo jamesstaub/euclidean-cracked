@@ -3,6 +3,7 @@
     ".indexOn": "uid",
     ".read": true,
     "projects": {
+      ".indexOn": "slug",
       "$projects": {
         ".write": "auth.uid == data.child('creator').val() || auth.uid == newData.child('creator').val() || newData.child('publicEditable').val() == true || data.child('publicEditable').val() == true"
       }
@@ -49,6 +50,7 @@
       ".write": "auth !== null"
     },
     "users": {
+      ".indexOn": "uid",
       "$user": {
         ".write": "auth !== null "
 

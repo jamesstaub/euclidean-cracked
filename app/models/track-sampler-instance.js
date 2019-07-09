@@ -197,12 +197,6 @@ export default Model.extend({
     );
   },
 
-  bindTrackControls() {
-    this.get('trackControls').forEach(()=> {
-
-    });
-  },
-
   applyTrackControls(index) {
     this.get('trackControls').forEach((control)=> {
       let { nodeSelector, nodeAttr, controlDataArray } = control.getProperties(

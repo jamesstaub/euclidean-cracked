@@ -18,18 +18,17 @@ exports.sanitizer = functions.database.ref('/customFunctions/{customFunctionId}'
   /*
   
   function checking flow:
-  user types into editorContent property
-  user clicks load and editorContent content is saved to functionPreCheck on the client
-  this function hook is called and checks for safty of functionPreCheck, if OK it copies
-  content to function and deletes content of functionPreCheck
-  client then applies function code
- 
+  - user types into editorContent property
+  - user clicks load and editorContent is saved to functionPreCheck on the client
+  - this cloud function sanitizer hook is called and checks for safety of functionPreCheck string, if OK it copies
+    content to the record's "function" property and deletes the content of functionPreCheck
+  - client can always rely on the "function" property to be safe since it cannot be written by users.
   */
  
   if (customFunction) {
     let cleanFunction;
-	let forbiddenTokens;
-	let precheck = customFunction.functionPreCheck;
+	  let forbiddenTokens;
+	  let precheck = customFunction.functionPreCheck;
 
     if(precheck !== null){
       //Check for illegal tokens
@@ -190,7 +189,6 @@ const excludes = [
   'nextSibling',
   'nodeName',
   'nodeValue',
-
   'offsetHeight',
   'offsetWidth',
   'ol',

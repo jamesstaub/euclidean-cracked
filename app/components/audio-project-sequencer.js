@@ -49,6 +49,7 @@ export default Component.extend({
 
   actions: {
     async start() {
+      this.project.initializeTrackSamplers();
       __.loop('start');
       const interval = await this.get('project.interval');
       // + 1 hack to 

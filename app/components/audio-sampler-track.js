@@ -6,7 +6,7 @@ export default Component.extend(DidChangeAttrs, {
   // only re-initialize if necessary
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   didChangeAttrsConfig: {
-    attrs: ['filepath']
+    attrs: ['filepath', 'sequence'],
   },
 
   didChangeAttrs(changes) {
