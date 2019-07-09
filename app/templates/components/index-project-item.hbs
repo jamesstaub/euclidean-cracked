@@ -1,21 +1,22 @@
-{{#if visible}}
-  <div class="card border">
-    <div class="card-body">
-      {{#if canDelete}}
-        <button type="delete" class="btn btn-danger delete-project-btn" {{action "deleteProject" project}}>
-          ✕
-        </button>
-      {{/if}}
+{{#mdc-card outlined=true}}
+  <h2 class="project-title">
+    <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
+    {{#link-to "user.creator.project" session.currentUser project}}
+      {{project.title}}
+    {{/link-to}}
+  </h2>
+  <p class="card-text">
+    {{project.body}}
+  </p>
+  {{#mdc-card-actions}}
+    {{#mdc-card-action-icons}}
       {{yield}}
-      <h2 class="card-title project-title">
-        <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
-        {{#link-to "user.creator.project" session.currentUser project}}
-          {{project.title}}
-        {{/link-to}}
-      </h2>
-      <p class="card-text">
-        {{project.body}}
-      </p>
-    </div>
-  </div>
-{{/if}}
+      {{#if canDelete}}
+        {{mdc-card-action-icon "delete" title="Delete" click=(action "deleteProject" project)}}
+      {{/if}}
+    {{/mdc-card-action-icons}}
+  {{/mdc-card-actions}}
+{{/mdc-card}}
+
+
+  

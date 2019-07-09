@@ -5,7 +5,7 @@
 
 {{#each projects as |project|}}
   {{#index-project-item project=project}}
-    {{mdc-icon-button icon="play_arrow" type="button" click=(action "setCurrentProject" project)}}
+    {{mdc-card-action-icon "play_arrow" title="Play" click=(action "setCurrentProject" project)}}
   {{/index-project-item}}
 {{else}}
   There are no projects...
