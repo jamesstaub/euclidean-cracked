@@ -4,7 +4,7 @@ import DS from 'ember-data';
 
 export default Component.extend({
   isEditing: false,
-  classNames: 'edit-project',
+  classNames: 'edit-project flex',
 
   isAllowed: computed('project.creator.uid', 'session.currentUser.uid',{
     get() {

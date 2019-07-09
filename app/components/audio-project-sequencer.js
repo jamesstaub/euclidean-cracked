@@ -1,5 +1,6 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
+import { computed } from '@ember/object';
 
 export default Component.extend({
   intervalSliderSize: [120, 20],
@@ -7,6 +8,20 @@ export default Component.extend({
   classNames: ['audio-project-sequencer'],
   dacGain: .9,
 
+  bpm: computed({
+    get() {
+      return 60000 / this.project.interval;
+    },
+    set(key, val) {
+      const interval = 60000 / val;
+      this.project.set('interval', interval)
+      __.loop(interval);
+      this.project.save();
+      
+      return val;
+    }
+  }),
+  
   didInsertElement() {
     this.initSignalChain();
     // document.body.addEventListener('keyup', this.onSpace.bind(this), true);
@@ -20,14 +35,14 @@ export default Component.extend({
 
   // TODO prevent scrolling
   // and properly removeEventListener
-  // onSpace(e) {
-  //   if (e.keyCode == 32) {
-  //     const action = this.isPlaying ? 'stop' : 'start';
-  //     this.send('loopAction', action);
-  //     e.preventDefault(); // dont go scrollin
-  //     return false;
-  //   }
-  // },
+  onSpace(e) {
+    if (e.keyCode == 32) {
+      const action = this.isPlaying ? 'stop' : 'start';
+      this.send('loopAction', action);
+      e.preventDefault(); // dont go scrollin
+      return false;
+    }
+  },
 
   disconnectAll() {
     // remove all existing cracked audio nodes
@@ -51,9 +66,9 @@ export default Component.extend({
     async start() {
       this.project.initializeTrackSamplers();
       __.loop('start');
-      const interval = await this.get('project.interval');
+      // const interval = await this.get('project.interval');
       // + 1 hack to 
-      this.send('setLoopInterval', interval + 1);
+      // this.send('setLoopInterval', interval + 1);
       this.project.set('isPlaying', true);
     },
 
@@ -67,11 +82,6 @@ export default Component.extend({
       // disable the "loop" aka global sequencer
       __.loop('stop');
       this.project.set('isPlaying', false);
-    },
-
-    setLoopInterval(interval) {
-      __.loop(interval);
-      this.project.save();
     },
 
     reset() {

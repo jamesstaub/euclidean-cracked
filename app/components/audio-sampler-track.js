@@ -12,7 +12,7 @@ export default Component.extend(DidChangeAttrs, {
   didChangeAttrs(changes) {
     this._super(...arguments);
     if (changes) {
-      this.track.initializeSampler.perform();
+      this.track.initializeSampler.perform(true);
     }
   },
 

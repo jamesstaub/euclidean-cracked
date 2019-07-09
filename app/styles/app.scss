@@ -6,9 +6,7 @@
 
 @import 'components/nav-bar';
 
-@import 'components/edit-project';
 @import 'components/edit-track';
-@import 'components/audio-project-sequencer';
 @import 'components/project-active-users';
 @import 'components/index-project-item.scss';
 @import 'components/track-function-editor';
@@ -35,7 +33,7 @@ html, body {
 
 /*move this somewehre and probably redesign to better height solution*/
 .tracks {
-  height: calc(100% - 19.5rem);
+  height: calc(100% - 17rem);
 
 }
 

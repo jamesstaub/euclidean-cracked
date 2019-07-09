@@ -1,27 +1,16 @@
-<form class="controls">
-  <fieldset class="transport">
-    {{mdc-icon-button icon="fast_rewind" type="button" click=(action "reset")}}
-    {{#if project.isPlaying}}
-      {{mdc-icon-button icon="stop" type="button" click=(action "stop")}}
-    {{else}}
-      {{mdc-icon-button icon="play_arrow" type="button" click=(action "start")}}
-    {{/if}}
-  </fieldset>
-  <label class="interval-container">
-    <small>
-      loop interval
-      {{project.interval}}
-      ms
-    </small>
-    {{ui-slider
-      max=1000
-      min=20
-      size=intervalSliderSize
-      step=10
-      class="interval-slider"
-      onChangeValue=(action "setLoopInterval")
-      value=project.interval
-    }}
+<div class="ba flex items-center ph3">
+  {{mdc-icon-button icon="fast_rewind" type="button" click=(action "reset")}}
+  {{#if project.isPlaying}}
+    {{mdc-icon-button icon="stop" type="button" click=(action "stop")}}
+  {{else}}
+    {{mdc-icon-button icon="play_arrow" type="button" click=(action "start")}}
+  {{/if}}
+  <label>
+    {{input
+      value=bpm
+      class="w3 bg-transparent bw1 b--black"
+      type="number"
+    }} BPM
   </label>
-  {{yield}}
-</form>
+</div>
+

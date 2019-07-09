@@ -157,13 +157,17 @@ export default Model.extend({
     }
   },
 
-  initializeSampler: task(function* () {
+  initializeSampler: task(function* (awaitStart) {
     timeout(300);
     yield waitForProperty(
       this,
       'sequence',
       s => typeof s !== 'undefined'
     );
+
+    if (awaitStart) {
+      yield waitForProperty(this, 'stepIndex', 0);
+    }
 
     yield waitForProperty(this, 'samplerId');
     yield waitForProperty(this, 'filepath');

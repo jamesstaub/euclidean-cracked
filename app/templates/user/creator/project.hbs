@@ -1,20 +1,22 @@
 {{#if model}}
-  {{edit-project
-    project=model
-    session=session
-    onSaveProject=(action "save")
-    onDelete=(action "delete")
-  }}
+  <div class="flex justify-between items-center ph3">
+    {{edit-project
+      project=model
+      session=session
+      onSaveProject=(action "save")
+      onDelete=(action "delete")
+    }}
 
-  {{#audio-project-sequencer project=model}}
-    <button
-      class="btn btn-primary"
-      type="button"
-      onclick={{action "createTrack" model}}
-    >
-      add track (<span>{{model.tracks.length}}</span>)
-    </button>
-  {{/audio-project-sequencer}}
+    {{audio-project-sequencer project=model}}
+    {{#mdc-button
+      title="Add new track"
+      style="raised"
+      click=(action "createTrack" model)
+    }}
+      {{mdc-button-icon "add"}}
+      {{#mdc-button-label}}Add Track ({{model.tracks.length}}){{/mdc-button-label}}
+    {{/mdc-button}}
+  </div>
   <DrumFilePicker
     @isOpen={{drumMenuOpen}}
     @track={{activeTrack}}
@@ -44,10 +46,10 @@
         {{/track-container-ui}}
       {{/if}}
     {{else}}
-      <p class="tc w-100">No Tracks</p>
+      <p class="tc w-100 yellow pa3">No Tracks</p>
     {{/each}}
   </div>
-  {{#if (and activeTrack activeTrack.isLoaded)}}
+  {{#if (and activeTrack activeTrack.isLoaded (not activeTrack.isDeleted))}}
     {{current-track-footer 
       track=activeTrack
       saveTrackTask=saveTrackTask
