@@ -128,7 +128,11 @@ export default Component.extend({
     },
    
     setTargetNodeAttr(nodeAttr) {
-      const nodeAttrParams = this.defaultNodeOptions.findBy('nodeName', this.trackControl.nodeName).attrs.firstObject;
+      const nodeAttrParams = this.defaultNodeOptions
+        .findBy('nodeName', this.trackControl.nodeName)
+        .attrs
+        .findBy('name', nodeAttr);
+
       this.setNodeParam({ nodeAttr }, nodeAttrParams);
     },
 
