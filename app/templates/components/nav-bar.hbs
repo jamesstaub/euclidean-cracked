@@ -1,61 +1,59 @@
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" {{action "toggleCollapsed"}}>
-        <span class="sr-only">
-          Toggle navigation
-        </span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      {{#link-to "index" class="navbar-brand"}}
-        euclip drum console
+{{#mdc-top-app-bar class="bg-dark-gray" style="fixed"}}
+  {{#mdc-top-app-bar-row}}
+    {{#mdc-top-app-bar-section class="flex-grow-0 mr3" position="alignStart"}}
+      {{#link-to "user" class="link white" alt="Euclip Drum Console"}}
+        <img width="200px" src="/assets/icons/logo-250.svg">
       {{/link-to}}
-    </div>
-    <div
-      class="{{if isCollapsed "collapse"}} navbar-collapse"
-      id="navigationbar"
-    >
-      <ul class="nav navbar-nav">
-        {{#if session.isAuthenticated}}
-          <li>
-            {{#link-to "new"}}
-              New Project
-            {{/link-to}}
-          </li>
-        {{/if}}
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        {{#if isAnonymous}}
-          <li>
-            <a href="#" {{action onLogout}}>
-              (anonymous) Logout
-            </a>
-          </li>
-          <li class="avatar">
-            <img src="{{avatar}}" height="50px" width="50px" />
-          </li>
-        {{else}}
-          {{#unless session.isAuthenticated}}
-            <li>
-              <a href="#" {{action onLogin}}>
-                Login
-              </a>
-            </li>
-          {{else}}
-            <li>
-              <a href="#" {{action onLogout}}>
+    {{/mdc-top-app-bar-section}}
+    {{#mdc-top-app-bar-section}}
+    {{/mdc-top-app-bar-section}}
+    {{#mdc-top-app-bar-section position="alignEnd" role="toolbar"}}
+      {{#mdc-button-linkto "user.new" style="unelevated" class="mh4"}}
+        New Project
+      {{/mdc-button-linkto}}
+      <div>
+        {{#mdc-fab click=(action "toggleMenu")}}
+          {{#if session.currentUserModel.avatar}}
+            <img
+              alt={{session.currentUserModel.username}}
+              class="br-100"
+              src={{session.currentUserModel.avatar}}
+              height="56px"
+              width="56px"
+            >
+
+          {{/if}}
+        {{/mdc-fab}}
+        {{#mdc-menu-surface
+          class="w5"
+          anchor="parent"
+          anchorCorner="bottomLeft"
+          anchorMargin=(hash top=10)
+          open=isOpen
+        }}
+          {{#mdc-list}}
+            {{#mdc-list-item disabled=true}}
+              {{#mdc-list-item-secondary-text}}
+                You are anonymous
+              {{/mdc-list-item-secondary-text}}
+            {{/mdc-list-item}}
+            {{mdc-list-divider}}
+            {{#if isAnonymous}}
+              {{#mdc-list-item class="pointer" click=(action onLogin)}}
+                Log in with Google
+              {{/mdc-list-item}}
+            {{else if session.isAuthenticated}}
+              {{#mdc-list-item class="pointer" click=(action onLogout)}}
                 Logout
-              </a>
-            </li>
-            <li class="avatar">
-              <img src="{{avatar}}" height="50px" width="50px" />
-            </li>
-          {{/unless}}
-        {{/if}}
-      </ul>
-    </div>
-  </div>
-</nav>
-{{yield}}
+              {{/mdc-list-item}}
+            {{else}}
+              {{#mdc-list-item click=(action onLogin)}}
+                Login
+              {{/mdc-list-item}}
+            {{/if}}
+          {{/mdc-list}}
+        {{/mdc-menu-surface}}
+      </div>
+    {{/mdc-top-app-bar-section}}
+  {{/mdc-top-app-bar-row}}
+{{/mdc-top-app-bar}}

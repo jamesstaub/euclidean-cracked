@@ -1,0 +1,58 @@
+{{#if model}}
+  <div class="flex justify-between items-center ph3 bg-light-gray pv2">
+    {{edit-project
+      project=model
+      session=session
+      onSaveProject=(action "save")
+      onDelete=(action "delete")
+    }}
+
+    {{audio-project-sequencer project=model}}
+    {{#mdc-button
+      title="Add new track"
+      style="raised"
+      click=(action "createTrack" model)
+    }}
+      {{mdc-button-icon "add"}}
+      {{#mdc-button-label}}Add Track ({{model.tracks.length}}){{/mdc-button-label}}
+    {{/mdc-button}}
+  </div>
+  <DrumFilePicker
+    @isOpen={{drumMenuOpen}}
+    @track={{activeTrack}}
+    @saveTrackTask={{saveTrackTask}}
+  />
+  <div class="tracks overflow-container h-100 bg-dark-gray">
+    {{#each tracks as |track idx|}}
+      {{#if track.isLoaded}}
+        <AudioSamplerTrack
+          @track={{track}}
+          @filepath={{track.filepath}}
+          @sequence={{track.sequence}}
+          @gain={{track.gain}} 
+          @gainSelector={{track.gainSelector}}
+          />
+        {{#track-container-ui
+          idx=idx
+          isActive=(eq track.id activeTrack.id)
+          track=track
+          saveTrackTask=saveTrackTask
+          onDeleteTrack=(action "deleteTrack")
+          selectActiveTrack=(action "selectActiveTrack")
+        }}
+          {{#mdc-button class="w4 h-100 mr2" style="raised" click=(action (mut drumMenuOpen) true)}}
+            {{if track.filepath track.filename}} 
+          {{/mdc-button}}
+        {{/track-container-ui}}
+      {{/if}}
+    {{else}}
+      <p class="tc w-100 yellow pa3">No Tracks</p>
+    {{/each}}
+  </div>
+  {{#if (and activeTrack activeTrack.isLoaded (not activeTrack.isDeleted))}}
+    {{current-track-footer 
+      track=activeTrack
+      saveTrackTask=saveTrackTask
+    }}
+  {{/if}}
+{{/if}}

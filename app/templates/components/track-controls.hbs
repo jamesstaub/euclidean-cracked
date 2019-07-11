@@ -1,0 +1,27 @@
+<section class="pa3 w-100 overflow-hidden">
+  <div class="flex justify-between items-center">
+    <h3>Step Automation</h3>
+      {{#mdc-button
+        title="Add new parameter control"
+        style="raised"
+        click=(action "newControl" "multislider") 
+      }}
+        {{mdc-button-icon "add"}}
+        {{#mdc-button-label}}Add Control{{/mdc-button-label}}
+      {{/mdc-button}}
+  </div>
+
+  <div class="flex flex-column h-100 w-100 overflow-scroll mb4 mt3">
+    {{#each track.trackControls as |trackControl|}}
+      {{#if trackControl.isLoaded}}
+        <TrackControlWrapper 
+          @track={{track}} 
+          @sequence={{track.sequence}} 
+          @trackControl={{trackControl}}
+          @stepIndex={{stepIndex}}
+        />
+      {{/if}}
+    {{/each}}
+    <div class="mb5">{{!-- spacer --}}</div>
+  </div>
+</section>

@@ -1,15 +1,27 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 
 export default Component.extend({
-  audioService: service(),
-
   intervalSliderSize: [120, 20],
 
   classNames: ['audio-project-sequencer'],
   dacGain: .9,
 
+  bpm: computed({
+    get() {
+      return 60000 / this.project.interval;
+    },
+    set(key, val) {
+      const interval = 60000 / val;
+      this.project.set('interval', interval)
+      __.loop(interval);
+      this.project.save();
+      
+      return val;
+    }
+  }),
+  
   didInsertElement() {
     this.initSignalChain();
     // document.body.addEventListener('keyup', this.onSpace.bind(this), true);
@@ -23,14 +35,14 @@ export default Component.extend({
 
   // TODO prevent scrolling
   // and properly removeEventListener
-  // onSpace(e) {
-  //   if (e.keyCode == 32) {
-  //     const action = this.isPlaying ? 'stop' : 'start';
-  //     this.send('loopAction', action);
-  //     e.preventDefault(); // dont go scrollin
-  //     return false;
-  //   }
-  // },
+  onSpace(e) {
+    if (e.keyCode == 32) {
+      const action = this.isPlaying ? 'stop' : 'start';
+      this.send('loopAction', action);
+      e.preventDefault(); // dont go scrollin
+      return false;
+    }
+  },
 
   disconnectAll() {
     // remove all existing cracked audio nodes
@@ -51,31 +63,32 @@ export default Component.extend({
   },
 
   actions: {
-    setLoopInterval(project, interval) {
-      this.audioService.setInterval(interval);
-      project.save();
+    async start() {
+      this.project.initializeTrackSamplers();
+      __.loop('start');
+      // const interval = await this.get('project.interval');
+      // + 1 hack to 
+      // this.send('setLoopInterval', interval + 1);
+      this.project.set('isPlaying', true);
     },
 
-    loopAction(action) {
-      const audio = this.audioService;
-      const interval = get(this, 'project.interval');
+    stop() {
+      this.project.eachTrackAsync((track)=>{
+        // track.initializeSampler.cancelAll();
+        // disable the looping of individual samples
+        __(track.samplerSelector).attr({ loop: false });
+      });
 
-      switch (action) {
-        case 'start':
-          audio.startLoop();
-          // terrible hack
-          audio.setInterval(interval + 1);
-          this.toggleProperty('isPlaying');
-          break;
-        case 'reset':
-          audio.resetLoop(interval);
-          break;
-        case 'stop':
-          audio.stopLoop();
-          this.toggleProperty('isPlaying');
-          break;
-      }
-    }
+      // disable the "loop" aka global sequencer
+      __.loop('stop');
+      this.project.set('isPlaying', false);
+    },
+
+    reset() {
+      __.loop('reset');
+      this.project.set('isPlaying', false);
+      this.project.initializeTrackSamplers();
+    },
   },
 
 });

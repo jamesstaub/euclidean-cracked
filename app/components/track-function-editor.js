@@ -1,37 +1,27 @@
 import Component from '@ember/component';
-import { computed, get, set } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { reads, not, and, or } from '@ember/object/computed';
+import { computed } from '@ember/object';
+import { reads, not, and, or, alias } from '@ember/object/computed';
 import { task, waitForProperty } from 'ember-concurrency';
 import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
-  audioService: service(),
-  classNames: ['track-function-editor'],
 
-  // stringified code that gets run in audio service on submit
-  function: reads('customFunction.function'),
-  // code in text editor
+  classNames: ['track-function-editor'],
+  tagName:'',
+  customFunction: reads('track.customFunction'), // the model that saves custom function as string
+  function: alias('customFunction.function'),
+  onStepFunction: reads('track.onStepFunction'), // the actual function that gets called on each step
   illegalTokens: reads('customFunction.illegalTokens'),
-  editorContent: reads('customFunction.editorContent'),
+  // code in text editor
+  editorContent: alias('customFunction.editorContent'),
   canSubmit: and('editorContent.length'),
   cantSubmit: or('!canSubmit', 'functionIsLoaded'),
   functionIsLoaded: computed('function', 'editorContent', {
     get() {
-      const f = this.function;
-      const e = this.editorContent;
-      return f && f.length && f === e;
+      return this.function === this.editorContent && this.onStepFunction;
     }
   }),
 
   showDiscardBtn: not('hasUnloadedCode'),
-
-  serviceTrackRef: computed('audioService.tracks.@each.trackId', {
-    get() {
-      return get(this, 'audioService').findOrCreateTrackRef(
-        get(this, 'track.id')
-      );
-    }
-  }),
 
   init() {
     this._super(...arguments);
@@ -53,12 +43,29 @@ export default Component.extend({
     // after save is called, functionPreCheck has a value
     // until the function checker sets it null and either sets
     // the function property, or returns illegal keywords
+    
     yield waitForProperty(this, 'customFunction.functionPreCheck', null);
+
     // the cloud function check succeeded if function + editor are identical
-    if (this.function === this.editorContent) {
-      yield this.sampler.initializeSampler.perform();
+    if (this.customFunction.get('function') === this.editorContent) {
+      yield this.track.initializeSampler.perform();
     }
+    /**
+     * TODO: set a timeout condition for this method
+     * if the cloud function fails to respond, it can still set
+     * the track function locally for this user (also display an error message)
+     */
   }),
+
+
+  verifyCustomFunction() {
+    // customFunction.function can only be written by a cloud function
+    // that filters out dangerous tokens
+    let isSafe = !this.get('illegalTokens');
+    if (isSafe && this.function) {
+      this.track.applyCustomFunction();
+    }
+  },
 
   injectExample: task(function*(code) {
     if (this.editorContent) {
@@ -88,7 +95,7 @@ export default Component.extend({
     disableFunction() {
       // TODO: fix
       this.saveFunctionTask.perform('functionPreCheck', '');
-      set(this.serviceTrackRef, 'customFunction', null);
+      this.track.set('onStepFunction', null);
     }
   }
 });

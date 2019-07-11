@@ -1,36 +1,42 @@
 {{! template-lint-disable }}
-<div class="sequence-dials">
-  {{#ui-dial
-    max=16
-    step=1
-    onChangeValue=(action "updateSequenceParam" "hits")
-    value=hits
-  }}
-  <dl>
-    <dt>hits</dt>
-    <dd>{{hits}}</dd>
-  </dl>
-  {{/ui-dial}}
-  {{#ui-dial
-    max=16
-    step=1
-    onChangeValue=(action "updateSequenceParam" "steps")
-    value=steps
-  }}
-  <dl>
-    <dt>steps</dt>
-    <dd>{{steps}}</dd>
-  </dl>
-  {{/ui-dial}}
-  {{#ui-dial
-    max=16
-    step=1
-    onChangeValue=(action "updateSequenceParam" "offset")
-    value=offset
-  }}
-  <dl>
-    <dt>offset</dt>
-    <dd>{{offset}}</dd>
-  </dl>
-  {{/ui-dial}}
-</div>
+<section ...attributes>
+  {{yield}}
+  <div class="flex justify-between items-center" >
+    <UiDial
+      class="flex flex-column items-center w3"
+      @max=16
+      @step=1
+      @onChangeValue={{action "updateSequenceParam" "hits"}}
+      @value={{hits}}
+    >
+    <dl class="flex">
+      <dt class="fw7">hits:</dt>
+      <dd class="ml1">{{hits}}</dd>
+    </dl>
+    </UiDial>
+    <UiDial
+      class="flex flex-column items-center w3"
+      @max=16
+      @step=1
+      @onChangeValue={{action "updateSequenceParam" "steps"}}
+      @value={{steps}}
+    >
+    <dl class="flex">
+      <dt class="fw7">steps:</dt>
+      <dd class="ml1">{{steps}}</dd>
+    </dl>
+    </UiDial>
+    <UiDial
+      class="flex flex-column items-center w3"
+      @max=16
+      @step=1
+      @onChangeValue={{action "updateSequenceParam" "offset"}}
+      @value={{offset}}
+    >
+    <dl class="flex">
+      <dt class="fw7">offset:</dt>
+      <dd class="ml1">{{offset}}</dd>
+    </dl>
+    </UiDial>
+  </div>
+</section>

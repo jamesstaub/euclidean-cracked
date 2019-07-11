@@ -1,0 +1,21 @@
+html, 
+h1 , 
+h2, 
+h3, 
+h4, 
+h5, 
+h6, 
+p, 
+button,
+input,
+.mdc-typography,
+.mdc-button {
+  font-family: 'Poppins', sans-serif;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  text-decoration: underline;
+}

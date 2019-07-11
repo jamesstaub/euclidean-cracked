@@ -1,21 +1,24 @@
-{{#if visible}}
-  <div class="card border">
-    <div class="card-body">
-      {{#if canDelete}}
-        <button type="delete" class="btn btn-danger delete-project-btn" {{action "deleteProject" project}}>
-          ✕
-        </button>
-      {{/if}}
-      {{yield}}
-      <h2 class="card-title project-title">
-        <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
-        {{#link-to "user.project" session.currentUser  project}}
-          {{project.title}}
-        {{/link-to}}
-      </h2>
-      <p class="card-text">
-        {{project.body}}
-      </p>
-    </div>
+{{#mdc-card outlined=true class="ma3 pa3"}}
+    <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
+  <div class="mdc-typography mdc-typography--headline6">
+    {{#link-to "user.creator.project" session.currentUser project class="link"}}
+      {{project.title}}
+    {{/link-to}}
   </div>
-{{/if}}
+  {{#mdc-card-media scale="16-9"}}
+    {{#mdc-card-media-content}}
+      {{!-- <UiStepSequencer @sequence={{project.sequenceMatrix}}/> --}}
+    {{/mdc-card-media-content}}
+  {{/mdc-card-media}}
+  {{#mdc-card-actions}}
+    {{#mdc-card-action-icons}}
+      {{yield}}
+      {{#if canDelete}}
+        {{mdc-card-action-icon "delete" title="Delete" click=(action "deleteProject" project)}}
+      {{/if}}
+    {{/mdc-card-action-icons}}
+  {{/mdc-card-actions}}
+{{/mdc-card}}
+
+
+  

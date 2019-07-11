@@ -1,11 +1,10 @@
 import Component from '@ember/component';
-import { inject as service } from '@ember/service';
 import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { get, set, computed, observer } from '@ember/object';
+import { waitForProperty } from 'ember-concurrency';
 
 export default Component.extend(NexusMixin, {
-  classNames: ['ui-step-sequencer'],
-  audioService: service(),
+  classNames: ['ui-step-sequencer', 'flex items-center'],
 
   ElementName: 'Sequencer',
 
@@ -47,14 +46,25 @@ export default Component.extend(NexusMixin, {
       }
       sequencer.next();
     }
-
   }),
+
+  init() {
+    this._super(...arguments);
+    this.renderWhenReady();
+  },
+
+  async renderWhenReady() {
+    await waitForProperty(this, 'sequence');
+    this.updateAndCacheSequence();
+  },
 
   didUpdateAttrs() {
     this._super(...arguments);
+    this.updateAndCacheSequence();
+  },
 
+  updateAndCacheSequence() {
     let refreshOnUpdate = this.sequence !== this._sequence;
-
     if (refreshOnUpdate) {
       this._nexusInit();
       if (this.sequence) {
@@ -66,6 +76,8 @@ export default Component.extend(NexusMixin, {
   },
 
   afterInitNexus(NexusElement) {
+    NexusElement.colorize('accent', '#52ebff');
+    NexusElement.colorize('fill', '#ffffff');
     NexusElement.colorize('mediumLight', '#d9534f');
-  }
+  },
 });

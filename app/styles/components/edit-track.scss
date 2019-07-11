@@ -1,101 +1,17 @@
-.tracks {
-  width: 100%;
-}
-
-.edit-track {
-  align-content: flex-start;
-  display: flex;
-  margin: 15px 0;
-  min-height: 260px;
-  position: relative;
-  width: 100%;
-
-  .data-display {
-    flex: 0 1 300px;
+.track-footer {
+  .step-param-sliders, .ui-step-sequencer {
+    min-width: 36rem;
   }
-
-  .ui-step-sequencer {
-    background-color: darkgray;
-    border-top: solid 1px darkgray;
-    flex: 1 0 100%;
-    margin: -15px -15px 15px;
-    overflow: scroll;
-    padding: 15px;
-  }
-
-  .gain-slider {
-    background-color: gray;
-    padding: 15px;
-  }
-  .inner-ui-controls {
-    background-color: lightgray;
-    flex: 1 1 auto;
-    padding: 15px;
-    width: calc(100% - 55px);
-
-    .delete-track-btn { 
-      font-size: 10px;
-      padding: 5px 8px;
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      width: 30px;
-
-      @include small-screen {
-        font-size: 14px;
-        height: 32px;
-        position: absolute;
-        right: 0;
-        top: 75px;
-        width: 32px;
+  .track-control-wrapper {
+    .multislider-wrapper {
+      width: 544px;
+      svg {
+        transform: translateY(5px);
       }
     }
-  }
-
-  .sequence-dials {
-    display: flex;
-    margin-top: 15px;
-  }
-
-  .step-param-sliders {
-    margin: 15px 0;
-
-    .interface-switches {
-      margin: 5px 0;
-
-      .toggle-loop {
-        padding-left: 15px;
+    table {
+      td:first-child {
       }
     }
-  }
-
-  .code-info {
-    font-size: 12px;
-    flex: 1 1 50%;
-    ul {
-      padding-left: 15px;
-      list-style: none;
-      li {
-        padding: 5px 0;
-      }
-    }
-    small {
-      display: block;
-    }
-  }
-
-  .sequence-dials {
-    .ui-dial {
-      margin-right: 15px;
-    }
-  }
-}
-
-.audio-track-sampler {
-  position: relative;
-  .changes-pending-notification {
-    position: absolute;
-    right: 0px;
-    top: 2px;
   }
 }

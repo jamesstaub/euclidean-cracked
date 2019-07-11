@@ -1,17 +1,23 @@
-<div class='drum-file-header'>
-  <h3>{{track.filename}}</h3>
-  {{!-- <img src={{img}} alt={{track.filename}}> --}}
-    {{#if fetchDirectory.isRunning}}
-      <div class='spinner'></div>
-    {{/if}}
-</div>
-<div class="drum-file-picker">
-    {{#each directories as |directory idx|}}
-      {{file-directory 
-        directory=directory 
-        filepath=track.filepath
-        idx=idx
-        onSelect=(action "onSelect")
-      }}
-    {{/each}}
-</div>
+{{#mdc-dialog 
+  title="Choose a drum sound"
+  accept=(action (mut isOpen) true)
+  cancelButtonText="done"
+  show=isOpen
+  scrollable=false
+}}
+
+  {{#if (or saveTrackTask.isRunning fetchDirectory.isRunning)}}
+    {{mdc-linear-progress indeterminate=true}}
+  {{/if}}
+
+  <div class="drum-file-picker">
+      {{#each directories as |directory idx|}}
+        {{file-directory 
+          directory=directory 
+          filepath=track.filepath
+          idx=idx
+          onSelect=(action "onSelect")
+        }}
+      {{/each}}
+  </div>
+{{/mdc-dialog}}

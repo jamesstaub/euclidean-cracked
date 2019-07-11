@@ -4,7 +4,7 @@ import DS from 'ember-data';
 
 export default Component.extend({
   isEditing: false,
-  classNames: 'edit-project',
+  classNames: 'edit-project flex',
 
   isAllowed: computed('project.creator.uid', 'session.currentUser.uid',{
     get() {
@@ -22,27 +22,24 @@ export default Component.extend({
   }),
 
   actions: {
-    save(project) {
+    save() {
       let sessionName = get(this, 'session.currentUser.uid');
 
-      if (sessionName === project.get('creator.uid')) {
+      if (sessionName === this.project.get('creator.uid')) {
         set(this, 'isEditing', false);
-        get(this, 'onSaveProject')(project);
+        get(this, 'onSaveProject')(this.project);
       } else {
         alert('Sorry not authorized');
       }
     },
+
     edit() {
       set(this, 'isEditing', true);
     },
 
-    delete(project) {
-      this.sendAction('delete', project);
+    deleteProject() {
+      this.onDelete(this.project);
       set(this, 'isEditing', false);
-    },
-
-    createComment(author, body, project) {
-      this.sendAction('createComment', author, body, project);
     },
   }
 });

@@ -18,7 +18,7 @@ export default Component.extend({
     if (this.track && this.track.filepath) {
       this.initDirectoryFromTrack.perform(this.track.filepath);
     } else {
-      this.updateDirectories(path);
+      this.updateDirectories.perform(path);
     }
   },
 
@@ -55,8 +55,8 @@ export default Component.extend({
     }
   }),
 
-  async updateDirectories(pathToFetch) {
-    let response = await this.fetchDirectory.perform(pathToFetch);
+  updateDirectories: task(function*(pathToFetch) {
+    let response = yield this.fetchDirectory.perform(pathToFetch);
     let directory = this.parseResponse(response);
     // clear any child directories when clicking back higher up the tree
     const pathDepth = directory.path.split('/').filter(s => s.length).length;
@@ -64,7 +64,7 @@ export default Component.extend({
       this.directories.pop();
     }
     this.directories.pushObject(directory);
-  },
+  }).keepLatest(),
 
   actions: {
     onSelect(directory, choice) {
@@ -73,10 +73,10 @@ export default Component.extend({
       let type = directory.type;
       if (type === 'dir') {
         newPath = `${newPath}/`;
-        this.updateDirectories(newPath);
+        this.updateDirectories.perform(newPath);
       } else if (type === 'audio') {
         this.track.set('filepath', newPath);
-        this.saveTrack.perform(this.track);
+        this.saveTrackTask.perform(this.track);
       }
     }
   }

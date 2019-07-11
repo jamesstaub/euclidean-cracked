@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
+
   projectCreatorUid: DS.attr('string'),
 
   // the text of the function string as the user types
@@ -19,5 +20,6 @@ export default DS.Model.extend({
   function: DS.attr('string', { readOnly: true }),
 
   // unsafe javascript keywords returned from cloud function
-  illegalTokens: DS.attr('string', { readOnly: true })
+  illegalTokens: DS.attr('string', { readOnly: true }),
+
 });

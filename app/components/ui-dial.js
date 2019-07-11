@@ -3,8 +3,6 @@ import NexusMixin from 'euclidean-cracked/mixins/nexus-ui';
 import { computed } from '@ember/object';
 
 export default Component.extend(NexusMixin, {
-  classNames: ['ui-dial'],
-  tagName: 'span',
 
   didInsertElement() {
     this._super(...arguments);
@@ -25,5 +23,10 @@ export default Component.extend(NexusMixin, {
         'value': this.value
       };
     }
-  })
+  }),
+
+  afterInitNexus(NexusElement) {
+    NexusElement.colorize('accent', '#000000');
+    NexusElement.colorize('fill', '#ffffff');
+  },
 });

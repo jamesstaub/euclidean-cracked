@@ -1,50 +1,8 @@
-.track-function-editor {
-  display: flex;
-  flex-direction: column;
-  
-  .function-editor {
+.function-editor {
+  .ace-editor {
     flex: 1 1 auto;
-    flex-direction: column;
-    flex-wrap: wrap;
-    margin: 15px 0;
-    max-width: 100%;
-
-    .function-controls {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      position: relative;
-    }
-
-    fieldset {
-      textarea {
-        flex: 1 1 100%;
-        font-family: monospace;
-        max-width: 100%;
-      }
-    }
-
-    legend {
-      font-size: 14px;
-    }
-
-    .run-code-btn,
-    .disable-code-btn {
-      flex: 0 1 100px;
-    }
-
-    .run-code-btn {
-      width: 70px;
-    }
+  }
+  .mdc-button--raised:disabled, .mdc-button--unelevated:disabled {
+    background-color: transparent;
   }
 }
-
-// .function-menu {
-//   // match Ace editor colors
-//   background-color: #3d3d3d;
-//   color: #e6e1dc;
-//
-//   flex: 0 1 120px;
-//   margin: 4rem 0;
-//   padding: 1rem;
-// }

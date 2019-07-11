@@ -25,5 +25,10 @@ export default Component.extend(NexusMixin, {
         'value': this.value
       };
     }
-  })
+  }),
+
+  afterInitNexus(NexusElement) {
+    NexusElement.colorize('accent', '#52ebff');
+    NexusElement.colorize('fill', '#ffffff');
+  },
 });

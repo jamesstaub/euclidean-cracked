@@ -1,1 +1,10 @@
-{{outlet}}
+{{nav-bar session=session 
+  onLogin=(route-action "login") 
+  onLogout=(route-action "logout")
+  currentProject=currentProject
+}}
+
+
+{{#mdc-content class="h-100 bg-dark-gray"}}
+  {{outlet}}
+{{/mdc-content}}
