@@ -2,11 +2,12 @@
   {{audio-project-sequencer project=currentProject readOnly=true}}
 {{/if}}
 
-
-{{#each projects as |project|}}
-  {{#index-project-item project=project}}
-    {{mdc-card-action-icon "play_arrow" title="Play" click=(action "setCurrentProject" project)}}
-  {{/index-project-item}}
-{{else}}
-  There are no projects...
-{{/each}}
+<div class="flex">
+  {{#each projects as |project|}}
+    <IndexProjectItem @project={{project}}>
+      {{mdc-card-action-icon "play_arrow" title="Play" click=(action "setCurrentProject" project)}}
+    </IndexProjectItem>
+  {{else}}
+    There are no projects...
+  {{/each}}
+</div>

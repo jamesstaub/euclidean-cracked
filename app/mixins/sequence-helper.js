@@ -1,5 +1,5 @@
 import Mixin from '@ember/object/mixin';
-import { get, set, computed } from "@ember/object";
+import { get, set } from "@ember/object";
 
 /**
  * TODO:
@@ -15,7 +15,6 @@ export default Mixin.create({
   // gainStepArray: computed('track.gainStepSeq', arraySequenceComputed('gainStepSeq')),
   // speedStepArray: computed('track.speedStepSeq', arraySequenceComputed('speedStepSeq')),
   // loopEndStepArray: computed('track.loopEndStepSeq', arraySequenceComputed('loopEndStepSeq')),
-
 
   stringToArray(stringKey) {
     let trackData = get(this, `track.${stringKey}`);

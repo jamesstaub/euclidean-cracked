@@ -1,5 +1,6 @@
 import DS from 'ember-data';
-
+import { computed } from '@ember/object';
+import nexusUi from '../mixins/nexus-ui';
 export default DS.Model.extend({
     title: DS.attr('string'),
     body: DS.attr('string'),
@@ -44,4 +45,18 @@ export default DS.Model.extend({
         track.initializeSampler.perform();
       });  
     },
+
+    sequenceMatrix:computed('tracks.@each.sequence',{
+      get() {
+        const tracks = this.get('tracks');
+        if (tracks.length) {          
+          const matrix = new Nexus.Matrix(tracks.length, 16);
+          tracks.forEach((track, idx)=> {
+            matrix.set.row(idx, track.get('sequence'));
+          });
+
+          return matrix;
+        }
+      }
+    }),
 });

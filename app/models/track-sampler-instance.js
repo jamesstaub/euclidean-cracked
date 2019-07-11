@@ -2,7 +2,6 @@ import Model from 'ember-data/model';
 import { computed } from '@ember/object';
 import { task, waitForProperty, timeout } from 'ember-concurrency';
 
-
 /* 
   Module  to be extended by the track model 
   containing methods and properties to manage the state 
@@ -92,7 +91,6 @@ export default Model.extend({
       };
     }
   }),
-
 
   // TODO: cracked: how to set new filepath without rebuilding node?
   buildNodes() {

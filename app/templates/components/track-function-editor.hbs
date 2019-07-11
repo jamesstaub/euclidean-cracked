@@ -5,6 +5,13 @@
         <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
         <p>script will be called on each step of the step sequencer.</p>
       </legend> }}
+    {{mdc-fab 
+      click=(action (mut isExpanded) (not isExpanded)) 
+      icon=(if isExpanded "expand_more" "expand_less")
+      mini=true 
+      class="bg-transparent absolute right-1 top-0 mt2 shadow-none" 
+    }}
+
     <div class="function-controls flex justify-between items-center">
       <div class="flex flex-column justify-between">
         <div class="flex items-center">
@@ -60,7 +67,7 @@
       {{/if}}
     </div>
     {{ember-ace
-      lines=8
+      lines=(if isExpanded 24 6)
       editorClass="ace-editor"
       value=editorContent
       mode="ace/mode/javascript"
