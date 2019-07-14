@@ -3,6 +3,7 @@ import DidChangeAttrs from 'ember-did-change-attrs';
 import { computed } from '@ember/object';
 /* This component updates the cracked audio nodes as track model properties are passed in through the template */
 export default Component.extend(DidChangeAttrs, {
+  tagName: '',
   // only re-initialize if necessary
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   didChangeAttrsConfig: {

@@ -14,7 +14,7 @@ export default Component.extend({
     },
     set(key, val) {
       const interval = 60000 / val;
-      this.project.set('interval', interval)
+      this.project.set('interval', interval);
       __.loop(interval);
       this.project.save();
       
@@ -24,11 +24,11 @@ export default Component.extend({
   
   didInsertElement() {
     this.initSignalChain();
-    // document.body.addEventListener('keyup', this.onSpace.bind(this), true);
+    document.body.addEventListener('keyup', this.onSpace.bind(this), true);
   },
 
   willDestroyElement() {
-    // document.body.removeEventListener('keyup', this.onSpace.bind(this), true);
+    document.body.removeEventListener('keyup', this.onSpace.bind(this), true);
     __.loop("stop");
     this.disconnectAll();
   },
@@ -36,9 +36,9 @@ export default Component.extend({
   // TODO prevent scrolling
   // and properly removeEventListener
   onSpace(e) {
-    if (e.keyCode == 32) {
+    if (e.keyCode == "Space") {
       const action = this.isPlaying ? 'stop' : 'start';
-      this.send('loopAction', action);
+      this.send(action);
       e.preventDefault(); // dont go scrollin
       return false;
     }
@@ -66,15 +66,14 @@ export default Component.extend({
     async start() {
       this.project.initializeTrackSamplers();
       __.loop('start');
-      // const interval = await this.get('project.interval');
-      // + 1 hack to 
-      // this.send('setLoopInterval', interval + 1);
+      
+      // + 1 hack to fix unknown playback problem
+      __.loop(this.project.interval + 1);
       this.project.set('isPlaying', true);
     },
 
     stop() {
       this.project.eachTrackAsync((track)=>{
-        // track.initializeSampler.cancelAll();
         // disable the looping of individual samples
         __(track.samplerSelector).attr({ loop: false });
       });

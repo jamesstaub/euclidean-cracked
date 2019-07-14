@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import nexusUi from '../mixins/nexus-ui';
+
 export default DS.Model.extend({
     title: DS.attr('string'),
     body: DS.attr('string'),

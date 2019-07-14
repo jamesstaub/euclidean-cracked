@@ -7,17 +7,17 @@
 }}
 
   {{#if (or saveTrackTask.isRunning fetchDirectory.isRunning)}}
-    {{mdc-linear-progress indeterminate=true}}
+    {{mdc-linear-progress class="absolute bottom-0 w-100" indeterminate=true}}
   {{/if}}
 
   <div class="drum-file-picker">
       {{#each directories as |directory idx|}}
-        {{file-directory 
-          directory=directory 
-          filepath=track.filepath
-          idx=idx
-          onSelect=(action "onSelect")
-        }}
+        <FileDirectory 
+          @directory={{directory}}
+          @filepath={{track.filepath}}
+          @idx={{idx}}
+          @onSelect={{action "onSelect"}}
+        />
       {{/each}}
   </div>
 {{/mdc-dialog}}

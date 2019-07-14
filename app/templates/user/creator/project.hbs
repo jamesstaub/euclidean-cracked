@@ -22,33 +22,39 @@
     @track={{activeTrack}}
     @saveTrackTask={{saveTrackTask}}
   />
-  <div class="tracks overflow-container h-100 bg-dark-gray">
-    {{#each tracks as |track idx|}}
-      {{#if track.isLoaded}}
-        <AudioSamplerTrack
-          @track={{track}}
-          @filepath={{track.filepath}}
-          @sequence={{track.sequence}}
-          @gain={{track.gain}} 
-          @gainSelector={{track.gainSelector}}
-          />
-        {{#track-container-ui
-          idx=idx
-          isActive=(eq track.id activeTrack.id)
-          track=track
-          saveTrackTask=saveTrackTask
-          onDeleteTrack=(action "deleteTrack")
-          selectActiveTrack=(action "selectActiveTrack")
-        }}
-          {{#mdc-button class="w4 h-100 mr2" style="raised" click=(action (mut drumMenuOpen) true)}}
-            {{if track.filepath track.filename}} 
-          {{/mdc-button}}
-        {{/track-container-ui}}
-      {{/if}}
-    {{else}}
-      <p class="tc w-100 yellow pa3">No Tracks</p>
-    {{/each}}
-  </div>
+    <ul class="list mt0 pl0 pb4 tracks overflow-container h-100 bg-dark-gray ">
+      {{#each tracks as |track idx|}}
+        {{#if track.isLoaded}}
+          <AudioSamplerTrack
+            @track={{track}}
+            @filepath={{track.filepath}}
+            @sequence={{track.sequence}}
+            @gain={{track.gain}} 
+            @gainSelector={{track.gainSelector}}
+            />
+          {{#track-container-ui
+            idx=idx
+            isActive=(eq track.id activeTrack.id)
+            track=track
+            saveTrackTask=saveTrackTask
+            onDeleteTrack=(action "deleteTrack")
+            selectActiveTrack=(action "selectActiveTrack")
+          }}
+            {{#mdc-button 
+              class="w4 mr2 ph1 f7" 
+              style="raised" 
+              click=(action (mut drumMenuOpen) true)
+              title=(concat "Drum Machine: " track.filepath)
+            }}
+              {{if track.filepath track.filename}} 
+            {{/mdc-button}}
+          {{/track-container-ui}}
+        {{/if}}
+      {{else}}
+        <p class="tc w-100 yellow pa3">No Tracks</p>
+      {{/each}}
+    </ul>
+
   {{#if (and activeTrack activeTrack.isLoaded (not activeTrack.isDeleted))}}
     {{current-track-footer 
       track=activeTrack

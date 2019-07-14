@@ -1,6 +1,6 @@
 <section class="pa3 w-100 overflow-hidden">
   <div class="flex justify-between items-center">
-    <h3>Step Automation</h3>
+    <h3>Automation Controls</h3>
       {{#mdc-button
         title="Add new parameter control"
         style="raised"
@@ -11,17 +11,30 @@
       {{/mdc-button}}
   </div>
 
-  <div class="flex flex-column h-100 w-100 overflow-scroll mb4 mt3">
-    {{#each track.trackControls as |trackControl|}}
-      {{#if trackControl.isLoaded}}
-        <TrackControlWrapper 
-          @track={{track}} 
-          @sequence={{track.sequence}} 
-          @trackControl={{trackControl}}
-          @stepIndex={{stepIndex}}
-        />
-      {{/if}}
-    {{/each}}
-    <div class="mb5">{{!-- spacer --}}</div>
+
+  <div class="flex flex-column h-100 w-100 mb4">
+    <ul class="list flex pa0 ma0">
+      {{#each track.trackControls as |trackControl|}}
+        <li class="">
+          {{#mdc-button
+            click=(action (mut currentTrackControl) trackControl) 
+            class="f7"
+            title= (concat "audio node " trackControl.nodeName "\n : attribute: " trackControl.nodeAttr)
+            style=(if (eq trackControl.id currentTrackControl.id) "raised")
+          }} 
+            {{trackControl.nodeName}}:{{trackControl.nodeAttr}} 
+          {{/mdc-button}}
+        </li>
+      {{/each}}
+    </ul>
+    
+    {{#if currentTrackControl.isLoaded}}
+      <TrackControlWrapper 
+        @track={{track}} 
+        @sequence={{track.sequence}} 
+        @trackControl={{currentTrackControl}}
+        @stepIndex={{stepIndex}}
+      />
+    {{/if}}
   </div>
 </section>

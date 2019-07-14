@@ -43,13 +43,22 @@ html, body {
   height: 2rem;
 }
 
-.mdc-button--outlined:not(:disabled) {
+.mdc-button--outlined:not(:disabled), .mdc-button--raised:not(:disabled) {
   border-radius: 0;
 }
 
 .bg-dark-blue {
   background-color: $dark-blue;
 }
+.b--dark-blue {
+  border-color: $dark-blue;
+}
 .bg-dark-gray {
   background-color: var(--mdc-theme-primary);
+}
+
+.mdc-button:not(:disabled) { 
+  &.bg-light-blue {
+    background-color: $light-blue;
+  }
 }

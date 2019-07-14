@@ -1,71 +1,89 @@
+# Euclip Drum Console
+[Open the app](https://euclidean-cracked.firebaseapp.com)
 
-[work in progress demo](https://euclidean-cracked.firebaseapp.com)
+Euclip Drum console is a real-time collaborative web audio rhythm sequencer, and a live coding environment for algorithmic electronic music. 
 
-# euclidean-cracked
-This project is in development.
+You can create complex euclidean rhythm patterns with a large library of drum samples and write your own custom logic and audio signal chains with javascript.
 
-After building a  [prototype](https://cracked-doodles.firebaseapp.com/doodles/sequencer) euclidean rhythm sequencer, the aim of this rebuild is to deal with application concerns such as authentication, and data modeling as a foundation, then to reimplement the web audio components.
+Euclip is powered by the Cracked web audio library which provides an easy syntax for creating and chaining together web audio nodes, as well as a bunch of useful helpers for creating algorithmic music.
 
-
-* add a track field `custom class` (for cracked audio nodes), so users can write macro controls
-  - eg. multiple tracks with class `bass-drum` can be selected in the code editor like so:  `__('.bass-drum').connect('reverb');`
- 
- * users can add arbitrary UI controls (multisliders, XY slider, matrixctrl) and access them in track script editors
-    - step-wise arrays that are controlled by the rhythm sequence length
-        - provide `onChange` hooks so moving slider can change cracked `attrs` in real time.
-    - arbitrary arrays for creating patterns (musical scales, breakpoint envelopes)
-
-* ability to duplicate a track, to make iteration easier
+Euclip projects are made up of tracks, each of which have 2 code editors, one that is executed once on **setup**, and another which is executed on each step of the rhythm sequence (**on-step**). 
 
 
+Pre-release TODOs:
+- setup() functions per track
+- cloud function to  delete orphan data 
+- test+review permissions
+    - show/hide public feed
+- track controller UI (buttons, instead of scroll)
+- about page
+- clone projects
+
+### selecting Cracked audio nodes with Cracked audio syntax in javascript
+the `__()` function is used to select Cracked audio nodes, which have css/jQuery style selecors for `id` and `class`.
+Each Euclip track is made of Cracked node chain, so you can access the various selectors for each track like so:
+
+```
+ __(this.sampler) // this.sampler is a string like "#123-track-sampler"
+
+ __(this.lowpass) // select the lowpass filter that this sampler is connected to
+
+```
+
+Once you've selected a node, you can change it's properties with `attr()` function
+
+```
+ __(this.sampler).attr({speed: .5})
+```
+
+### on-step functions
+
+imagine a track with the following sequence:
+**3 hits**, spaced between **8 steps**.
+
+which, as a javascript array would look like:
+`[1, 0, 0, 1, 0, 0, 1, 0]`
+
+The track's **on-step** function gets called on each step with the following arguments available
+```
+index // the number of the current step (0-7)
+data  // the value of the current step (0 or 1)
+array // the entire sequence [1, 0, 0, 1, 0, 0, 1, 0]
+```
+
+we could then write an **on-step** function that randomly changes the pitch on every step that has a hit
+
+```
+var randSpeed = __.random(.5, 2); // pick a random decimal between half speed and double speed
+__(this.sampler).attr({speed: randSpeed});
+```
 
 
-### data authorization (in progress)
-users create sequence projects and can edit meta data like the name, description and audio parameters
 
-if the user authenticates anonymously, their projects could be subject to any other user editing them
 
-users authenticated with email can control editing access, and invite other users to edit
+## Built with Cracked, Nexus and Ember
+[Cracked](https://github.com/billorcutt/i_dropped_my_phone_the_screen_cracked)
+[NeusUI](https://nexus-js.github.io/) 
+[Ember](https://emberjs.com/)
 
-#### permission scenarios
-* a user can create a project
-  - user can choose to show/hide project in public list
-  - if user is anonymous: the project is public, and anyone with link can edit
-  - if authenticated: use can choose to allow public editing
-
-* a user can edit modify other user's projects
-  - if the project is publicVisible && publicEditable, changes made will be saved, regardless of the user.
-  - if the project is not publicEditable, but someone other than the creator tries to edit it, allow the changes to be made. For this to work, will need to add a modified_but_not_saved flag, which prevents firebase from re-syncing data once a non-authorized user starts editing locally.
-    - alternative solution would be do create a duplicate project with, so the new user can save their changes.
-
-not sure why this doesn't work on the `$track` rule
-`".write": "auth.uid == newData.child('projectCreatorUid').val() || newData.child('publicEditable').val() == true"`
-
-## Cracked, Nexus and ember
-This app uses the web audio library [cracked](https://github.com/billorcutt/i_dropped_my_phone_the_screen_cracked) for audio along with NexusUI for interface objects.
-
-A few notes on conventions I've established for using these in ember components.
+## Contribute
 
 ### Cracked
 - ember components prefixed with `audio-` deal with the cracked audio library.
 - the audio-service handles global state of audio nodes, to allow initialization, destruction of audio nodes and bindings throughout the app.
 
-#### track automation (aka parameter sequences)
--  stringified arrays saved on the track model, and loaded into the serviceTrackRef on initialization and track update. this allows the track to update various parameters on each step of the sequence.
-  - the sequence helper mixin generalizes some functions + computed properties for getting/setting parameter sequences between the track model, interface components and the global service
-
 ### NexusUI
 - ember components prefixed with `ui-` are [nexus ui](nexus-js.github.io/ui/) objects.
 - all ui components inherit the nexus-ui-mixin, which generalizes some functionality for initialization and onChange events.
-
 - the `.hbs` template must contain an element such as `<span id="{{nexusId}}"></span>` for the nexus object to select.
 
 
 The component must also have properties `ElementName` and `ElementOptions` for configuration, which is handled in the nexus-ui-mixin. This mixin is also where initialization and destruction of the Nexus object is handled.
 
 
-## Prerequisites
 
+
+## Prerequisites To Run Locally
 You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
