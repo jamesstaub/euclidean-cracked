@@ -4,20 +4,20 @@ import { reads, not, and, or, alias } from '@ember/object/computed';
 import { task, waitForProperty } from 'ember-concurrency';
 import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
+  // customFunctionModel is the model that saves custom function as string
 
   classNames: ['track-function-editor'],
   tagName:'',
-  onstepFunction: reads('track.onstepFunction'), // the model that saves custom function as string
-  function: alias('onstepFunction.function'),
-  onStepFunctionRef: reads('track.onStepFunctionRef'), // the actual function that gets called on each step
-  illegalTokens: reads('onstepFunction.illegalTokens'),
+  function: alias('customFunctionModel.function'),
+  customFunctionRef: reads('track.customFunctionRef'), // the actual function that gets called on each step
+  illegalTokens: reads('customFunctionModel.illegalTokens'),
   // code in text editor
-  editorContent: alias('onstepFunction.editorContent'),
+  editorContent: alias('customFunctionModel.editorContent'),
   canSubmit: and('editorContent.length'),
   cantSubmit: or('!canSubmit', 'functionIsLoaded'),
   functionIsLoaded: computed('function', 'editorContent', {
     get() {
-      return this.function === this.editorContent && this.onStepFunctionRef;
+      return this.function === this.editorContent && this.customFunctionRef;
     }
   }),
 
@@ -31,9 +31,9 @@ export default Component.extend({
   // set property to cusotmFunction model then save
   saveFunctionTask: task(function*(property, value) {
     // yield proxy to model record
-    const onstepFunction = yield this.onstepFunction;
-    onstepFunction.set(property, value);
-    yield onstepFunction.save();
+    const customFunctionModel = yield this.customFunctionModel;
+    customFunctionModel.set(property, value);
+    yield customFunctionModel.save();
   }),
 
   applyFunction: task(function*() {
@@ -44,10 +44,10 @@ export default Component.extend({
     // until the function checker sets it null and either sets
     // the function property, or returns illegal keywords
     
-    yield waitForProperty(this, 'onstepFunction.functionPreCheck', null);
+    yield waitForProperty(this, 'customFunctionModel.functionPreCheck', null);
 
     // the cloud function check succeeded if function + editor are identical
-    if (this.onstepFunction.get('function') === this.editorContent) {
+    if (this.customFunctionModel.get('function') === this.editorContent) {
       yield this.track.initializeSampler.perform();
     }
     /**
@@ -59,7 +59,7 @@ export default Component.extend({
 
 
   verifyCustomFunction() {
-    // onstepFunction.function can only be written by a cloud function
+    // customFunctionModel.function can only be written by a cloud function
     // that filters out dangerous tokens
     let isSafe = !this.get('illegalTokens');
     if (isSafe && this.function) {
@@ -95,7 +95,7 @@ export default Component.extend({
     disableFunction() {
       // TODO: fix
       this.saveFunctionTask.perform('functionPreCheck', '');
-      this.track.set('onStepFunctionRef', null);
+      this.track.set('customFunctionRef', null);
     }
   }
 });

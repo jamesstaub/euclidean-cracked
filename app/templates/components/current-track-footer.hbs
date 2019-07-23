@@ -41,29 +41,7 @@
     {{/if}}
 
     {{#if (eq visibleInterface "script")}}
-      <TrackFunctionEditor
-        class="w-100 h-auto overflow-scroll absolute bottom-0 bg-yellow pa3"
-        @track={{track}}
-      >
-          <div class="flex pa0 ma0">
-            {{#mdc-button
-              click=(action (mut functionType) "onstep") 
-              class="f7"
-              title="On Step: runs on each step"
-              style=(if (eq functionType "onstep") "raised")
-            }} 
-              On Step
-            {{/mdc-button}}
-            {{#mdc-button
-              click=(action (mut functionType) "init") 
-              class="f7"
-              title="Init function: runs once"
-              style=(if (eq functionType "init") "raised")
-            }} 
-              Init
-            {{/mdc-button}}
-          </div>
-      </TrackFunctionEditor>
+      <TrackScripts @track={{track}} />
     {{/if}}
   </div>
 

@@ -81,7 +81,7 @@ export default Model.extend({
     }
   }),
 
-  onstepFunctionScope: computed('samplerSelector,gainOnStepSelector,lowpassSelector', {
+  customFunctionScope: computed('samplerSelector,gainOnStepSelector,lowpassSelector', {
     get() {
       // variables available for user defined track functions
       return {
@@ -150,11 +150,12 @@ export default Model.extend({
 
     this.applyTrackControls(index);
 
-    if (this.onStepFunctionRef) {
-      this.onStepFunctionRef(index, data, array);
+    if (this.onstepFunctionRef) {
+      this.onstepFunctionRef(index, data, array);
     }
   },
 
+  // eslint-disable-next-line complexity
   initializeSampler: task(function* (awaitStart) {
     timeout(300);
     yield waitForProperty(
@@ -169,7 +170,10 @@ export default Model.extend({
 
     yield waitForProperty(this, 'samplerId');
     yield waitForProperty(this, 'filepath');
+    yield waitForProperty(this, 'initFunction.content');
+    yield waitForProperty(this, 'initFunction.content');
     yield waitForProperty(this, 'onstepFunction.content');
+    
     // wait until beginning of sequence to apply changes
     // prevents lots of concurrent disruptions
 
@@ -178,6 +182,12 @@ export default Model.extend({
       this.removeAllNodes();
       this.buildNodes();
       this.bindTrackSampler();
+
+      // Call user written init function 
+      if (this.initFunctionRef) {
+        this.initFunctionRef();
+      }
+
       if (this.get('project.isPlaying')) {
         timeout(300);
         __.loop('start');
@@ -188,7 +198,8 @@ export default Model.extend({
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
     let onStepCallback = this.onStepCallback.bind(this);
-    this.applyCustomFunction();
+    this.applyInitFunction();
+    this.applyOnstepFunction();
 
     __(this.samplerSelector).unbind('step');
 
@@ -212,21 +223,37 @@ export default Model.extend({
     });
   },
 
-  /* 
-    Takes a function definition (string) from the onstepFunction model
-    evaluates it as a Function, and binds it to the track as a method named onStepFunctionRef
-   */
-  async applyCustomFunction() {
-    const functionDefinition = await this.get('onstepFunction.function');
+  async applyInitFunction() {
+    const functionDefinition = await this.get('initFunction.function');
     try {
-      let onStepFunctionRef = new Function(
+      let onstepFunctionRef = new Function(
+        'index',
+        'data',
+        'array',
+        functionDefinition
+      )
+        .bind(this.customFunctionScope);
+      this.set('initFunctionRef', onstepFunctionRef);
+    } catch (e) {
+      alert('problem with function', e);
+    }
+  },
+  /* 
+    Takes a modelName (initFunction or onstepFunction
+    evaluates it as a Function, and binds it to the track as a method named 
+    initFunctionRef or onstepFunctionRef
+   */
+  async applyOnstepFunction(modelName) {
+    const functionDefinition = await this.get(`${modelName}.function`);
+    try {
+      let functionRef = new Function(
         'index', 
         'data', 
         'array', 
         functionDefinition
       )
-      .bind(this.onstepFunctionScope);
-      this.set('onStepFunctionRef', onStepFunctionRef);
+      .bind(this.customFunctionScope);
+      this.set(`${modelName}Ref`, functionRef);
     } catch (e) {
       alert('problem with function', e);
     }
