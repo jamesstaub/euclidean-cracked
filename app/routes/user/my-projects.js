@@ -5,6 +5,6 @@ export default Route.extend({
   session: service(),
 
   model() {
-    return this.session.get('currentUserModel.projects');
+    return this.session.get('currentUser.projects');
   },
 });

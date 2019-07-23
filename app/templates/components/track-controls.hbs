@@ -19,7 +19,7 @@
           {{#mdc-button
             click=(action (mut currentTrackControl) trackControl) 
             class="f7"
-            title= (concat "audio node " trackControl.nodeName "\n : attribute: " trackControl.nodeAttr)
+            title= (concat "audio node " trackControl.nodeName " : attribute: " trackControl.nodeAttr)
             style=(if (eq trackControl.id currentTrackControl.id) "raised")
           }} 
             {{trackControl.nodeName}}:{{trackControl.nodeAttr}} 

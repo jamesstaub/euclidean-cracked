@@ -1,15 +1,13 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-
+import { waitForProperty } from 'ember-concurrency';
 export default Component.extend({
   store: service(),
   tagName:'',
-  
-  didReceiveAttrs() {
+  async init() {
     this._super(...arguments);
-    if (this.track.get('trackControls')) {
-      this.set('currentTrackControl', this.track.get('trackControls.firstObject'));
-    }
+    await waitForProperty(this.track, 'trackControls');
+    this.set('currentTrackControl', this.track.get('trackControls.firstObject'));
   },
   
   actions: {
