@@ -198,8 +198,8 @@ export default Model.extend({
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
     let onStepCallback = this.onStepCallback.bind(this);
-    this.applyInitFunction();
-    this.applyOnstepFunction();
+    this.applyCustomFunction('initFunction');
+    this.applyCustomFunction('onstepFunction');
 
     __(this.samplerSelector).unbind('step');
 
@@ -223,27 +223,12 @@ export default Model.extend({
     });
   },
 
-  async applyInitFunction() {
-    const functionDefinition = await this.get('initFunction.function');
-    try {
-      let onstepFunctionRef = new Function(
-        'index',
-        'data',
-        'array',
-        functionDefinition
-      )
-        .bind(this.customFunctionScope);
-      this.set('initFunctionRef', onstepFunctionRef);
-    } catch (e) {
-      alert('problem with function', e);
-    }
-  },
   /* 
     Takes a modelName (initFunction or onstepFunction
     evaluates it as a Function, and binds it to the track as a method named 
     initFunctionRef or onstepFunctionRef
    */
-  async applyOnstepFunction(modelName) {
+  async applyCustomFunction(modelName) {
     const functionDefinition = await this.get(`${modelName}.function`);
     try {
       let functionRef = new Function(

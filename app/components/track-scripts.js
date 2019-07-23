@@ -8,12 +8,12 @@ export default Component.extend({
   },
   customFunctionRef: computed('functionType', {
     get() {
-      return `${this.functionType}Ref`;
+      return this.track.get(`${this.functionType}FunctionRef`);
     }
   }),
   customFunctionModel: computed('functionType', {
     get() {
-      return `${this.functionType}Model`;
+      return this.track.get(`${this.functionType}Function`);
     }
   }),
 });

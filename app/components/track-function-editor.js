@@ -17,7 +17,8 @@ export default Component.extend({
   cantSubmit: or('!canSubmit', 'functionIsLoaded'),
   functionIsLoaded: computed('function', 'editorContent', {
     get() {
-      return this.function === this.editorContent && this.customFunctionRef;
+      console.log(this.function, this.editorContent, this.customFunctionRef);
+      return (this.function === this.editorContent) && this.customFunctionRef;
     }
   }),
 
