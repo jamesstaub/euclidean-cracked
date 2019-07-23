@@ -57,10 +57,9 @@ export default Controller.extend({
     },
 
     async deleteTrack(track) {
-      const customFunction = await track.get('customFunction');
-      // TODO: delete customFunction with cloud Function
+      // TODO: delete onstepFunction with cloud Function
       // since readOnly validation prevents deletion
-      // customFunction.destroyRecord();
+      // onstepFunction.destroyRecord();
       const projectTracks = await this.model.get('tracks');
       projectTracks.removeObject(track);
       await this.model.save();
@@ -74,11 +73,14 @@ export default Controller.extend({
     },
 
     async createTrack(project) {
-      let customFunction = this.store.createRecord('customFunction', {
-        projectCreatorUid: project.get('creator.uid')
+      let onstepFunction = this.store.createRecord('customFunction', {
+        projectCreatorUid: project.get('creator.uid'),
+      });
+      let initFunction = this.store.createRecord('customFunction', {
+        projectCreatorUid: project.get('creator.uid'),
       });
 
-      await customFunction.save();
+      await onstepFunction.save();
 
       // TODO: instead of setting defaults here, just use
       // defaults on the model
@@ -86,10 +88,11 @@ export default Controller.extend({
       let track = this.store.createRecord('track', {
         projectCreatorUid: project.get('creator.uid'),
         publicEditable: project.publicEditable,
-        customFunction: customFunction
+        onstepFunction: onstepFunction,
+        initFunction: initFunction
       });
 
-      track.set('customFunction', customFunction);
+      track.set('onstepFunction', onstepFunction);
 
       project.get('tracks').addObject(track);
 

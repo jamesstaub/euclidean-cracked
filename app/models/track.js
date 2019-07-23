@@ -45,7 +45,8 @@ export default TrackSamplerInstance.extend({
     }
   }),
 
-  customFunction: belongsTo('customFunction'),
+  onstepFunction: belongsTo('customFunction'),
+  initFunction: belongsTo('customFunction'),
 
   hits: attr('number', {
     defaultValue() {

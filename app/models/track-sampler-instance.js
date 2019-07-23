@@ -81,7 +81,7 @@ export default Model.extend({
     }
   }),
 
-  customFunctionScope: computed('samplerSelector,gainOnStepSelector,lowpassSelector', {
+  onstepFunctionScope: computed('samplerSelector,gainOnStepSelector,lowpassSelector', {
     get() {
       // variables available for user defined track functions
       return {
@@ -150,8 +150,8 @@ export default Model.extend({
 
     this.applyTrackControls(index);
 
-    if (this.onStepFunction) {
-      this.onStepFunction(index, data, array);
+    if (this.onStepFunctionRef) {
+      this.onStepFunctionRef(index, data, array);
     }
   },
 
@@ -169,7 +169,7 @@ export default Model.extend({
 
     yield waitForProperty(this, 'samplerId');
     yield waitForProperty(this, 'filepath');
-    yield waitForProperty(this, 'customFunction.content');
+    yield waitForProperty(this, 'onstepFunction.content');
     // wait until beginning of sequence to apply changes
     // prevents lots of concurrent disruptions
 
@@ -213,20 +213,20 @@ export default Model.extend({
   },
 
   /* 
-    Takes a function definition (string) from the customFunction model
-    evaluates it as a Function, and binds it to the track as a method named onStepFunction
+    Takes a function definition (string) from the onstepFunction model
+    evaluates it as a Function, and binds it to the track as a method named onStepFunctionRef
    */
   async applyCustomFunction() {
-    const functionDefinition = await this.get('customFunction.function');
+    const functionDefinition = await this.get('onstepFunction.function');
     try {
-      let onStepFunction = new Function(
+      let onStepFunctionRef = new Function(
         'index', 
         'data', 
         'array', 
         functionDefinition
       )
-      .bind(this.customFunctionScope);
-      this.set('onStepFunction', onStepFunction);
+      .bind(this.onstepFunctionScope);
+      this.set('onStepFunctionRef', onStepFunctionRef);
     } catch (e) {
       alert('problem with function', e);
     }

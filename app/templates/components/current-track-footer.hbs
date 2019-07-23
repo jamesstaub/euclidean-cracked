@@ -14,10 +14,10 @@
 
   <div class="flex-0 br flex flex-column w3 h-100">
     {{#mdc-button class=(concat "bb b--black br0 h-auto flex-grow " (if (eq visibleInterface "rhythm") "bg-light-blue br")) click=(action (mut visibleInterface) "rhythm")}}
-      <img alt="Rhythm and Automation editor" src="/assets/icons/automation.svg"/>
+      <img alt="Rhythm and Automation editor" src="/assets/icons/automation.svg">
     {{/mdc-button}}
     {{#mdc-button class=(concat "br0 h-auto flex-grow " (if (eq visibleInterface "script") "bg-light-blue br")) click=(action (mut visibleInterface) "script")}}
-      <img alt="Script Editor" src="/assets/icons/script.svg"/>
+      <img alt="Script Editor" src="/assets/icons/script.svg">
     {{/mdc-button}}
   </div>
 
@@ -45,7 +45,24 @@
         class="w-100 h-auto overflow-scroll absolute bottom-0 bg-yellow pa3"
         @track={{track}}
       >
-        <h3>Script Editor</h3>
+          <div class="flex pa0 ma0">
+            {{#mdc-button
+              click=(action (mut functionType) "onstep") 
+              class="f7"
+              title="On Step: runs on each step"
+              style=(if (eq functionType "onstep") "raised")
+            }} 
+              On Step
+            {{/mdc-button}}
+            {{#mdc-button
+              click=(action (mut functionType) "init") 
+              class="f7"
+              title="Init function: runs once"
+              style=(if (eq functionType "init") "raised")
+            }} 
+              Init
+            {{/mdc-button}}
+          </div>
       </TrackFunctionEditor>
     {{/if}}
   </div>
