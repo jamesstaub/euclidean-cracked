@@ -6,7 +6,7 @@
         click=(action (mut isExpanded) (not isExpanded))
         icon=(if isExpanded "expand_more" "expand_less")
         mini=true
-        class="bg-transparent absolute top-0 right-0 shadow-none"
+        class="expand-btn bg-transparent absolute right-0 shadow-none"
       }}
     </div>
     {{#if (not functionIsLoaded)}}
@@ -53,7 +53,7 @@
     <div class="flex">
       {{ember-ace
         class="flex-grow"
-        lines=(if isExpanded 24 9)
+        lines=(if isExpanded 24 8)
         editorClass="ace-editor"
         value=editorContent
         mode="ace/mode/javascript"

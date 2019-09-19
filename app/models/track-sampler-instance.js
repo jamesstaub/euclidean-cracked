@@ -121,11 +121,12 @@ export default Model.extend({
   removeAllNodes() {
     __(this.samplerSelector).unbind('step');
 
+    // __("*").remove();  
+    
     // NOTE: any cracked node created in this component must be selected
     // for tear down here, otherwise lingering nodes will break
     // ability to select by ID
     let selectors = [this.trackNodeSelector];
-
     selectors.forEach(selector => {
       __(selector).remove();
     });
@@ -171,7 +172,6 @@ export default Model.extend({
     yield waitForProperty(this, 'samplerId');
     yield waitForProperty(this, 'filepath');
     yield waitForProperty(this, 'initFunction.content');
-    yield waitForProperty(this, 'initFunction.content');
     yield waitForProperty(this, 'onstepFunction.content');
     
     // wait until beginning of sequence to apply changes
@@ -184,9 +184,7 @@ export default Model.extend({
       this.bindTrackSampler();
 
       // Call user written init function 
-      if (this.initFunctionRef) {
-        this.initFunctionRef();
-      }
+      this.customInitFunction();
 
       if (this.get('project.isPlaying')) {
         timeout(300);
@@ -208,6 +206,25 @@ export default Model.extend({
       onStepCallback, // call this function (bound to component scope)
       this.sequence // passing in array value at position
     );
+  },
+
+  /**
+   * call user defined initFunction
+   * lookup the difference in cracked nodes that exist before and 
+   * after this init function is called. store them and attempt to
+   * clear them every time this track is re-initialized
+   */
+  customInitFunction() {
+    // return object of all web audio nodes (uuid as keys)
+    const nodeStoreBeforeInit = __._getNodeStore();    
+    const b = Object.keys(nodeStoreBeforeInit);
+    console.log(nodeStoreBeforeInit);
+    if (this.initFunctionRef) {
+      this.initFunctionRef();
+    }
+    const nodeStoreAfterInit = __._getNodeStore();
+    const a = Object.keys(nodeStoreAfterInit);
+    console.log(nodeStoreAfterInit);
   },
 
   applyTrackControls(index) {
