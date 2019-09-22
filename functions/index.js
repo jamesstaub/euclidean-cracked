@@ -214,7 +214,6 @@ const excludes = [
   'preventDefault',
   'protect',
   'prototype',
-  'remove',
   'removeChild',
   'removeElement',
   'replace',
