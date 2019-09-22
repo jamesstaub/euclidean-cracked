@@ -217,14 +217,14 @@ export default Model.extend({
   customInitFunction() {
     // return object of all web audio nodes (uuid as keys)
     const nodeStoreBeforeInit = __._getNodeStore();    
-    const b = Object.keys(nodeStoreBeforeInit);
-    console.log(nodeStoreBeforeInit);
+    const before = Object.keys(nodeStoreBeforeInit);
+
     if (this.initFunctionRef) {
       this.initFunctionRef();
     }
     const nodeStoreAfterInit = __._getNodeStore();
-    const a = Object.keys(nodeStoreAfterInit);
-    console.log(nodeStoreAfterInit);
+    const after = Object.keys(nodeStoreAfterInit);
+
   },
 
   applyTrackControls(index) {
@@ -247,6 +247,7 @@ export default Model.extend({
    */
   async applyCustomFunction(modelName) {
     const functionDefinition = await this.get(`${modelName}.function`);
+
     try {
       let functionRef = new Function(
         'index', 

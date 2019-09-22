@@ -4,15 +4,15 @@ import { reads, not, and, or, alias } from '@ember/object/computed';
 import { task, waitForProperty } from 'ember-concurrency';
 import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
-  // customFunctionModel is the model that saves custom function as string
+  // customFunctionRecord is the model that saves custom function as string
 
   classNames: ['track-function-editor'],
   tagName:'',
-  function: alias('customFunctionModel.function'),
-  customFunctionRef: reads('track.customFunctionRef'), // the actual function that gets called on each step
-  illegalTokens: reads('customFunctionModel.illegalTokens'),
+  function: alias('customFunctionRecord.function'),
+  
+  illegalTokens: reads('customFunctionRecord.illegalTokens'),
   // code in text editor
-  editorContent: alias('customFunctionModel.editorContent'),
+  editorContent: alias('customFunctionRecord.editorContent'),
   canSubmit: and('editorContent.length'),
   cantSubmit: or('!canSubmit', 'functionIsLoaded'),
   functionIsLoaded: computed('function', 'editorContent', {
@@ -31,9 +31,9 @@ export default Component.extend({
   // set property to cusotmFunction model then save
   saveFunctionTask: task(function*(property, value) {
     // yield proxy to model record
-    const customFunctionModel = yield this.customFunctionModel;
-    customFunctionModel.set(property, value);
-    yield customFunctionModel.save();
+    const customFunctionRecord = yield this.customFunctionRecord;
+    customFunctionRecord.set(property, value);
+    yield customFunctionRecord.save();
   }),
 
   applyFunction: task(function*() {
@@ -44,10 +44,10 @@ export default Component.extend({
     // until the function checker sets it null and either sets
     // the function property, or returns illegal keywords
     
-    yield waitForProperty(this, 'customFunctionModel.functionPreCheck', null);
+    yield waitForProperty(this, 'customFunctionRecord.functionPreCheck', null);
 
     // the cloud function check succeeded if function + editor are identical
-    if (this.customFunctionModel.get('function') === this.editorContent) {
+    if (this.customFunctionRecord.get('function') === this.editorContent) {
       yield this.track.initializeSampler.perform();
     }
     /**
@@ -59,7 +59,7 @@ export default Component.extend({
 
 
   verifyCustomFunction() {
-    // customFunctionModel.function can only be written by a cloud function
+    // customFunctionRecord.function can only be written by a cloud function
     // that filters out dangerous tokens
     let isSafe = !this.get('illegalTokens');
     if (isSafe && this.function) {
