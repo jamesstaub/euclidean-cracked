@@ -16,6 +16,12 @@ export default Route.extend({
 
   async afterModel(model, transition) {
     this.addProjectActiveUser(model);
+    const tracks = await model.get('tracks');
+
+    await Promise.all(tracks.map((track) => track.get('onstepFunction')));
+    await Promise.all(tracks.map((track) => track.get('initFunction')));
+
+      // track.get('initFunction');));
     if (!model.tracks.length) {
       this.createDefaultTrack(model, transition);
     }

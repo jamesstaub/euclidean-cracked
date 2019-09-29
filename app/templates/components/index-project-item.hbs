@@ -1,7 +1,7 @@
 {{#mdc-card outlined=true class="ma3 pa3"}}
     <!-- <button class="btn play">{{fa-icon "play"}}</button>  -->
   <div class="mdc-typography mdc-typography--headline6">
-    {{#link-to "user.creator.project" session.currentUser project class="link"}}
+    {{#link-to "user.creator.project" session.currentUserModel project class="link"}}
       {{project.title}}
     {{/link-to}}
   </div>

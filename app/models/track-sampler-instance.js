@@ -1,6 +1,6 @@
 import Model from 'ember-data/model';
 import { computed } from '@ember/object';
-import { task, waitForProperty, timeout } from 'ember-concurrency';
+import { task, waitForProperty } from 'ember-concurrency';
 
 /* 
   Module  to be extended by the track model 
@@ -69,7 +69,8 @@ export default Model.extend({
 
   path: computed('directory', 'filepath', {
     get() {
-      return `https://s3.amazonaws.com/drumserver${this.filepath}`;
+      const filepath = this.filepath.replace(' ', '%20');
+      return `https://s3.amazonaws.com/drumserver${filepath}`;
     }
   }),
 
@@ -138,10 +139,10 @@ export default Model.extend({
     this.set('stepIndex', index);
 
     if (data) {
-      __(this).stop();
-      __(this).start();
+      __(this.samplerSelector).stop();
+      __(this.samplerSelector).start();
 
-      __(this).attr({ loop: this.isLooping });
+      __(this.samplerSelector).attr({ loop: this.isLooping });
     } else {
       // __(this).stop();
       // if (!get(this, 'isLegato')) {
@@ -158,7 +159,6 @@ export default Model.extend({
 
   // eslint-disable-next-line complexity
   initializeSampler: task(function* (awaitStart) {
-    timeout(300);
     yield waitForProperty(
       this,
       'sequence',
@@ -171,9 +171,9 @@ export default Model.extend({
 
     yield waitForProperty(this, 'samplerId');
     yield waitForProperty(this, 'filepath');
-    yield waitForProperty(this, 'initFunction.content');
-    yield waitForProperty(this, 'onstepFunction.content');
-    
+    yield waitForProperty(this.initFunction, 'isFulfilled');
+    yield waitForProperty(this.onstepFunction, 'isFulfilled');
+
     // wait until beginning of sequence to apply changes
     // prevents lots of concurrent disruptions
 
@@ -187,7 +187,6 @@ export default Model.extend({
       this.customInitFunction();
 
       if (this.get('project.isPlaying')) {
-        timeout(300);
         __.loop('start');
       }
     }
@@ -247,7 +246,6 @@ export default Model.extend({
    */
   async applyCustomFunction(modelName) {
     const functionDefinition = await this.get(`${modelName}.function`);
-
     try {
       let functionRef = new Function(
         'index', 

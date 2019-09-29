@@ -33,6 +33,8 @@ export default Component.extend(NexusMixin, {
     }
   }),
 
+  // eslint-disable-next-line ember/no-observers
+  // eslint-disable-next-line complexity
   onStepChange: observer('stepIndex', function() {
     let sequencer = this.NexusElement;
     if (sequencer) {

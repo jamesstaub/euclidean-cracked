@@ -10,7 +10,7 @@ export default Component.extend({
 
   bpm: computed({
     get() {
-      return 60000 / this.project.interval;
+      return (60000 / this.project.interval);
     },
     set(key, val) {
       const interval = 60000 / val;
@@ -64,7 +64,8 @@ export default Component.extend({
 
   actions: {
     async start() {
-      this.project.initializeTrackSamplers();
+      await this.project.initializeTrackSamplers();
+      __.play();
       __.loop('start');
       
       // + 1 hack to fix unknown playback problem

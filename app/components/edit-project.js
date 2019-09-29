@@ -6,9 +6,9 @@ export default Component.extend({
   isEditing: false,
   classNames: 'edit-project flex',
 
-  isAllowed: computed('project.creator.uid', 'session.currentUser.uid',{
+  isAllowed: computed('project.creator.uid', 'session.currentUserModel.uid',{
     get() {
-      const currentUser = get(this, 'session.currentUser.uid');
+      const currentUser = get(this, 'session.currentUserModel.uid');
       const creatorPromise = get(this, 'project.creator').then((creator)=>{
         if (creator) {
           return get(creator, 'uid') === currentUser;
@@ -23,7 +23,7 @@ export default Component.extend({
 
   actions: {
     save() {
-      let sessionName = get(this, 'session.currentUser.uid');
+      let sessionName = get(this, 'session.currentUserModel.uid');
 
       if (sessionName === this.project.get('creator.uid')) {
         set(this, 'isEditing', false);

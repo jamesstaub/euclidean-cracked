@@ -50,6 +50,7 @@ export default Component.extend({
     if (this.customFunctionRecord.get('function') === this.editorContent) {
       yield this.track.initializeSampler.perform();
     }
+
     /**
      * TODO: set a timeout condition for this method
      * if the cloud function fails to respond, it can still set

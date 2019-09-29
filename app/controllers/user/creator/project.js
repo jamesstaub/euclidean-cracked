@@ -92,7 +92,9 @@ export default Controller.extend({
         initFunction: initFunction
       });
 
+    //  shouldnt need to do this but prevents firebase errors
       track.set('onstepFunction', onstepFunction);
+      track.set('initFunction', onstepFunction);
 
       project.get('tracks').addObject(track);
 

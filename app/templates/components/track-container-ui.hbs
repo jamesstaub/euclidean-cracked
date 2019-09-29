@@ -6,3 +6,10 @@
   }}
 </div>
 {{mdc-icon-button icon="close" title="Delete Track" class="dark-red delete-track-btn" click=(action "deleteTrack" track bubbles=false)}}
+
+{{#if isActive}}
+  <CurrentTrackFooter 
+    @track={{track}}
+    @saveTrackTask={{saveTrackTask}}
+  />
+{{/if}}
