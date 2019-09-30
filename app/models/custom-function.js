@@ -17,6 +17,7 @@ export default DS.Model.extend({
 
   // always copied from functionPreCheck in cloud function
   // after submitted and checked for forbidden tokens
+  // never settable by the client
   function: DS.attr('string', { readOnly: true }),
 
   // unsafe javascript keywords returned from cloud function

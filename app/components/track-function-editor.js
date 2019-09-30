@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { reads, not, and, or, alias } from '@ember/object/computed';
 import { task, waitForProperty } from 'ember-concurrency';
-import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
   // customFunctionRecord is the model that saves custom function as string
 
@@ -22,11 +21,6 @@ export default Component.extend({
   }),
 
   showDiscardBtn: not('hasUnloadedCode'),
-
-  init() {
-    this._super(...arguments);
-    this.set('exampleFunctions', exampleFunctions);
-  },
 
   // set property to cusotmFunction model then save
   saveFunctionTask: task(function*(property, value) {

@@ -42,8 +42,12 @@ export default Model.extend({
     this._super(...arguments);
     this.set('stepIndex', 0);
   },
-  /* class to add to all nodes on this track */
-  trackNodeClass: nodeName('id', 'node'),
+  /* class to add to all nodes on this track 
+    this suffix -controlleris used to select audio nodes
+    to dynamically create multislider controls for
+  */
+
+  trackNodeClass: nodeName('id', 'controller'),
 
   /** cracked webaudio node ids */
   samplerId: nodeName('id', 'sampler'),
@@ -74,21 +78,32 @@ export default Model.extend({
     }
   }),
 
-  stepsUntilStart: computed('sequence.length', 'stepIndex', {
-    get() {
-      if (this.sequence) {
-        return this.sequence.length - this.stepIndex;
-      }
-    }
-  }),
+  // stepsUntilStart: computed('sequence.length', 'stepIndex', {
+  //   get() {
+  //     if (this.sequence) {
+  //       return this.sequence.length - this.stepIndex;
+  //     }
+  //   }
+  // }),
 
-  customFunctionScope: computed('samplerSelector,gainOnStepSelector,lowpassSelector', {
+  // 
+  customFunctionScope: computed(
+    'samplerSelector',
+    'gainValue',
+    'path',
+    'trackNodeClass',
+    'gainOnStepSelector',
+    'lowpassSelector', {
     get() {
       // variables available for user defined track functions
+
       return {
-        sampler: `${this.get('samplerSelector')}`,
-        gain: `${this.get('gainOnStepSelector')}`,
-        lowpass: `${this.get('lowpassSelector')}`
+        path: this.path,
+        sampler: this.samplerSelector,
+        samplerId: this.samplerId,
+        className: this.trackNodeClass,
+        gainId: this.gainId,
+        gainValue: this.gain,
       };
     }
   }),
@@ -116,21 +131,16 @@ export default Model.extend({
         id: `${this.gainOnStepId}`,
         class: this.trackNodeClass
       })
-      .connect(this.get('project.outputNodeSelector'));
+      .connect(this.get('project.masterCompressorSelector'));
   },
 
   removeAllNodes() {
     __(this.samplerSelector).unbind('step');
-
-    // __("*").remove();  
     
     // NOTE: any cracked node created in this component must be selected
     // for tear down here, otherwise lingering nodes will break
     // ability to select by ID
-    let selectors = [this.trackNodeSelector];
-    selectors.forEach(selector => {
-      __(selector).remove();
-    });
+    __(this.trackNodeSelector).remove();
   },
 
   // callback functions to be called on each step of sequencer
@@ -144,7 +154,7 @@ export default Model.extend({
 
       __(this.samplerSelector).attr({ loop: this.isLooping });
     } else {
-      // __(this).stop();
+      __(this.samplerSelector).stop();
       // if (!get(this, 'isLegato')) {
       // __(this).attr({loop:false});
       // }
@@ -179,12 +189,15 @@ export default Model.extend({
 
     if (this.sequence.length) {
       __.loop('stop');
-      this.removeAllNodes();
-      this.buildNodes();
-      this.bindTrackSampler();
+      // this.removeAllNodes();
+      // this.buildNodes();
+      this.bindCustomFunctionDefinition('initFunction');
+      if (this.initFunctionRef) {
+        // Call initFunction
+        this.initFunctionRef();
+      }
 
-      // Call user written init function 
-      this.customInitFunction();
+      this.bindTrackSampler();
 
       if (this.get('project.isPlaying')) {
         __.loop('start');
@@ -195,11 +208,11 @@ export default Model.extend({
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
     let onStepCallback = this.onStepCallback.bind(this);
-    this.applyCustomFunction('initFunction');
-    this.applyCustomFunction('onstepFunction');
+    
+    this.bindCustomFunctionDefinition('onstepFunction');
 
     __(this.samplerSelector).unbind('step');
-
+  
     __(this.samplerSelector).bind(
       'step', // on every crack sequencer step
       onStepCallback, // call this function (bound to component scope)
@@ -212,19 +225,15 @@ export default Model.extend({
    * lookup the difference in cracked nodes that exist before and 
    * after this init function is called. store them and attempt to
    * clear them every time this track is re-initialized
-   */
-  customInitFunction() {
     // return object of all web audio nodes (uuid as keys)
-    const nodeStoreBeforeInit = __._getNodeStore();    
-    const before = Object.keys(nodeStoreBeforeInit);
+    // const nodeStoreBeforeInit = __._getNodeStore();    
+    // const before = Object.keys(nodeStoreBeforeInit);
 
-    if (this.initFunctionRef) {
-      this.initFunctionRef();
-    }
-    const nodeStoreAfterInit = __._getNodeStore();
-    const after = Object.keys(nodeStoreAfterInit);
 
-  },
+    // const nodeStoreAfterInit = __._getNodeStore();
+    // const after = Object.keys(nodeStoreAfterInit);
+   */
+
 
   applyTrackControls(index) {
     this.get('trackControls').forEach((control)=> {
@@ -244,16 +253,24 @@ export default Model.extend({
     evaluates it as a Function, and binds it to the track as a method named 
     initFunctionRef or onstepFunctionRef
    */
-  async applyCustomFunction(modelName) {
+  async bindCustomFunctionDefinition(modelName) {
     const functionDefinition = await this.get(`${modelName}.function`);
+    let functionRef;
+
     try {
-      let functionRef = new Function(
-        'index', 
-        'data', 
-        'array', 
-        functionDefinition
-      )
-      .bind(this.customFunctionScope);
+      if (modelName === 'initFunction') {
+        functionRef = new Function(functionDefinition).bind(this.customFunctionScope);
+      }
+      if (modelName === 'onstepFunction') {
+        functionRef = new Function(
+          'index', 
+          'data', 
+          'array', 
+          functionDefinition
+        )
+        .bind(this.customFunctionScope);
+      }
+
       this.set(`${modelName}Ref`, functionRef);
     } catch (e) {
       alert('problem with function', e);

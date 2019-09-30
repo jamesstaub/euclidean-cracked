@@ -28,7 +28,7 @@ export default DS.Model.extend({
 
     init() {
       this._super(...arguments);
-      this.set('outputNodeSelector', '#master-compressor');
+      this.set('masterCompressorSelector', '#master-compressor');
     },
     
     async eachTrackAsync(asyncFn) {
@@ -40,6 +40,9 @@ export default DS.Model.extend({
 
     // TODO: move to project controller?
     async initializeTrackSamplers() {
+      __('sampler').unbind('step');
+      __('sampler').remove(); 
+
       return this.eachTrackAsync((track) => {
         track.set('stepIndex', 1);
         track.initializeSampler.perform();

@@ -1,5 +1,7 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
+import exampleInitFunctions from '../utils/example-init-functions';
+import exampleOnstepFunctions from '../utils/example-onstep-functions';
 
 export default Component.extend({
   init() {
@@ -15,7 +17,7 @@ export default Component.extend({
       if (!onstepFunctionRecord || !initFunctionRecord) {
         throw `${this.functionType}Function is null, Cloud function should enforce this never happens`;
       }
-      
+
       this.set('onstepFunctionRecord', onstepFunctionRecord);
       this.set('initFunctionRecord', initFunctionRecord);
     }
@@ -25,6 +27,16 @@ export default Component.extend({
     get() {
       // returns either onstepFunctionRef or initFunctionRef
       return this.track.get(`${this.functionType}FunctionRef`);
+    }
+  }),
+  exampleFunctions: computed('functionType', {
+    get() {
+      switch (this.functionType) {
+        case 'init':
+          return exampleInitFunctions;
+        case 'onstep':
+          return exampleOnstepFunctions;
+      }
     }
   }),
 

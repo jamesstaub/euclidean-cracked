@@ -4,6 +4,7 @@ import cleanURI from 'euclidean-cracked/utils/clean';
 import { debug } from "@ember/debug";
 import { computed } from '@ember/object';
 import { task } from 'ember-concurrency';
+import exampleInitFunctions from '../../../utils/example-init-functions';
 
 export default Controller.extend({
   session: service(),
@@ -76,10 +77,14 @@ export default Controller.extend({
       let onstepFunction = this.store.createRecord('customFunction', {
         projectCreatorUid: project.get('creator.uid'),
       });
+
       let initFunction = this.store.createRecord('customFunction', {
         projectCreatorUid: project.get('creator.uid'),
+        editorContent: exampleInitFunctions[0].examples[0].code,
+        functionPreCheck: exampleInitFunctions[0].examples[0].code
       });
 
+      await initFunction.save();
       await onstepFunction.save();
 
       // TODO: instead of setting defaults here, just use
@@ -94,7 +99,7 @@ export default Controller.extend({
 
     //  shouldnt need to do this but prevents firebase errors
       track.set('onstepFunction', onstepFunction);
-      track.set('initFunction', onstepFunction);
+      track.set('initFunction', initFunction);
 
       project.get('tracks').addObject(track);
 

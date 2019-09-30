@@ -1,10 +1,11 @@
 <TrackFunctionEditor
   class="w-100 h-auto overflow-scroll absolute bottom-0 bg-yellow pa3"
   @track={{track}}
+  @exampleFunctions={{exampleFunctions}}
   @customFunctionRef={{customFunctionRef}}
   @customFunctionRecord={{customFunctionRecord}}
 >
-  {{log "customFunctionRecord" customFunctionRecord}}
+
   <div class="flex pa0 ma0">
     {{#mdc-button
       click=(action (mut functionType) "init")

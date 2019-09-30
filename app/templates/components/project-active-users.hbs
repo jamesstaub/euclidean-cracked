@@ -2,14 +2,15 @@
   <h4>
     active users
   </h4>
-  <ul class="list-unstyled user-list">
-    {{#each project.activeUsers as |activeUser|}}
-      {{#if activeUser.online}}
-        <li class="user {{if activeUser.online "online"}}">
-          <img src="{{activeUser.avatar}}" title="{{activeUser.username}}" />
-        </li>
-      {{/if}}
-    {{/each}}
-  </ul>
+    <div class="flex">
+      {{#each project.activeUsers as |activeUser|}}
+        {{#if activeUser.online}}
+          <div class="user {{if activeUser.ondivne "online"}}">
+            <img src="{{activeUser.avatar}}" title="{{activeUser.username}}" />
+          </div>
+        {{/if}}
+      {{/each}}
+    </div>
+
 {{/if}}
 {{yield}}
