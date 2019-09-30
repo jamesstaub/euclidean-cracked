@@ -7,6 +7,8 @@ You can create complex euclidean rhythm patterns with a large library of drum sa
 
 Euclip is powered by the Cracked web audio library which provides an easy syntax for creating and chaining together web audio nodes, as well as a bunch of useful helpers for creating algorithmic music.
 
+This project is in development, the demo link may have some usability issues. 
+
 Euclip projects are made up of tracks, each of which have 2 code editors, one that is executed once on **setup**, and another which is executed on each step of the rhythm sequence (**on-step**). 
 
 
@@ -40,6 +42,8 @@ Each Euclip track is made of Cracked node chain, so you can access the various s
 ```
 
 Once you've selected a node, you can change it's properties with `attr()` function
+## Cracked, Nexus and ember
+This app uses the web audio library [cracked](https://github.com/billorcutt/i_dropped_my_phone_the_screen_cracked) for audio along with NexusUI for interface objects.
 
 ```
  __(this.sampler).attr({speed: .5})
