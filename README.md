@@ -11,13 +11,22 @@ Euclip projects are made up of tracks, each of which have 2 code editors, one th
 
 
 Pre-release TODOs:
-- setup() functions per track
-- cloud function to  delete orphan data 
+- init function is where track nodes are initialized (with this.trackSelector class on all) 
+- prefill controls attrs based on track's nodes
+- 
+- cloud function to  delete orphan data  (moved to new repo)
 - test+review permissions
     - show/hide public feed
-- track controller UI (buttons, instead of scroll)
-- about page
-- clone projects
+- about / help page
+
+
+Future features:
+
+- Audio uploads
+    - user can upload their own samples, expand drum file picker to show users' collection
+    - cloud function (or possibly client service worker) performs beat tracking analysis, creates a track-script variable which is an array of start/end times of the beat tracking. 
+
+
 
 ### selecting Cracked audio nodes with Cracked audio syntax in javascript
 the `__()` function is used to select Cracked audio nodes, which have css/jQuery style selecors for `id` and `class`.

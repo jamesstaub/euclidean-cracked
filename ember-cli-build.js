@@ -1,12 +1,16 @@
 /* eslint-env node */
+
+// https://discuss.emberjs.com/t/tips-for-improving-build-time-of-large-apps/15008/13
 'use strict';
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-
+const environment = process.env.EMBER_ENV;
+const IS_PROD = environment === 'production';
+const IS_TEST = environment === 'test';
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
-
+    hinting: IS_TEST,
     'ember-cli-babel': {
-      includePolyfill: true
+      includePolyfill: IS_PROD // Only include babel polyfill in prod
     },
 
     fingerprint: {
@@ -17,7 +21,11 @@ module.exports = function(defaults) {
     // minifyJS: { enabled: process.env.NODE_ENV !== 'development' },
     autoprefixer: {
       // https://github.com/ai/browserslist#queries
-      browsers: ['> 1% in US', 'last 3 versions', 'Safari >= 8']
+      browsers: ['> 1% in US', 'last 3 versions', 'Safari >= 8'],
+      sourcemap: false // Was never helpful
+    },
+    sourcemaps: {
+      enabled: true, // IS_PROD // CMD ALT F in chrome is *almost* as fast as CMD P
     },
 
     ace: {
@@ -28,8 +36,8 @@ module.exports = function(defaults) {
 
   });
 
-  app.import('vendor/i_dropped_my_phone_the_screen_cracked/dist/cracked.js');
-  app.import('vendor/nexusui/dist/NexusUi.js');
+  app.import('vendor/i_dropped_my_phone_the_screen_cracked/dist/cracked.min.js');
+  app.import('vendor/nexusui/dist/NexusUI.js');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
