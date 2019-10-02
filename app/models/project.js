@@ -40,8 +40,8 @@ export default DS.Model.extend({
 
     // TODO: move to project controller?
     async initializeTrackSamplers() {
-      __('sampler').unbind('step');
-      __('sampler').remove(); 
+      // __('sampler').unbind('step');
+      // __('*').remove(); 
 
       return this.eachTrackAsync((track) => {
         track.set('stepIndex', 1);

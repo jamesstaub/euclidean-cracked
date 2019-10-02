@@ -1,6 +1,7 @@
 import Model from 'ember-data/model';
 import { computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
+import crackedNodeUtil from '../utils/cracked-nodes';
 
 /* 
   Module  to be extended by the track model 
@@ -42,12 +43,12 @@ export default Model.extend({
     this._super(...arguments);
     this.set('stepIndex', 0);
   },
+  
   /* class to add to all nodes on this track 
     this suffix -controlleris used to select audio nodes
     to dynamically create multislider controls for
   */
-
-  trackNodeClass: nodeName('id', 'controller'),
+  nodeWithControllerClass: nodeName('id', 'controller'),
 
   /** cracked webaudio node ids */
   samplerId: nodeName('id', 'sampler'),
@@ -69,7 +70,7 @@ export default Model.extend({
   lowpassSelector: selectorFor('id', 'lowpassId'),
   
   /* Class selector for every node bound to this track */
-  trackNodeSelector: selectorFor('class', 'trackNodeClass'),
+  trackNodeSelector: selectorFor('class', 'nodeWithControllerClass'),
 
   path: computed('directory', 'filepath', {
     get() {
@@ -91,7 +92,7 @@ export default Model.extend({
     'samplerSelector',
     'gainValue',
     'path',
-    'trackNodeClass',
+    'nodeWithControllerClass',
     'gainOnStepSelector',
     'lowpassSelector', {
     get() {
@@ -101,7 +102,7 @@ export default Model.extend({
         path: this.path,
         sampler: this.samplerSelector,
         samplerId: this.samplerId,
-        className: this.trackNodeClass,
+        className: this.nodeWithControllerClass,
         gainId: this.gainId,
         gainValue: this.gain,
       };
@@ -114,22 +115,22 @@ export default Model.extend({
       .sampler({
         id: this.samplerId,
         path: this.path,
-        class: this.trackNodeClass
+        class: this.nodeWithControllerClass
       })
       .lowpass({
         id: this.lowpassId,
         frequency: 10000,
         q: 0,
-        class: this.trackNodeClass
+        class: this.nodeWithControllerClass
       })
       .gain({
         id: this.gainId,
-        class: this.trackNodeClass,
+        class: this.nodeWithControllerClass,
         gain: this.gain
       })
       .gain({
         id: `${this.gainOnStepId}`,
-        class: this.trackNodeClass
+        class: this.nodeWithControllerClass
       })
       .connect(this.get('project.masterCompressorSelector'));
   },
@@ -142,6 +143,41 @@ export default Model.extend({
     // ability to select by ID
     __(this.trackNodeSelector).remove();
   },
+
+
+    // create multisliders for each web audio node defined in the init function
+    async createTrackControls() {
+      const nodes = crackedNodeUtil.selectNodes(this.trackNodeSelector);
+      // get array of options to create new track-control model instances
+      // by querying existing cracked nodes
+      const controlDefaults = nodes
+        .map((node) => crackedNodeUtil.attrsForNode(node))
+        .map((attrs) => crackedNodeUtil.defaultForAttr(...attrs));
+
+      const controlRecords = controlDefaults.flat().map((options)=>{
+        options = { interfaceName: 'ui-multislider', ...options };
+        
+        let trackControl = this.trackControls.findBy('uniqueNameAttr', `${options.nodeName}-${options.nodeAttr}`);
+        if (trackControl) {
+          trackControl.setProperties(options);
+        } else {
+          trackControl = this.store.createRecord('track-control', options);
+        }
+        this.trackControls.pushObject(trackControl);
+        return trackControl;
+      });
+
+
+      // TODO when to save (destroy) the deleted record, and do i need to also save the track?
+      this.trackControls.filterBy('nodeSelector', null).forEach((trackControl)=>{
+        trackControl.deleteRecord();
+      });
+ 
+
+
+      const saveArray = Promise.all(controlRecords.map((record) => record.save()));
+      return saveArray;
+    },
 
   // callback functions to be called on each step of sequencer
   // eslint-disable-next-line complexity
@@ -191,13 +227,14 @@ export default Model.extend({
       __.loop('stop');
       // this.removeAllNodes();
       // this.buildNodes();
-      this.bindCustomFunctionDefinition('initFunction');
+      yield this.bindCustomFunctionDefinition('initFunction');
       if (this.initFunctionRef) {
         // Call initFunction
         this.initFunctionRef();
+        yield this.createTrackControls();
       }
 
-      this.bindTrackSampler();
+      yield this.bindTrackSampler();
 
       if (this.get('project.isPlaying')) {
         __.loop('start');
@@ -205,11 +242,11 @@ export default Model.extend({
     }
   }).keepLatest(),
 
-  bindTrackSampler() {
+  async bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
     let onStepCallback = this.onStepCallback.bind(this);
     
-    this.bindCustomFunctionDefinition('onstepFunction');
+    await this.bindCustomFunctionDefinition('onstepFunction');
 
     __(this.samplerSelector).unbind('step');
   
@@ -241,7 +278,7 @@ export default Model.extend({
         'nodeName', 'nodeSelector', 'nodeAttr', 'controlDataArray'
       );
       const attrs = {};
-      if (nodeSelector, nodeAttr && controlDataArray.length) {
+      if (nodeSelector && nodeAttr && controlDataArray.length) {
         attrs[nodeAttr] = controlDataArray[index];
         __(nodeSelector).attr(attrs);
       }

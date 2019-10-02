@@ -25,20 +25,6 @@ export default Controller.extend({
     }
   }),
 
-  // create param multisliders 
-  async createDefaultTrackControls(track) {
-    const gainCtrl = this.store.createRecord('track-control', {
-      interfaceName: 'ui-multislider',
-      nodeSelector: track.get('gainOnStepSelector'),
-      nodeAttr: 'gain',
-      nodeName: 'gain',
-      min: 0,
-      max: 1
-    });
-
-    track.trackControls.pushObject(gainCtrl);
-    await gainCtrl.save();
-  },
 
   actions: {
     save(project) {
@@ -74,6 +60,8 @@ export default Controller.extend({
     },
 
     async createTrack(project) {
+      // every track must have 2 customFunction methods. 
+      // ideally these would get created in a cloud function on track create, not in the client
       let onstepFunction = this.store.createRecord('customFunction', {
         projectCreatorUid: project.get('creator.uid'),
       });
@@ -103,7 +91,6 @@ export default Controller.extend({
 
       project.get('tracks').addObject(track);
 
-      this.createDefaultTrackControls(track);
       return track
         .save()
         .then(() => {

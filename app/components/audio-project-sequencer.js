@@ -64,6 +64,7 @@ export default Component.extend({
 
   actions: {
     async start() {
+      this.initSignalChain();
       await this.project.initializeTrackSamplers();
       __.play();
       __.loop('start');

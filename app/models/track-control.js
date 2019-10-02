@@ -28,15 +28,15 @@ export default DS.Model.extend({
     }
   }),
 
-  nodeName: DS.attr('string', {
-    defaultValue() {
-      return 'gain';
-    }
-  }),
   nodeSelector: DS.attr('string'),
-  nodeAttr: DS.attr('string', {
-    defaultValue() {
-      return 'gain';
+
+  nodeName: DS.attr('string'),
+
+  nodeAttr: DS.attr('string'),
+
+  uniqueNameAttr: computed('nodeName', 'nodeAttr', {
+    get() {
+      return `${this.nodeName}-${this.nodeAttr}`;
     }
   }),
   
