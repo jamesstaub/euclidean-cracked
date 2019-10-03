@@ -75,7 +75,7 @@ export default Model.extend({
   path: computed('directory', 'filepath', {
     get() {
       const filepath = this.filepath.replace(' ', '%20');
-      return `https://s3.amazonaws.com/drumserver${filepath}`;
+      return `https://storage.googleapis.com/euclidean-cracked.appspot.com/Drum Machines mp3${filepath}`;
     }
   }),
 
