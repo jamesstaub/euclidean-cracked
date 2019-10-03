@@ -28,6 +28,13 @@ export default DS.Model.extend({
     }
   }),
 
+  setDefaultValue() {
+    const controlData = this.get('controlDataArray')
+      .map(() => this.get('default'))
+      .join(',');
+    this.set('controlData', controlData);
+  },
+
   nodeSelector: DS.attr('string'),
 
   nodeName: DS.attr('string'),

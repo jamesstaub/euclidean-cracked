@@ -162,6 +162,7 @@ export default Model.extend({
           trackControl.setProperties(options);
         } else {
           trackControl = this.store.createRecord('track-control', options);
+          trackControl.setDefaultValue();
         }
         this.trackControls.pushObject(trackControl);
         return trackControl;
@@ -173,7 +174,6 @@ export default Model.extend({
         trackControl.deleteRecord();
       });
  
-
 
       const saveArray = Promise.all(controlRecords.map((record) => record.save()));
       return saveArray;
@@ -224,7 +224,7 @@ export default Model.extend({
     // prevents lots of concurrent disruptions
 
     if (this.sequence.length) {
-      __.loop('stop');
+      // __.loop('stop');
       // this.removeAllNodes();
       // this.buildNodes();
       yield this.bindCustomFunctionDefinition('initFunction');
@@ -239,6 +239,8 @@ export default Model.extend({
       if (this.get('project.isPlaying')) {
         __.loop('start');
       }
+    } else {
+      throw "There is no sequence";
     }
   }).keepLatest(),
 

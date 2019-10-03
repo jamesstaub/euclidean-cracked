@@ -13,7 +13,11 @@ export default Component.extend(DidChangeAttrs, {
   didChangeAttrs(changes) {
     this._super(...arguments);
     if (changes) {
-      this.track.initializeSampler.perform();
+      if (changes.sequence && Object.keys(changes.sequence).length === 1) {
+        this.track.bindTrackSampler();
+      } else {
+        this.track.initializeSampler.perform();
+      }
     }
   },
 

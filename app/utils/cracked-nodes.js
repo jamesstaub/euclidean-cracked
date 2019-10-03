@@ -106,7 +106,7 @@ const crackedNodes = {
         case 'gain':
           paramDefaults.min = 0;
           paramDefaults.max = 1;
-          paramDefaults.default = 0;
+          paramDefaults.default = 1;
           break;
         case 'postCut':
           paramDefaults.min = 0;

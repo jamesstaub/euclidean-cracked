@@ -57,10 +57,7 @@ export default Component.extend({
     },
    
     setDefault() {
-      const controlData = this.trackControl.get('controlDataArray')
-        .map(() => this.trackControl.get('default'))
-        .join(',');
-      this.trackControl.set('controlData', controlData);
+      this.trackControl.setDefaultValue();
       this.saveTask.perform();
     },
 

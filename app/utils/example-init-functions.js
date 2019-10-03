@@ -7,8 +7,10 @@ __()
     path: this.path,
     class: this.className
   })
-  .gain({
+  .gain({ // track gain controlled by slider
     id: this.gainId,
+  })
+  .gain({ //onstep gain controlled by multislider
     class: this.className,
   })
   .connect('#master-compressor');
