@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import Model from 'ember-data/model';
 import { computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
@@ -65,9 +66,6 @@ export default Model.extend({
   /** ID selector for track sampler node */
   gainSelector: selectorFor('id', 'gainId'),
   
-  gainOnStepSelector: selectorFor('id', 'gainOnStepId'),
-  
-  lowpassSelector: selectorFor('id', 'lowpassId'),
   
   /* Class selector for every node bound to this track */
   trackNodeSelector: selectorFor('class', 'nodeWithControllerClass'),
@@ -92,9 +90,7 @@ export default Model.extend({
     'samplerSelector',
     'gainValue',
     'path',
-    'nodeWithControllerClass',
-    'gainOnStepSelector',
-    'lowpassSelector', {
+    'nodeWithControllerClass', {
     get() {
       // variables available for user defined track functions
 
@@ -110,72 +106,46 @@ export default Model.extend({
   }),
 
   // TODO: cracked: how to set new filepath without rebuilding node?
-  buildNodes() {
-    __()
-      .sampler({
-        id: this.samplerId,
-        path: this.path,
-        class: this.nodeWithControllerClass
-      })
-      .lowpass({
-        id: this.lowpassId,
-        frequency: 10000,
-        q: 0,
-        class: this.nodeWithControllerClass
-      })
-      .gain({
-        id: this.gainId,
-        class: this.nodeWithControllerClass,
-        gain: this.gain
-      })
-      .gain({
-        id: `${this.gainOnStepId}`,
-        class: this.nodeWithControllerClass
-      })
-      .connect(this.get('project.masterCompressorSelector'));
-  },
-
-  removeAllNodes() {
-    __(this.samplerSelector).unbind('step');
-    
-    // NOTE: any cracked node created in this component must be selected
-    // for tear down here, otherwise lingering nodes will break
-    // ability to select by ID
-    __(this.trackNodeSelector).remove();
-  },
-
 
     // create multisliders for each web audio node defined in the init function
     async createTrackControls() {
+      // TODO delete orphaned records as user add/removes audio nodes
+      // let newTrackControlIds = new Set(newTrackControls.map((ctrl)=> ctrl.uniqueNameAttr));
+      // let loadedTrackControlIds = new Set(this.trackControls.map((ctrl)=> ctrl.uniqueNameAttr));
+      // // get diff of newly updated records and those already loaded on track
+      // const diff = [...newTrackControlIds].filter(x => !loadedTrackControlIds.has(x));
+      // TODO when to save (destroy) the deleted record, and do i need to also save the track?
+
+      // this.trackControls.forEach((trackControl) => {
+      //   trackControl.deleteRecord();
+      // });
+
       const nodes = crackedNodeUtil.selectNodes(this.trackNodeSelector);
       // get array of options to create new track-control model instances
       // by querying existing cracked nodes
       const controlDefaults = nodes
         .map((node) => crackedNodeUtil.attrsForNode(node))
         .map((attrs) => crackedNodeUtil.defaultForAttr(...attrs));
-
-      const controlRecords = controlDefaults.flat().map((options)=>{
+      
+      // iterate over the array of configs for mapped from the selected nodes with the control class.
+      const newTrackControls = controlDefaults.flat().map((options)=>{
         options = { interfaceName: 'ui-multislider', ...options };
         
         let trackControl = this.trackControls.findBy('uniqueNameAttr', `${options.nodeName}-${options.nodeAttr}`);
         if (trackControl) {
+          // if this node/attr pair exists, update it
           trackControl.setProperties(options);
         } else {
           trackControl = this.store.createRecord('track-control', options);
           trackControl.setDefaultValue();
         }
+        console.log('got set', trackControl.nodeUUID);
         this.trackControls.pushObject(trackControl);
         return trackControl;
       });
 
-
-      // TODO when to save (destroy) the deleted record, and do i need to also save the track?
-      this.trackControls.filterBy('nodeSelector', null).forEach((trackControl)=>{
-        trackControl.deleteRecord();
-      });
  
-
-      const saveArray = Promise.all(controlRecords.map((record) => record.save()));
+      const saveArray = await Promise.all(newTrackControls.map((record) => record.save()));
       return saveArray;
     },
 
@@ -211,6 +181,8 @@ export default Model.extend({
       s => typeof s !== 'undefined'
     );
 
+    // wait until beginning of sequence to apply changes
+    // prevents lots of concurrent disruptions
     if (awaitStart) {
       yield waitForProperty(this, 'stepIndex', 0);
     }
@@ -220,19 +192,9 @@ export default Model.extend({
     yield waitForProperty(this.initFunction, 'isFulfilled');
     yield waitForProperty(this.onstepFunction, 'isFulfilled');
 
-    // wait until beginning of sequence to apply changes
-    // prevents lots of concurrent disruptions
 
     if (this.sequence.length) {
-      // __.loop('stop');
-      // this.removeAllNodes();
-      // this.buildNodes();
-      yield this.bindCustomFunctionDefinition('initFunction');
-      if (this.initFunctionRef) {
-        // Call initFunction
-        this.initFunctionRef();
-        yield this.createTrackControls();
-      }
+      yield this.setupInitFunctionAndControls();
 
       yield this.bindTrackSampler();
 
@@ -244,11 +206,22 @@ export default Model.extend({
     }
   }).keepLatest(),
 
-  async bindTrackSampler() {
+  async setupInitFunctionAndControls() {
+    this.bindCustomFunctionDefinition('initFunction');
+    if (this.initFunctionRef) {
+      // Call initFunction
+      this.initFunctionRef();
+
+      // this should only happen when custominitfunction is run
+      await this.createTrackControls();
+    }
+  },
+
+  bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
     let onStepCallback = this.onStepCallback.bind(this);
     
-    await this.bindCustomFunctionDefinition('onstepFunction');
+    this.bindCustomFunctionDefinition('onstepFunction');
 
     __(this.samplerSelector).unbind('step');
   
@@ -260,7 +233,7 @@ export default Model.extend({
   },
 
   /**
-   * call user defined initFunction
+   * todo: to cleanup
    * lookup the difference in cracked nodes that exist before and 
    * after this init function is called. store them and attempt to
    * clear them every time this track is re-initialized
@@ -275,14 +248,21 @@ export default Model.extend({
 
 
   applyTrackControls(index) {
+    // iterate over each track conrol and update the cracked audio note attributes
+    // by selector or uuid
     this.get('trackControls').forEach((control)=> {
-      let { nodeSelector, nodeAttr, controlDataArray } = control.getProperties(
-        'nodeName', 'nodeSelector', 'nodeAttr', 'controlDataArray'
+      let { nodeSelector,  nodeUUID, nodeAttr, controlDataArray } = control.getProperties(
+        'nodeName', 'nodeSelector', 'nodeUUID', 'nodeAttr', 'controlDataArray'
       );
       const attrs = {};
-      if (nodeSelector && nodeAttr && controlDataArray.length) {
+      nodeSelector || nodeUUID;
+      if (nodeAttr && controlDataArray.length) {
         attrs[nodeAttr] = controlDataArray[index];
-        __(nodeSelector).attr(attrs);
+        if (nodeSelector) {
+          __(nodeSelector).attr(attrs);
+        } else {
+          __._getNode(nodeUUID).attr(attrs);
+        }
       }
     });
   },
@@ -293,7 +273,7 @@ export default Model.extend({
     initFunctionRef or onstepFunctionRef
    */
   async bindCustomFunctionDefinition(modelName) {
-    const functionDefinition = await this.get(`${modelName}.function`);
+    const functionDefinition = this.get(`${modelName}.function`);
     let functionRef;
 
     try {
@@ -315,4 +295,7 @@ export default Model.extend({
       alert('problem with function', e);
     }
   },
+  removeAllNodes() {
+    // TOOD
+  }
 })

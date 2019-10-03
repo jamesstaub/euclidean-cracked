@@ -28,7 +28,7 @@
       {{/each}}
     </ul>
     
-    {{#if currentTrackControl.isLoaded}}
+    {{#if (and currentTrackControl.isLoaded (not currentTrackControl.isDeleted))}}
       <TrackControlWrapper 
         @track={{track}} 
         @sequence={{track.sequence}} 

@@ -94,7 +94,9 @@ __(this.sampler).attr({speed: randSpeed});
 The component must also have properties `ElementName` and `ElementOptions` for configuration, which is handled in the nexus-ui-mixin. This mixin is also where initialization and destruction of the Nexus object is handled.
 
 
-
+## audio files
+audio files are hosted in a google storage bucket
+run `gsutil cors set bucket-cors.json gs://euclidean-cracked.appspot.com` to allow cors
 
 ## Prerequisites To Run Locally
 You will need the following things properly installed on your computer.
