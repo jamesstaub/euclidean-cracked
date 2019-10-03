@@ -60,7 +60,7 @@ const crackedNodes = {
           break;
         case 'color':
           paramDefaults.min = 0;
-          paramDefaults.max = 0;
+          paramDefaults.max = 1000;
           paramDefaults.default = 800;
           break;
         case 'cutoff':

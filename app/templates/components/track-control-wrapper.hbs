@@ -14,26 +14,6 @@
     {{/if}}
   </div>
   <table>
-      <tr>
-        <td class="f7 dark-gray">node name</td>
-        <td class="f7 dark-gray">attribute</td>
-      </tr>
-      <tr>
-        <td>
-          <select name="nodeName" onchange={{action "setTargetNodeName" value="target.value"}}>
-            {{#each defaultNodeOptions as |opt|}}
-              <option value="{{opt.nodeName}}@@{{opt.nodeSelector}}" selected={{if (eq opt.nodeName trackControl.nodeName) 'true'}}>{{opt.nodeName}}</option>
-            {{/each}}
-          </select>
-        </td>
-        <td>
-          <select name="nodeAttr" onchange={{action "setTargetNodeAttr" value="target.value"}}>
-            {{#each nodeAttrOptions as |opt|}}
-              <option value={{opt.value}}>{{opt.value}}</option>
-            {{/each}}
-          </select>
-        </td>
-      </tr>
     <tr>
       <td class="f7 dark-gray">min</td>
       <td class="f7 dark-gray">max</td>
