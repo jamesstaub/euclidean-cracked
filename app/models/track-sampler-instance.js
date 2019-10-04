@@ -119,7 +119,6 @@ export default Model.extend({
       // this.trackControls.forEach((trackControl) => {
       //   trackControl.deleteRecord();
       // });
-
       const nodes = crackedNodeUtil.selectNodes(this.trackNodeSelector);
       // get array of options to create new track-control model instances
       // by querying existing cracked nodes
@@ -132,6 +131,7 @@ export default Model.extend({
         options = { interfaceName: 'ui-multislider', ...options };
         
         let trackControl = this.trackControls.findBy('uniqueNameAttr', `${options.nodeName}-${options.nodeAttr}`);
+        console.log(trackControl, `${options.nodeName}-${options.nodeAttr}`); 
         if (trackControl) {
           // if this node/attr pair exists, update it
           trackControl.setProperties(options);
@@ -181,24 +181,23 @@ export default Model.extend({
       s => typeof s !== 'undefined'
     );
 
-    // wait until beginning of sequence to apply changes
-    // prevents lots of concurrent disruptions
-    if (awaitStart) {
-      yield waitForProperty(this, 'stepIndex', 0);
-    }
-
     yield waitForProperty(this, 'samplerId');
     yield waitForProperty(this, 'filepath');
     yield waitForProperty(this.initFunction, 'isFulfilled');
     yield waitForProperty(this.onstepFunction, 'isFulfilled');
-
-
+    yield waitForProperty(this.trackControls, 'isFulfilled');
+    console.log('done waiting');
     if (this.sequence.length) {
       yield this.setupInitFunctionAndControls();
 
       yield this.bindTrackSampler();
 
       if (this.get('project.isPlaying')) {
+        // wait until beginning of sequence to apply changes
+        // prevents lots of concurrent disruptions
+        if (awaitStart) {
+          yield waitForProperty(this, 'stepIndex', 0);
+        }
         __.loop('start');
       }
     } else {
@@ -207,11 +206,10 @@ export default Model.extend({
   }).keepLatest(),
 
   async setupInitFunctionAndControls() {
-    this.bindCustomFunctionDefinition('initFunction');
+    this.bindCustomFunctionDefinition.perform('initFunction');
     if (this.initFunctionRef) {
       // Call initFunction
       this.initFunctionRef();
-
       // this should only happen when custominitfunction is run
       await this.createTrackControls();
     }
@@ -221,7 +219,7 @@ export default Model.extend({
     // let selector = `#${this.samplerId}`;
     let onStepCallback = this.onStepCallback.bind(this);
     
-    this.bindCustomFunctionDefinition('onstepFunction');
+    this.bindCustomFunctionDefinition.perform('onstepFunction');
 
     __(this.samplerSelector).unbind('step');
   
@@ -272,29 +270,31 @@ export default Model.extend({
     evaluates it as a Function, and binds it to the track as a method named 
     initFunctionRef or onstepFunctionRef
    */
-  async bindCustomFunctionDefinition(modelName) {
-    const functionDefinition = this.get(`${modelName}.function`);
-    let functionRef;
-
-    try {
-      if (modelName === 'initFunction') {
-        functionRef = new Function(functionDefinition).bind(this.customFunctionScope);
+  bindCustomFunctionDefinition: task(function*(modelName) {
+    const customFunctionModel =  this.get(`${modelName}`);
+    yield waitForProperty(customFunctionModel, 'function');
+    const functionDefinition = customFunctionModel.get('function');
+    if (functionDefinition) {
+      let functionRef;
+      try {
+        if (modelName === 'initFunction') {
+          functionRef = new Function(functionDefinition).bind(this.customFunctionScope);
+        }
+        if (modelName === 'onstepFunction') {
+          functionRef = new Function(
+            'index', 
+            'data', 
+            'array', 
+            functionDefinition
+          )
+          .bind(this.customFunctionScope);
+        }
+        this.set(`${modelName}Ref`, functionRef);
+      } catch (e) {
+        alert('problem with function', e);
       }
-      if (modelName === 'onstepFunction') {
-        functionRef = new Function(
-          'index', 
-          'data', 
-          'array', 
-          functionDefinition
-        )
-        .bind(this.customFunctionScope);
-      }
-
-      this.set(`${modelName}Ref`, functionRef);
-    } catch (e) {
-      alert('problem with function', e);
     }
-  },
+  }),
   removeAllNodes() {
     // TOOD
   }

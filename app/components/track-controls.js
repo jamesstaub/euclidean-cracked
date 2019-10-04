@@ -10,15 +10,4 @@ export default Component.extend({
     this.set('currentTrackControl', this.track.get('trackControls.firstObject'));
   },
   
-  actions: {
-    async newControl(type) {
-      const trackControl = this.store.createRecord('track-control', { 
-        track: this.track,
-        interfaceName:`ui-${type}`,
-      });
-      await trackControl.save();
-      this.track.get('trackControls').addObject(trackControl);
-      await this.track.save();
-    },
-  }
 });

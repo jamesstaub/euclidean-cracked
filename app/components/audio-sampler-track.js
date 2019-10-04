@@ -10,10 +10,15 @@ export default Component.extend(DidChangeAttrs, {
     attrs: ['filepath', 'sequence'],
   },
 
+  didInsertElement() {
+    this._super(...arguments);
+    this.track.initializeSampler.perform();
+  },
+
   didChangeAttrs(changes) {
     this._super(...arguments);
     if (changes) {
-      if (changes.sequence && Object.keys(changes.sequence).length === 1) {
+      if (changes.sequence && Object.keys(changes).length === 1) {
         this.track.bindTrackSampler();
       } else {
         this.track.initializeSampler.perform();
