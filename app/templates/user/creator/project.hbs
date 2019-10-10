@@ -1,5 +1,5 @@
 {{#if model}}
-  <div class="flex justify-between items-center ph3 bg-light-gray pv2">
+  <div class="flex justify-between items-center ph3 bg-light-gray pv2 relative">
     {{edit-project
       project=model
       session=session
@@ -16,43 +16,49 @@
       {{mdc-button-icon "add"}}
       {{#mdc-button-label}}Add Track ({{model.tracks.length}}){{/mdc-button-label}}
     {{/mdc-button}}
+    {{#if activeTrack.initializeSampler.isRunning}}
+      {{mdc-linear-progress class="absolute top-0 w-100" indeterminate=true}}
+    {{/if}}
   </div>
   <DrumFilePicker
     @isOpen={{drumMenuOpen}}
     @track={{activeTrack}}
     @saveTrackTask={{saveTrackTask}}
   />
-  <ul class="list mt0 pl0 pb4 tracks overflow-container h-100 bg-dark-gray ">
-    {{#each tracks as |track idx|}}
-      {{#if (and track.isLoaded (not track.isDeleted))}}
-        <AudioSamplerTrack
-          @track={{track}}
-          @filepath={{track.filepath}}
-          @sequence={{track.sequence}}
-          @gain={{track.gain}} 
-          @gainSelector={{track.gainSelector}}
-          />
-        <TrackContainerUi
-          @idx={{idx}}
-          @isActive={{eq track.id activeTrack.id}}
-          @track={{track}}
-          @saveTrackTask={{saveTrackTask}}
-          @onDeleteTrack={{action "deleteTrack"}}
-          @selectActiveTrack={{action "selectActiveTrack"}}
-        >
-          {{#mdc-button 
-            class="w4 mr2 ph1 f7" 
-            style="raised" 
-            click=(action (mut drumMenuOpen) true)
-            title=(concat "Drum Machine: " track.filepath)
-          }}
-            {{if track.filepath track.filename}} 
-          {{/mdc-button}}
-        </TrackContainerUi>
-      {{/if}}
-    {{else}}
-      <p class="tc w-100 yellow pa3">No Tracks</p>
-    {{/each}}
-  </ul>
+
+
+<ul class="list mt0 pl0 pb4 tracks overflow-container h-100 bg-dark-gray ">
+  {{#each tracks as |track idx|}}
+    {{#if (and track.isLoaded (not track.isDeleted))}}
+      <AudioSamplerTrack
+        @track={{track}}
+        @filepath={{track.filepath}}
+        @sequence={{track.sequence}}
+        @gain={{track.gain}} 
+        @gainSelector={{track.gainSelector}}
+        />
+      <TrackContainerUi
+        @idx={{idx}}
+        @isActive={{eq track.id activeTrack.id}}
+        @track={{track}}
+        @saveTrackTask={{saveTrackTask}}
+        @onDeleteTrack={{action "deleteTrack"}}
+        @selectActiveTrack={{action "selectActiveTrack"}}
+      >
+        {{#mdc-button 
+          class="w4 mr2 ph1 f7" 
+          style="raised" 
+          click=(action (mut drumMenuOpen) true)
+          title=(concat "Drum Machine: " track.filepath)
+        }}
+          {{if track.filepath track.filename}} 
+        {{/mdc-button}}
+      </TrackContainerUi>
+    {{/if}}
+  {{else}}
+    <p class="tc w-100 yellow pa3">No Tracks</p>
+  {{/each}}
+</ul>
+
 
 {{/if}}

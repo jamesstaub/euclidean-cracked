@@ -23,4 +23,18 @@ export default DS.Model.extend({
   // unsafe javascript keywords returned from cloud function
   illegalTokens: DS.attr('string', { readOnly: true }),
 
+  // create the function referecne and bind it's scope
+  createRef(track, ...args){
+    let functionRef;
+    if (this.function) {
+      try {
+        functionRef = new Function(...[this.function, ...args])
+          .bind(track.get('customFunctionScope'));
+        return functionRef;
+      } catch (e) {
+        alert('problem with function', e);
+      }
+    }
+  },
+
 });

@@ -70,7 +70,7 @@ const crackedNodes = {
           break;
         case 'damping':
           paramDefaults.min = 0;
-          paramDefaults.max = 0;
+          paramDefaults.max = 1;
           paramDefaults.default = 0.84;
           break;
         case 'decay':
@@ -80,7 +80,7 @@ const crackedNodes = {
           break;
         case 'delay':
           paramDefaults.min = 0;
-          paramDefaults.max = 0;
+          paramDefaults.max = 6;
           paramDefaults.default = 2;
           break;
         case 'distortion':

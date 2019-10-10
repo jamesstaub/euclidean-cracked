@@ -81,8 +81,8 @@ export default Component.extend({
       });
 
       // disable the "loop" aka global sequencer
-      __.loop('stop');
       this.project.set('isPlaying', false);
+      __.loop('stop');
     },
 
     reset() {

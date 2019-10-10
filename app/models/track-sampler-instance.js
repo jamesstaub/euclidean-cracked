@@ -2,7 +2,7 @@
 import Model from 'ember-data/model';
 import { computed } from '@ember/object';
 import { task, waitForProperty } from 'ember-concurrency';
-import crackedNodeUtil from '../utils/cracked-nodes';
+import nodeUtil from '../utils/cracked-nodes';
 
 /* 
   Module  to be extended by the track model 
@@ -66,7 +66,6 @@ export default Model.extend({
   /** ID selector for track sampler node */
   gainSelector: selectorFor('id', 'gainId'),
   
-  
   /* Class selector for every node bound to this track */
   trackNodeSelector: selectorFor('class', 'nodeWithControllerClass'),
 
@@ -85,7 +84,6 @@ export default Model.extend({
   //   }
   // }),
 
-  // 
   customFunctionScope: computed(
     'samplerSelector',
     'gainValue',
@@ -93,7 +91,6 @@ export default Model.extend({
     'nodeWithControllerClass', {
     get() {
       // variables available for user defined track functions
-
       return {
         path: this.path,
         sampler: this.samplerSelector,
@@ -108,46 +105,46 @@ export default Model.extend({
   // TODO: cracked: how to set new filepath without rebuilding node?
 
     // create multisliders for each web audio node defined in the init function
-    async createTrackControls() {
-      // TODO delete orphaned records as user add/removes audio nodes
-      // let newTrackControlIds = new Set(newTrackControls.map((ctrl)=> ctrl.uniqueNameAttr));
-      // let loadedTrackControlIds = new Set(this.trackControls.map((ctrl)=> ctrl.uniqueNameAttr));
-      // // get diff of newly updated records and those already loaded on track
-      // const diff = [...newTrackControlIds].filter(x => !loadedTrackControlIds.has(x));
-      // TODO when to save (destroy) the deleted record, and do i need to also save the track?
+  async createTrackControls() {
+    // TODO delete orphaned records as user add/removes audio nodes
+    // let newTrackControlIds = new Set(newTrackControls.map((ctrl)=> ctrl.uniqueNameAttr));
+    // let loadedTrackControlIds = new Set(this.trackControls.map((ctrl)=> ctrl.uniqueNameAttr));
+    // // get diff of newly updated records and those already loaded on track
+    // const diff = [...newTrackControlIds].filter(x => !loadedTrackControlIds.has(x));
+    // TODO when to save (destroy) the deleted record, and do i need to also save the track?
 
-      // this.trackControls.forEach((trackControl) => {
-      //   trackControl.deleteRecord();
-      // });
-      const nodes = crackedNodeUtil.selectNodes(this.trackNodeSelector);
-      // get array of options to create new track-control model instances
-      // by querying existing cracked nodes
-      const controlDefaults = nodes
-        .map((node) => crackedNodeUtil.attrsForNode(node))
-        .map((attrs) => crackedNodeUtil.defaultForAttr(...attrs));
+    // this.trackControls.forEach((trackControl) => {
+    //   trackControl.deleteRecord();
+    // });
+    const nodes = nodeUtil.selectNodes(this.trackNodeSelector);
+    // get array of options to create new track-control model instances
+    // by querying existing cracked nodes
+    const controlDefaults = nodes
+      .map((node) => nodeUtil.attrsForNode(node))
+      .map((attrs) => nodeUtil.defaultForAttr(...attrs));
+    
+    // iterate over the array of configs for mapped from the selected nodes with the control class.
+    const newTrackControls = controlDefaults.flat().map((options)=>{
+      options = { interfaceName: 'ui-multislider', ...options };
       
-      // iterate over the array of configs for mapped from the selected nodes with the control class.
-      const newTrackControls = controlDefaults.flat().map((options)=>{
-        options = { interfaceName: 'ui-multislider', ...options };
-        
-        let trackControl = this.trackControls.findBy('uniqueNameAttr', `${options.nodeName}-${options.nodeAttr}`);
-        console.log(trackControl, `${options.nodeName}-${options.nodeAttr}`); 
-        if (trackControl) {
-          // if this node/attr pair exists, update it
-          trackControl.setProperties(options);
-        } else {
-          trackControl = this.store.createRecord('track-control', options);
-          trackControl.setDefaultValue();
-        }
-        console.log('got set', trackControl.nodeUUID);
-        this.trackControls.pushObject(trackControl);
-        return trackControl;
-      });
+      let trackControl = this.trackControls.findBy('uniqueNameAttr', `${options.nodeName}-${options.nodeAttr}`);
+      console.log(trackControl, `${options.nodeName}-${options.nodeAttr}`); 
+      if (trackControl) {
+        // if this node/attr pair exists, update it
+        trackControl.setProperties(options);
+      } else {
+        trackControl = this.store.createRecord('track-control', options);
+        trackControl.setDefaultValue();
+      }
+      console.log('got set', trackControl.nodeUUID);
+      this.trackControls.pushObject(trackControl);
+      return trackControl;
+    });
 
- 
-      const saveArray = await Promise.all(newTrackControls.map((record) => record.save()));
-      return saveArray;
-    },
+
+    const saveArray = await Promise.all(newTrackControls.map((record) => record.save()));
+    return saveArray;
+  },
 
   // callback functions to be called on each step of sequencer
   // eslint-disable-next-line complexity
@@ -175,38 +172,36 @@ export default Model.extend({
 
   // eslint-disable-next-line complexity
   initializeSampler: task(function* (awaitStart) {
-    yield waitForProperty(
-      this,
-      'sequence',
-      s => typeof s !== 'undefined'
-    );
+    yield this.awaitDependencies.perform();
+    yield this.setupInitFunctionAndControls();
+    yield this.bindTrackSampler();
 
-    yield waitForProperty(this, 'samplerId');
-    yield waitForProperty(this, 'filepath');
-    yield waitForProperty(this.initFunction, 'isFulfilled');
-    yield waitForProperty(this.onstepFunction, 'isFulfilled');
-    yield waitForProperty(this.trackControls, 'isFulfilled');
-    console.log('done waiting');
-    if (this.sequence.length) {
-      yield this.setupInitFunctionAndControls();
-
-      yield this.bindTrackSampler();
-
-      if (this.get('project.isPlaying')) {
-        // wait until beginning of sequence to apply changes
-        // prevents lots of concurrent disruptions
-        if (awaitStart) {
-          yield waitForProperty(this, 'stepIndex', 0);
-        }
-        __.loop('start');
+    if (this.get('project.isPlaying')) {
+      // wait until beginning of sequence to apply changes
+      // prevents lots of concurrent disruptions
+      if (awaitStart) {
+        yield waitForProperty(this, 'stepIndex', 0);
       }
-    } else {
-      throw "There is no sequence";
+      __.loop('start');
     }
   }).keepLatest(),
 
+  awaitDependencies: task(function* () {
+    yield waitForProperty(this, 'sequence.length');
+    yield waitForProperty(this, 'samplerId');
+    yield waitForProperty(this, 'filepath');
+
+    // this feels bad but I need to make sure they're model records, not proxies 
+    yield this.get('initFunction');
+    yield this.get('onstepFunction');
+    yield this.get('trackControls');
+    // this is ugly but it its a workaround to ensure these are models, not proxys
+  }),
+
   async setupInitFunctionAndControls() {
-    this.bindCustomFunctionDefinition.perform('initFunction');
+    const initFunctionRef = this.initFunction.content.createRef(this);
+    this.set('initFunctionRef', initFunctionRef);
+
     if (this.initFunctionRef) {
       // Call initFunction
       this.initFunctionRef();
@@ -217,12 +212,13 @@ export default Model.extend({
 
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
+    const onstepFunctionRef = this.onstepFunction.content.createRef(this, 'index','data','array');
+    this.set('onstepFunctionRef', onstepFunctionRef);
+
     let onStepCallback = this.onStepCallback.bind(this);
-    
-    this.bindCustomFunctionDefinition.perform('onstepFunction');
 
     __(this.samplerSelector).unbind('step');
-  
+
     __(this.samplerSelector).bind(
       'step', // on every crack sequencer step
       onStepCallback, // call this function (bound to component scope)
@@ -265,36 +261,6 @@ export default Model.extend({
     });
   },
 
-  /* 
-    Takes a modelName (initFunction or onstepFunction
-    evaluates it as a Function, and binds it to the track as a method named 
-    initFunctionRef or onstepFunctionRef
-   */
-  bindCustomFunctionDefinition: task(function*(modelName) {
-    const customFunctionModel =  this.get(`${modelName}`);
-    yield waitForProperty(customFunctionModel, 'function');
-    const functionDefinition = customFunctionModel.get('function');
-    if (functionDefinition) {
-      let functionRef;
-      try {
-        if (modelName === 'initFunction') {
-          functionRef = new Function(functionDefinition).bind(this.customFunctionScope);
-        }
-        if (modelName === 'onstepFunction') {
-          functionRef = new Function(
-            'index', 
-            'data', 
-            'array', 
-            functionDefinition
-          )
-          .bind(this.customFunctionScope);
-        }
-        this.set(`${modelName}Ref`, functionRef);
-      } catch (e) {
-        alert('problem with function', e);
-      }
-    }
-  }),
   removeAllNodes() {
     // TOOD
   }

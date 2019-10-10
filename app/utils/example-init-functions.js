@@ -7,18 +7,36 @@ __()
     path: this.path,
     class: this.className
   })
-  .gain({ // track gain controlled by slider
-    id: this.gainId,
+  .gain({
+    id: this.gainId, // assign gainID to connect to the track's main volume slider
   })
-  .gain({ //onstep gain controlled by multislider
+  .gain({ // onstep gain controlled by multislider
     class: this.className,
   })
   .connect('#master-compressor');
 `
 },
 {
-  name: '',
-  code: ``
+  name: 'delay',
+  code: `
+  __()
+  .sampler({
+    id: this.samplerId,
+    path: this.path,
+    class: this.className
+  })
+  .gain({ 
+    id: this.gainId, // assign gainID to connect to the track's main volume slider
+  })
+  .delay({
+    class: this.className,
+    damping:.9, 
+    cutoff:3000,
+    feedback:0.9,
+    delay:3,
+  })
+  .connect('#master-compressor');
+  `
 }];
 const lfo = [{
   name: '',
