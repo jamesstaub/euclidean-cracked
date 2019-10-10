@@ -3,13 +3,12 @@
     <h3>Automation Controls</h3>
   </div>
 
-
   <div class="flex flex-column h-100 w-100 mb4">
-    <ul class="list flex pa0 ma0">
+    <ul class="list flex pb3 ph0 ma0 overflow-scroll mw6">
       {{#each track.trackControls as |trackControl|}}
         <li class="">
           {{#mdc-button
-            click=(action (mut currentTrackControl) trackControl) 
+            click=(action (mut currentTrackControlId) trackControl.id) 
             class="f7"
             title= (concat "audio node " trackControl.nodeName " : attribute: " trackControl.nodeAttr)
             style=(if (eq trackControl.id currentTrackControl.id) "raised")
@@ -20,13 +19,14 @@
       {{/each}}
     </ul>
     
-    {{#if (and currentTrackControl.isLoaded (not currentTrackControl.isDeleted))}}
-      <TrackControlWrapper 
-        @track={{track}} 
-        @sequence={{track.sequence}} 
-        @trackControl={{currentTrackControl}}
-        @stepIndex={{stepIndex}}
-      />
-    {{/if}}
+    {{#each track.trackControls as |trackControl|}}
+      {{#if (and (eq trackControl.id currentTrackControlId) trackControl.isLoaded (not trackControl.isDeleted))}}
+        <TrackControlWrapper
+          @track={{track}} 
+          @trackControl={{trackControl}}
+          @stepIndex={{stepIndex}}
+        />
+      {{/if}}
+    {{/each}}
   </div>
 </section>

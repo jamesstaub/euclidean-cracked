@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 /*
   Implementation notes on custom track controls:
   
@@ -64,5 +65,7 @@ export default DS.Model.extend({
       return 1;
     }
   }),
+
+  sequence: alias('track.sequence'),
 
 });

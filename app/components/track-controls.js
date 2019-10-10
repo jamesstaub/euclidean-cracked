@@ -7,7 +7,6 @@ export default Component.extend({
   async init() {
     this._super(...arguments);
     await waitForProperty(this.track, 'trackControls');
-    this.set('currentTrackControl', this.track.get('trackControls.firstObject'));
+    this.set('currentTrackControlId', this.track.get('trackControls.firstObject.id'));
   },
-  
 });

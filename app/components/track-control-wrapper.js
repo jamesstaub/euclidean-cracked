@@ -15,10 +15,6 @@ export default Component.extend({
     }
   }),
 
-  init() {
-    this._super(...arguments);
-  },
-
   saveTask: task(function*(){
     this.trackControl.save();
     yield timeout(300);

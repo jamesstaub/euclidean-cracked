@@ -5,10 +5,11 @@
         max=trackControl.max
         min=trackControl.min
         values=trackControl.controlDataArray
+        uniqueNameAttr=trackControl.uniqueNameAttr
         size=uiSize
         stepIndex=stepIndex
-        sequence=sequence
-        numberOfSliders=sequence.length
+        sequence=trackControl.sequence
+        numberOfSliders=trackControl.sequence.length
         onChangeValue=(action "onChangeValue")
       }}
     {{/if}}

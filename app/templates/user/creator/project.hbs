@@ -11,7 +11,8 @@
     {{#mdc-button
       title="Add new track"
       style="raised"
-      click=(action "createTrack" model)
+      disabled=createTrack.isRunning
+      click=(perform createTrack model)
     }}
       {{mdc-button-icon "add"}}
       {{#mdc-button-label}}Add Track ({{model.tracks.length}}){{/mdc-button-label}}

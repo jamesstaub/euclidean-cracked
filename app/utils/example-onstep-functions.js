@@ -62,7 +62,7 @@ __(this.lowpass).attr({frequency: f, q: q});
   }
 ];
 
-const effects = [
+const filters = [
   {
     name: 'filter sweep',
     code: `
@@ -83,28 +83,18 @@ if (data) {
 }
 `
   },
+];
+
+const sampler = [
   {
     name: 'pitch: chromatic scale',
     code: `
 /*
+  This script will multiply the sample playback speed by intervalic ratios to tune a sample
+  to the notes of a chromatic scale. Try a cowbell or other pitched drum for best effect.
+
   In the euclidean rhythm menu, set both the hits and steps
-  to 12
-
-  Multiply the sample speed by interval ratios to tune a sample
-  to a scale
-
-  1:1   unison
-  16:15 minor seconrd
-  9:8   major second
-  6:5   minor third
-  5:4   major third
-  4:3   fourth
-  3:2   fifth
-  8:5   minor sixth
-  5:3   major sixth
-  5:3   minor seventh
-  16:9  major seventh
-  15:8  octave
+  to 12.
 */
 
 var semitoneRatios = [1/1, 16/15, 9/8, 6/5, 5/4, 4/3, 3/2, 8/5, 5/3, 16/9, 15/8, 2/1];
@@ -112,6 +102,9 @@ var speed = semitoneRatios[index];
 __(this.sampler).attr({speed: speed});
 
 /*
+
+  The variable "index" is the current step in the sequence.
+  
   1:1   unison
   16:15 minor seconrd
   9:8   major second
@@ -126,7 +119,15 @@ __(this.sampler).attr({speed: speed});
   15:8  octave
 */
 `
-  }
+  },
+  {
+    name: 'reverse',
+    code: `
+var isReverse = index % 2; // isReverse is true on every other step. 
+__(this.sampler).attr({reverse: isReverse});
+`
+  },
+
 ];
 
 export default [
@@ -134,32 +135,13 @@ export default [
     sectionName: 'tutorial',
     examples: tutorial
   },
+
   {
-    sectionName: 'effects',
-    examples: effects
+    sectionName: 'sampler',
+    examples: sampler
+  },
+  {
+    sectionName: 'filters',
+    examples: filters
   }
 ];
-
-/*
-
-*/
-// if (data) {
-//   if (index < 4) {
-//     // for steps 0 - 3 of the sequence
-//     // randomly change the speed of playback
-//     // 1 is normal speed, 2 is double speed, .5 is half speed etc
-//     var rand = __.random(1, 20) / 10;
-//     __(this.sampler).attr({ speed: rand });
-//   }
-// }
-//
-// /*
-//
-// */
-//
-// // randomly change lowpass filter cutoff frequency on every step
-//
-// if (data) {
-//   var f = __.random(1000, 4000);
-//   __(this.lowpass).attr({ frequency: f, q: 30 });
-// }

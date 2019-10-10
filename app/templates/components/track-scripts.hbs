@@ -10,16 +10,16 @@
     {{#mdc-button
       click=(action (mut functionType) "init")
       class="f7"
-      title="Init function: runs once"
+      title="Setup function runs once to initialize the track. This is where you define the track's audio nodes."
       style=(if (eq functionType "init") "raised")
     }}
-      Init
+      Setup
     {{/mdc-button}}
 
     {{#mdc-button
       click=(action (mut functionType) "onstep")
       class="f7"
-      title="On Step: runs on each step"
+      title="On Step function runs on each step of the sequence. This is where you write code to modulate the tracks parameters"
       style=(if (eq functionType "onstep") "raised")
     }}
       On Step

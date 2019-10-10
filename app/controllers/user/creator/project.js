@@ -24,7 +24,43 @@ export default Controller.extend({
       return this.model.get('tracks').firstObject;
     }
   }),
+  
+  createTrack: task(function* (project) {
+    // every track must have 2 customFunction methods. 
+    // ideally these would get created in a cloud function on track create, not in the client
+    let onstepFunction = this.store.createRecord('customFunction', {
+      projectCreatorUid: project.get('creator.uid'),
+    });
 
+    let initFunction = this.store.createRecord('customFunction', {
+      projectCreatorUid: project.get('creator.uid'),
+      editorContent: exampleInitFunctions[0].examples[0].code,
+      functionPreCheck: exampleInitFunctions[0].examples[0].code
+    });
+
+    yield initFunction.save();
+    yield onstepFunction.save();
+
+    // TODO: instead of setting defaults here, just use
+    // defaults on the model
+    // or better yet, uses a post-create cloud function to setup default tracks, track custom controls
+    let track = this.store.createRecord('track', {
+      projectCreatorUid: project.get('creator.uid'),
+      publicEditable: project.publicEditable,
+      onstepFunction: onstepFunction,
+      initFunction: initFunction
+    });
+
+    //  shouldnt need to do this but prevents firebase errors
+    track.set('onstepFunction', onstepFunction);
+    track.set('initFunction', initFunction);
+
+    project.get('tracks').addObject(track);
+
+    yield track.save();
+    yield project.save();
+    return track;
+  }),
 
   actions: {
     save(project) {
@@ -57,53 +93,6 @@ export default Controller.extend({
     async delete(project) {
       await project.destroyRecord();
       this.transitionToRoute('user');
-    },
-
-    async createTrack(project) {
-      // every track must have 2 customFunction methods. 
-      // ideally these would get created in a cloud function on track create, not in the client
-      let onstepFunction = this.store.createRecord('customFunction', {
-        projectCreatorUid: project.get('creator.uid'),
-      });
-
-      let initFunction = this.store.createRecord('customFunction', {
-        projectCreatorUid: project.get('creator.uid'),
-        editorContent: exampleInitFunctions[0].examples[0].code,
-        functionPreCheck: exampleInitFunctions[0].examples[0].code
-      });
-
-      await initFunction.save();
-      await onstepFunction.save();
-
-      // TODO: instead of setting defaults here, just use
-      // defaults on the model
-      // or better yet, uses a post-create cloud function to setup default tracks, track custom controls
-      let track = this.store.createRecord('track', {
-        projectCreatorUid: project.get('creator.uid'),
-        publicEditable: project.publicEditable,
-        onstepFunction: onstepFunction,
-        initFunction: initFunction
-      });
-
-    //  shouldnt need to do this but prevents firebase errors
-      track.set('onstepFunction', onstepFunction);
-      track.set('initFunction', initFunction);
-
-      project.get('tracks').addObject(track);
-
-      return track
-        .save()
-        .then(() => {
-          debug('track saved succesfully');
-          return project.save();
-        })
-        .catch(error => {
-          debug(`track:  ${error}`);
-          track.rollbackAttributes();
-        })
-        .then(() => {
-          debug('project saved successfuly');
-        });
     },
   }
 });

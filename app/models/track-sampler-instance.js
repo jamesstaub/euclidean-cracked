@@ -55,10 +55,6 @@ export default Model.extend({
   samplerId: nodeName('id', 'sampler'),
   /* unique ID for track gain node */
   gainId: nodeName('samplerId', 'gain'),
-  /* separate gain node for on step (vs the track's volume slider) */
-  gainOnStepId: nodeName('samplerId', 'gain-onstep'),
-  
-  lowpassId: nodeName('samplerId', 'lowpass'),
   
   /** ID selector for track sampler node */
   samplerSelector: selectorFor('id','samplerId'),
@@ -128,7 +124,7 @@ export default Model.extend({
       options = { interfaceName: 'ui-multislider', ...options };
       
       let trackControl = this.trackControls.findBy('uniqueNameAttr', `${options.nodeName}-${options.nodeAttr}`);
-      console.log(trackControl, `${options.nodeName}-${options.nodeAttr}`); 
+
       if (trackControl) {
         // if this node/attr pair exists, update it
         trackControl.setProperties(options);
@@ -136,11 +132,10 @@ export default Model.extend({
         trackControl = this.store.createRecord('track-control', options);
         trackControl.setDefaultValue();
       }
-      console.log('got set', trackControl.nodeUUID);
+
       this.trackControls.pushObject(trackControl);
       return trackControl;
     });
-
 
     const saveArray = await Promise.all(newTrackControls.map((record) => record.save()));
     return saveArray;
@@ -199,6 +194,7 @@ export default Model.extend({
   }),
 
   async setupInitFunctionAndControls() {
+    await waitForProperty(this.initFunction.content, 'function');
     const initFunctionRef = this.initFunction.content.createRef(this);
     this.set('initFunctionRef', initFunctionRef);
 
@@ -226,21 +222,6 @@ export default Model.extend({
     );
   },
 
-  /**
-   * todo: to cleanup
-   * lookup the difference in cracked nodes that exist before and 
-   * after this init function is called. store them and attempt to
-   * clear them every time this track is re-initialized
-    // return object of all web audio nodes (uuid as keys)
-    // const nodeStoreBeforeInit = __._getNodeStore();    
-    // const before = Object.keys(nodeStoreBeforeInit);
-
-
-    // const nodeStoreAfterInit = __._getNodeStore();
-    // const after = Object.keys(nodeStoreAfterInit);
-   */
-
-
   applyTrackControls(index) {
     // iterate over each track conrol and update the cracked audio note attributes
     // by selector or uuid
@@ -264,4 +245,4 @@ export default Model.extend({
   removeAllNodes() {
     // TOOD
   }
-})
+});
