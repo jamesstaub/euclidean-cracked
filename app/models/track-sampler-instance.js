@@ -1,6 +1,8 @@
+/* eslint-disable complexity */
 import Model from 'ember-data/model';
 import { computed } from '@ember/object';
-import { task, waitForProperty, timeout } from 'ember-concurrency';
+import { task, waitForProperty } from 'ember-concurrency';
+import nodeUtil from '../utils/cracked-nodes';
 
 /* 
   Module  to be extended by the track model 
@@ -42,17 +44,17 @@ export default Model.extend({
     this._super(...arguments);
     this.set('stepIndex', 0);
   },
-  /* class to add to all nodes on this track */
-  trackNodeClass: nodeName('id', 'node'),
+  
+  /* class to add to all nodes on this track 
+    this suffix -controlleris used to select audio nodes
+    to dynamically create multislider controls for
+  */
+  nodeWithControllerClass: nodeName('id', 'controller'),
 
   /** cracked webaudio node ids */
   samplerId: nodeName('id', 'sampler'),
   /* unique ID for track gain node */
   gainId: nodeName('samplerId', 'gain'),
-  /* separate gain node for on step (vs the track's volume slider) */
-  gainOnStepId: nodeName('samplerId', 'gain-onstep'),
-  
-  lowpassId: nodeName('samplerId', 'lowpass'),
   
   /** ID selector for track sampler node */
   samplerSelector: selectorFor('id','samplerId'),
@@ -60,75 +62,83 @@ export default Model.extend({
   /** ID selector for track sampler node */
   gainSelector: selectorFor('id', 'gainId'),
   
-  gainOnStepSelector: selectorFor('id', 'gainOnStepId'),
-  
-  lowpassSelector: selectorFor('id', 'lowpassId'),
-  
   /* Class selector for every node bound to this track */
-  trackNodeSelector: selectorFor('class', 'trackNodeClass'),
+  trackNodeSelector: selectorFor('class', 'nodeWithControllerClass'),
 
   path: computed('directory', 'filepath', {
     get() {
-      return `https://s3.amazonaws.com/drumserver${this.filepath}`;
+      const filepath = this.filepath.replace(' ', '%20');
+      return `https://storage.googleapis.com/euclidean-cracked.appspot.com/Drum Machines mp3${filepath}`;
     }
   }),
 
-  stepsUntilStart: computed('sequence.length', 'stepIndex', {
-    get() {
-      if (this.sequence) {
-        return this.sequence.length - this.stepIndex;
-      }
-    }
-  }),
+  // stepsUntilStart: computed('sequence.length', 'stepIndex', {
+  //   get() {
+  //     if (this.sequence) {
+  //       return this.sequence.length - this.stepIndex;
+  //     }
+  //   }
+  // }),
 
-  customFunctionScope: computed('samplerSelector,gainOnStepSelector,lowpassSelector', {
+  customFunctionScope: computed(
+    'samplerSelector',
+    'gainValue',
+    'path',
+    'nodeWithControllerClass', {
     get() {
       // variables available for user defined track functions
       return {
-        sampler: `${this.get('samplerSelector')}`,
-        gain: `${this.get('gainOnStepSelector')}`,
-        lowpass: `${this.get('lowpassSelector')}`
+        path: this.path,
+        sampler: this.samplerSelector,
+        samplerId: this.samplerId,
+        className: this.nodeWithControllerClass,
+        gainId: this.gainId,
+        gainValue: this.gain,
       };
     }
   }),
 
   // TODO: cracked: how to set new filepath without rebuilding node?
-  buildNodes() {
-    __()
-      .sampler({
-        id: this.samplerId,
-        path: this.path,
-        class: this.trackNodeClass
-      })
-      .lowpass({
-        id: this.lowpassId,
-        frequency: 10000,
-        q: 0,
-        class: this.trackNodeClass
-      })
-      .gain({
-        id: this.gainId,
-        class: this.trackNodeClass,
-        gain: this.gain
-      })
-      .gain({
-        id: `${this.gainOnStepId}`,
-        class: this.trackNodeClass
-      })
-      .connect(this.get('project.outputNodeSelector'));
-  },
 
-  removeAllNodes() {
-    __(this.samplerSelector).unbind('step');
+    // create multisliders for each web audio node defined in the init function
+  async createTrackControls() {
+    // TODO delete orphaned records as user add/removes audio nodes
+    // let newTrackControlIds = new Set(newTrackControls.map((ctrl)=> ctrl.uniqueNameAttr));
+    // let loadedTrackControlIds = new Set(this.trackControls.map((ctrl)=> ctrl.uniqueNameAttr));
+    // // get diff of newly updated records and those already loaded on track
+    // const diff = [...newTrackControlIds].filter(x => !loadedTrackControlIds.has(x));
+    // TODO when to save (destroy) the deleted record, and do i need to also save the track?
 
-    // NOTE: any cracked node created in this component must be selected
-    // for tear down here, otherwise lingering nodes will break
-    // ability to select by ID
-    let selectors = [this.trackNodeSelector];
+    // this.trackControls.forEach((trackControl) => {
+    //   trackControl.deleteRecord();
+    // });
+    const nodes = nodeUtil.selectNodes(this.trackNodeSelector);
+    // get array of options to create new track-control model instances
+    // by querying existing cracked nodes
+    const controlDefaults = nodes
+      .map((node) => nodeUtil.attrsForNode(node))
+      .map((attrs) => nodeUtil.defaultForAttr(...attrs));
+    
+    // iterate over the array of configs for mapped from the selected nodes with the control class.
+    const newTrackControls = controlDefaults.flat().map((options)=>{
+      options = { interfaceName: 'ui-multislider', ...options };
+      
+      let trackControl = this.trackControls.findBy('uniqueNameAttr', `${options.nodeName}-${options.nodeAttr}`);
 
-    selectors.forEach(selector => {
-      __(selector).remove();
+      if (trackControl) {
+        // if this node/attr pair exists, update it
+        trackControl.setProperties(options);
+      } else {
+        trackControl = this.store.createRecord('track-control', options);
+        trackControl.setDefaultValue();
+      }
+
+      this.trackControls.pushObject(trackControl);
+      return trackControl;
     });
+
+    const saveArray = await Promise.all(newTrackControls.map((record) => record.save()));
+    return saveArray;
   },
 
   // callback functions to be called on each step of sequencer
@@ -137,12 +147,12 @@ export default Model.extend({
     this.set('stepIndex', index);
 
     if (data) {
-      __(this).stop();
-      __(this).start();
+      __(this.samplerSelector).stop();
+      __(this.samplerSelector).start();
 
-      __(this).attr({ loop: this.isLooping });
+      __(this.samplerSelector).attr({ loop: this.isLooping });
     } else {
-      // __(this).stop();
+      __(this.samplerSelector).stop();
       // if (!get(this, 'isLegato')) {
       // __(this).attr({loop:false});
       // }
@@ -150,45 +160,59 @@ export default Model.extend({
 
     this.applyTrackControls(index);
 
-    if (this.onStepFunction) {
-      this.onStepFunction(index, data, array);
+    if (this.onstepFunctionRef) {
+      this.onstepFunctionRef(index, data, array);
     }
   },
 
+  // eslint-disable-next-line complexity
   initializeSampler: task(function* (awaitStart) {
-    timeout(300);
-    yield waitForProperty(
-      this,
-      'sequence',
-      s => typeof s !== 'undefined'
-    );
+    yield this.awaitDependencies.perform();
+    yield this.setupInitFunctionAndControls();
+    yield this.bindTrackSampler();
 
-    if (awaitStart) {
-      yield waitForProperty(this, 'stepIndex', 0);
-    }
-
-    yield waitForProperty(this, 'samplerId');
-    yield waitForProperty(this, 'filepath');
-    yield waitForProperty(this, 'customFunction.content');
-    // wait until beginning of sequence to apply changes
-    // prevents lots of concurrent disruptions
-
-    if (this.sequence.length) {
-      __.loop('stop');
-      this.removeAllNodes();
-      this.buildNodes();
-      this.bindTrackSampler();
-      if (this.get('project.isPlaying')) {
-        timeout(300);
-        __.loop('start');
+    if (this.get('project.isPlaying')) {
+      // wait until beginning of sequence to apply changes
+      // prevents lots of concurrent disruptions
+      if (awaitStart) {
+        yield waitForProperty(this, 'stepIndex', 0);
       }
+      __.loop('start');
     }
   }).keepLatest(),
 
+  awaitDependencies: task(function* () {
+    yield waitForProperty(this, 'sequence.length');
+    yield waitForProperty(this, 'samplerId');
+    yield waitForProperty(this, 'filepath');
+
+    // this feels bad but I need to make sure they're model records, not proxies 
+    yield this.get('initFunction');
+    yield this.get('onstepFunction');
+    yield this.get('trackControls');
+    // this is ugly but it its a workaround to ensure these are models, not proxys
+  }),
+
+  async setupInitFunctionAndControls() {
+    __(this.samplerSelector).remove();
+    await waitForProperty(this.initFunction.content, 'function');
+    const initFunctionRef = this.initFunction.content.createRef(this);
+    this.set('initFunctionRef', initFunctionRef);
+
+    if (this.initFunctionRef) {
+      // Call initFunction
+      this.initFunctionRef();
+      // this should only happen when custominitfunction is run
+      await this.createTrackControls();
+    }
+  },
+
   bindTrackSampler() {
     // let selector = `#${this.samplerId}`;
+    const onstepFunctionRef = this.onstepFunction.content.createRef(this, 'index','data','array');
+    this.set('onstepFunctionRef', onstepFunctionRef);
+
     let onStepCallback = this.onStepCallback.bind(this);
-    this.applyCustomFunction();
 
     __(this.samplerSelector).unbind('step');
 
@@ -200,35 +224,26 @@ export default Model.extend({
   },
 
   applyTrackControls(index) {
+    // iterate over each track conrol and update the cracked audio note attributes
+    // by selector or uuid
     this.get('trackControls').forEach((control)=> {
-      let { nodeSelector, nodeAttr, controlDataArray } = control.getProperties(
-        'nodeName', 'nodeSelector', 'nodeAttr', 'controlDataArray'
+      let { nodeSelector,  nodeUUID, nodeAttr, controlDataArray } = control.getProperties(
+        'nodeName', 'nodeSelector', 'nodeUUID', 'nodeAttr', 'controlDataArray'
       );
       const attrs = {};
-      if (nodeSelector, nodeAttr && controlDataArray.length) {
+      nodeSelector || nodeUUID;
+      if (nodeAttr && controlDataArray.length) {
         attrs[nodeAttr] = controlDataArray[index];
-        __(nodeSelector).attr(attrs);
+        if (nodeSelector) {
+          __(nodeSelector).attr(attrs);
+        } else {
+          __._getNode(nodeUUID).attr(attrs);
+        }
       }
     });
   },
 
-  /* 
-    Takes a function definition (string) from the customFunction model
-    evaluates it as a Function, and binds it to the track as a method named onStepFunction
-   */
-  async applyCustomFunction() {
-    const functionDefinition = await this.get('customFunction.function');
-    try {
-      let onStepFunction = new Function(
-        'index', 
-        'data', 
-        'array', 
-        functionDefinition
-      )
-      .bind(this.customFunctionScope);
-      this.set('onStepFunction', onStepFunction);
-    } catch (e) {
-      alert('problem with function', e);
-    }
-  },
-})
+  removeAllNodes() {
+    // TOOD
+  }
+});

@@ -29,7 +29,7 @@ export default TrackSamplerInstance.extend({
         '/Korg/Korg DDD5/DDD5 RIM.mp3',
         '/Ace Tone Rhythm Ace/HHCL.mp3',
       ];
-      const idx = __.random(0, files.length);
+      const idx = __.random(0, files.length - 1);
       return files[idx];
     }
   }),
@@ -45,7 +45,8 @@ export default TrackSamplerInstance.extend({
     }
   }),
 
-  customFunction: belongsTo('customFunction'),
+  onstepFunction: belongsTo('customFunction'),
+  initFunction: belongsTo('customFunction'),
 
   hits: attr('number', {
     defaultValue() {

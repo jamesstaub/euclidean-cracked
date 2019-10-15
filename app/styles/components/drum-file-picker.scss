@@ -26,16 +26,14 @@
     height: 200px;
     overflow-y: scroll;
     position: relative;
-    ul {
-      list-style: none;
-      padding:0;
-      li:hover {
-        background-color: darkgray;
-      }
-      li.selected {
-        background-color: darken(darkgray, 20%);
-        color: lightgray;
-      }
+
+    li:hover {
+      background-color: darkgray;
     }
+    li.selected {
+      background-color: darken(darkgray, 20%);
+      color: lightgray;
+    }
+
   }
 }

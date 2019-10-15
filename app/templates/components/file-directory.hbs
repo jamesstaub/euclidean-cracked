@@ -1,8 +1,9 @@
-<div class="directory-wrapper">
-  <ul>
+<div class="relative pt4 min-width-12">
+  <h3 class="absolute black top-0 w-100 bg-white pl3">{{if (eq directory.type "audio") "Sounds" "Drum Machine"}}</h3>
+  <ul class="directory-wrapper list ph0 mt0">
     {{#each directory.choices as |choice|}}
-      <li class={{if (eq choice selected) 'selected'}}>
-        <button {{action "onSelect" directory choice}}>
+      <li class="{{if (eq choice selected) 'selected'}}">
+        <button class="pl3" {{action "onSelect" directory choice}}>
           {{#if (eq directory.type "audio")}}
             {{filename-ui choice}}
           {{else}}

@@ -1,47 +1,29 @@
-<section  class="function-editor" ...attributes>
-  <div>
-    {{yield}}
-    {{! <legend>
-        <p>write custom <a href="https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/" target="_blank">cracked</a> script</p>
-        <p>script will be called on each step of the step sequencer.</p>
-      </legend> }}
-    {{mdc-fab 
-      click=(action (mut isExpanded) (not isExpanded)) 
-      icon=(if isExpanded "expand_more" "expand_less")
-      mini=true 
-      class="bg-transparent absolute right-1 top-0 mt2 shadow-none" 
-    }}
+<section class="function-editor" ...attributes>
+  <div class="flex justify-between items-center">
+    <div class="flex items-start relative pr4">
+      <h3 class="mv0">Script Editor</h3>
+      {{mdc-fab
+        click=(action (mut isExpanded) (not isExpanded))
+        icon=(if isExpanded "expand_more" "expand_less")
+        mini=true
+        class="expand-btn bg-transparent absolute right-0 shadow-none"
+      }}
+    </div>
+    {{#if (not functionIsLoaded)}}
+      <span class="dark-gray flex-0">
+        No script loaded.
+      </span>
+    {{/if}}
 
-    <div class="function-controls flex justify-between items-center">
-      <div class="flex flex-column justify-between">
-        <div class="flex items-center">
-          {{#mdc-button click=(action "submitCode") disabled=functionIsLoaded style="outlined" title="Function is loaded" class="black mr2 f7"}}
-            {{#if functionIsLoaded}}
-              {{mdc-icon "done" class="mr1"}} Script Loaded
-            {{else}}
-              {{mdc-icon "arrow_upward" class="mr1"}} Load Script
-            {{/if}}
-          {{/mdc-button}}
-
-          {{#if functionIsLoaded}}
-            {{#mdc-button click=(action "disableFunction") style="outlined" class="black mr2 f7"}}
-                {{mdc-icon "cancel" class="mr1"}} disable
-            {{/mdc-button}}
-          {{else}}
-            {{#mdc-button click=(action "discardChanges") style="outlined" class="black mr2 f7"}}
-              {{mdc-icon "settings_backup_restore" class="mr1"}} discard changes 
-            {{/mdc-button}}
-          {{/if}}
-          {{#if (not functionIsLoaded)}}
-            <span class="dark-gray flex-0">
-              No script loaded.
-            </span>
-          {{/if}}
-        
-        </div>
-      </div>
+    <div>
+      {{#mdc-button
+        style="raised"
+        click=(action (mut exampleMenuOpen) true)
+        class="f7"
+      }}
+        examples
+      {{/mdc-button}}
       <div>
-        {{#mdc-button style="outlined" click=(action (mut exampleMenuOpen) true) class="f7"}}examples{{/mdc-button}}
         {{#mdc-menu
           open=exampleMenuOpen
           anchor="parent"
@@ -49,31 +31,69 @@
           position="fixed"
           anchorCorner="bottomLeft"
         }}
-          {{#each exampleFunctions as |exampleGroup| }}
+          {{#each exampleFunctions as |exampleGroup|}}
             {{mdc-menu-item exampleGroup.sectionName disabled=true}}
             {{#each exampleGroup.examples as |example|}}
-              {{mdc-menu-item example.name click=(perform injectExample example.code)}}
+              {{mdc-menu-item
+                example.name
+                click=(perform injectExample example.code)
+              }}
             {{/each}}
             {{mdc-list-divider}}
           {{/each}}
         {{/mdc-menu}}
       </div>
     </div>
-    <div>
-      {{#if illegalTokens}}
-        <div class="alert alert-danger" role="alert">
-          <span>remove unsupported keywords: <span class="danger">{{illegalTokens}}</span></span>
-        </div>
-      {{/if}}
-    </div>
-    {{ember-ace
-      lines=(if isExpanded 24 6)
-      editorClass="ace-editor"
-      value=editorContent
-      mode="ace/mode/javascript"
-      theme="ace/theme/ambiance"
-      update=(action "onUpdateEditor")
-    }}
   </div>
+  {{yield}}
+    <div class="flex">
+      {{ember-ace
+        class="grow-1"
+        lines=(if isExpanded 24 8)
+        editorClass="ace-editor"
+        value=editorContent
+        mode="ace/mode/javascript"
+        theme="ace/theme/ambiance"
+        update=(action "onUpdateEditor")
+      }}
+      <div class="flex flex-column ml3 mt3">
+        {{#mdc-button
+          click=(action "submitCode")
+          disabled=functionIsLoaded
+          style="outlined"
+          title="Function is loaded"
+          class="black f7"
+        }}
+          {{#if functionIsLoaded}}
+            {{mdc-icon "done" class="mr1"}}Loaded
+          {{else}}
+            {{mdc-icon "arrow_upward" class="mr1"}}Load
+          {{/if}}
+        {{/mdc-button}}
+        {{#if functionIsLoaded}}
+          {{#mdc-button
+            click=(action "disableFunction")
+            style="outlined"
+            class="black f7"
+          }}
+            {{mdc-icon "cancel" class="mr1"}}disable
+          {{/mdc-button}}
+        {{else}}
+          {{#mdc-button
+            click=(action "discardChanges")
+            style="outlined"
+            class="black f7"
+            title="Revert editor to currently running code"
+          }}
+            {{mdc-icon "settings_backup_restore" class="mr1"}}discard
+          {{/mdc-button}}
+        {{/if}}
+      </div>
+    </div>
+    {{#if illegalTokens}}
+      <p class="mv0 flex items-center">
+        {{mdc-icon "warning" class="mr3"}}
+        remove unsupported keywords: {{illegalTokens}}
+      </p>
+    {{/if}}
 </section>
-

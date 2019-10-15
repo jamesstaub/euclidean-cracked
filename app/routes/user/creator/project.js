@@ -16,6 +16,12 @@ export default Route.extend({
 
   async afterModel(model, transition) {
     this.addProjectActiveUser(model);
+    const tracks = await model.get('tracks');
+
+    await Promise.all(tracks.map((track) => track.get('onstepFunction')));
+    await Promise.all(tracks.map((track) => track.get('initFunction')));
+
+      // track.get('initFunction');));
     if (!model.tracks.length) {
       this.createDefaultTrack(model, transition);
     }
@@ -29,7 +35,7 @@ export default Route.extend({
 
   async createDefaultTrack(project, transition) {
     await transition;
-    this.controllerFor('user.creator.project').send('createTrack', project);
+    this.controllerFor('user.creator.project').createTrack.perform(project);
   },
 
   async addProjectActiveUser(model) {

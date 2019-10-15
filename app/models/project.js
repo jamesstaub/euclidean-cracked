@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import nexusUi from '../mixins/nexus-ui';
+
 export default DS.Model.extend({
     title: DS.attr('string'),
     body: DS.attr('string'),
@@ -28,7 +28,7 @@ export default DS.Model.extend({
 
     init() {
       this._super(...arguments);
-      this.set('outputNodeSelector', '#master-compressor');
+      this.set('masterCompressorSelector', '#master-compressor');
     },
     
     async eachTrackAsync(asyncFn) {
@@ -40,6 +40,9 @@ export default DS.Model.extend({
 
     // TODO: move to project controller?
     async initializeTrackSamplers() {
+      // __('sampler').unbind('step');
+      // __('*').remove(); 
+
       return this.eachTrackAsync((track) => {
         track.set('stepIndex', 1);
         track.initializeSampler.perform();

@@ -1,16 +1,12 @@
 .track-footer {
-  .step-param-sliders, .ui-step-sequencer {
-    min-width: 36rem;
+  .track-ctrl-btn-list {
+    margin-bottom: -0.6rem;
   }
   .track-control-wrapper {
     .multislider-wrapper {
-      width: 544px;
+      min-width: 544px;
       svg {
         transform: translateY(5px);
-      }
-    }
-    table {
-      td:first-child {
       }
     }
   }

@@ -8,7 +8,7 @@ export default Component.extend(NexusMixin, {
     this._super(...arguments);
     this._nexusInit();
   },
-
+  classNames: 'flex mb2',
   ElementName: 'Dial',
 
   ElementOptions: computed('max', 'step', 'value', {

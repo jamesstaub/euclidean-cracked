@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 /*
   Implementation notes on custom track controls:
   
@@ -28,15 +29,22 @@ export default DS.Model.extend({
     }
   }),
 
-  nodeName: DS.attr('string', {
-    defaultValue() {
-      return 'gain';
-    }
-  }),
+  setDefaultValue() {
+    const controlData = this.get('controlDataArray')
+      .map(() => this.get('defaultVal') || 0)
+      .join(',');
+    this.set('controlData', controlData);
+  },
+
   nodeSelector: DS.attr('string'),
-  nodeAttr: DS.attr('string', {
-    defaultValue() {
-      return 'gain';
+
+  nodeName: DS.attr('string'),
+
+  nodeAttr: DS.attr('string'),
+
+  uniqueNameAttr: computed('nodeName', 'nodeAttr', {
+    get() {
+      return `${this.nodeName}-${this.nodeAttr}`;
     }
   }),
   
@@ -52,10 +60,12 @@ export default DS.Model.extend({
     }
   }),
 
-  default: DS.attr('number', {
+  defaultVal: DS.attr('number', {
     defaultValue() {
       return 1;
     }
   }),
+
+  sequence: alias('track.sequence'),
 
 });

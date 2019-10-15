@@ -17,9 +17,24 @@ export default DS.Model.extend({
 
   // always copied from functionPreCheck in cloud function
   // after submitted and checked for forbidden tokens
+  // never settable by the client
   function: DS.attr('string', { readOnly: true }),
 
   // unsafe javascript keywords returned from cloud function
   illegalTokens: DS.attr('string', { readOnly: true }),
+
+  // create the function referecne and bind it's scope
+  createRef(track, ...args){
+    let functionRef;
+    if (this.function) {
+      try {
+        functionRef = new Function(args, this.function)
+          .bind(track.get('customFunctionScope'));
+        return functionRef;
+      } catch (e) {
+        alert('problem with function', e.message);
+      }
+    }
+  },
 
 });

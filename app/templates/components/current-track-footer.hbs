@@ -1,5 +1,5 @@
-<footer class="track-footer ba flex bg-yellow absolute bottom-0 w-100 h14 items-center">
-  <div class="flex-0 bl br h-100 pv2 ph3 w3">
+<footer class="track-footer ba flex bg-yellow absolute left-0 bottom-0 w-100 h14 items-center z-2">
+  <div class="flex-0 bl br h-100 pv2 ph3 w3 tc">
     <img alt="Volume" src="/assets/icons/volume.svg" alt="volume">
     {{ui-slider
       max=1
@@ -13,49 +13,37 @@
   </div>
 
   <div class="flex-0 br flex flex-column w3 h-100">
-    {{#mdc-button class="bb b--black br0 h-auto flex-grow" click=(action (mut visibleInterface) "rhythm")}}
-      <img alt="Rhythm and Automation editor" src="/assets/icons/automation.svg"/>
+    {{#mdc-button class=(concat "bb b--black br0 h-auto grow-1 " (if (eq visibleInterface "rhythm") "bg-light-blue br")) click=(action (mut visibleInterface) "rhythm")}}
+      <img alt="Rhythm and Automation editor" src="/assets/icons/automation.svg">
     {{/mdc-button}}
-    {{#mdc-button class="br0 h-auto flex-grow" click=(action (mut visibleInterface) "script")}}
-      <img alt="Script Editor" src="/assets/icons/script.svg"/>
+    {{#mdc-button class=(concat "br0 h-auto grow-1 " (if (eq visibleInterface "script") "bg-light-blue br")) click=(action (mut visibleInterface) "script")}}
+      <img alt="Script Editor" src="/assets/icons/script.svg">
     {{/mdc-button}}
   </div>
 
-  <div class="flex-grow flex-basis-auto h-100 relative mw-100">
+  <div class="grow-1 flex-basis-auto h-100 relative mw-100">
     {{#if (eq visibleInterface "rhythm")}}
-      <div class="flex justify-between flex-grow flex-basis-auto h-100">
-        <TrackControls
-          @track={{track}}
-          @stepIndex={{track.stepIndex}}
-        />
-        {{!-- <StepParamSliders
-          class="pa3"
-          @sequence={{track.sequence}}
-          @track={{track}}
-          @stepIndex={{audioService.activeTrackStepIndex}}
-        >
-          <h3>Step Automation</h3>
-        </StepParamSliders> --}}
-
+      <div class="flex justify-between grow-1 flex-basis-auto h-100">
         <UiSequenceControls
-          class="pa3 bl h-100 w18 flex-0 min-width-6"
+          class="pa3 br h-100 flex-0"
           @hits={{track.hits}}
           @steps={{track.steps}}
           @offset={{track.offset}}
           @onUpdateSequenceParam={{action "updateSequenceParam"}}
         >
-          <h3>Euclidean Rhythm</h3>
+          <h3>
+            Euclidean Rhythm
+          </h3>
         </UiSequenceControls>
+        <TrackControls
+          @track={{track}}
+          @stepIndex={{track.stepIndex}}
+        />
       </div>
     {{/if}}
 
     {{#if (eq visibleInterface "script")}}
-      <TrackFunctionEditor
-        class="w-100 h-auto overflow-scroll absolute bottom-0 bg-yellow pa3"
-        @track={{track}}
-      >
-        <h3>Script Editor</h3>
-      </TrackFunctionEditor>
+      <TrackScripts @track={{track}} />
     {{/if}}
   </div>
 

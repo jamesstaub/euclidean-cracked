@@ -1,8 +1,14 @@
 .function-editor {
+  pre.ace-editor {
+    margin: 0;
+  }
   .ace-editor {
     flex: 1 1 auto;
   }
   .mdc-button--raised:disabled, .mdc-button--unelevated:disabled {
     background-color: transparent;
+  }
+  .expand-btn {
+    top: -10px;
   }
 }

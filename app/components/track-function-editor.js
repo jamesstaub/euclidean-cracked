@@ -2,38 +2,32 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { reads, not, and, or, alias } from '@ember/object/computed';
 import { task, waitForProperty } from 'ember-concurrency';
-import exampleFunctions from '../utils/example-functions';
 export default Component.extend({
+  // customFunctionRecord is the model that saves custom function as string
 
   classNames: ['track-function-editor'],
   tagName:'',
-  customFunction: reads('track.customFunction'), // the model that saves custom function as string
-  function: alias('customFunction.function'),
-  onStepFunction: reads('track.onStepFunction'), // the actual function that gets called on each step
-  illegalTokens: reads('customFunction.illegalTokens'),
+  function: alias('customFunctionRecord.function'),
+  
+  illegalTokens: reads('customFunctionRecord.illegalTokens'),
   // code in text editor
-  editorContent: alias('customFunction.editorContent'),
+  editorContent: alias('customFunctionRecord.editorContent'),
   canSubmit: and('editorContent.length'),
   cantSubmit: or('!canSubmit', 'functionIsLoaded'),
   functionIsLoaded: computed('function', 'editorContent', {
     get() {
-      return this.function === this.editorContent && this.onStepFunction;
+      return (this.function === this.editorContent) && this.customFunctionRef;
     }
   }),
 
   showDiscardBtn: not('hasUnloadedCode'),
 
-  init() {
-    this._super(...arguments);
-    this.set('exampleFunctions', exampleFunctions);
-  },
-
   // set property to cusotmFunction model then save
   saveFunctionTask: task(function*(property, value) {
     // yield proxy to model record
-    const customFunction = yield this.customFunction;
-    customFunction.set(property, value);
-    yield customFunction.save();
+    const customFunctionRecord = yield this.customFunctionRecord;
+    customFunctionRecord.set(property, value);
+    yield customFunctionRecord.save();
   }),
 
   applyFunction: task(function*() {
@@ -44,12 +38,13 @@ export default Component.extend({
     // until the function checker sets it null and either sets
     // the function property, or returns illegal keywords
     
-    yield waitForProperty(this, 'customFunction.functionPreCheck', null);
+    yield waitForProperty(this, 'customFunctionRecord.functionPreCheck', null);
 
     // the cloud function check succeeded if function + editor are identical
-    if (this.customFunction.get('function') === this.editorContent) {
+    if (this.customFunctionRecord.get('function') === this.editorContent) {
       yield this.track.initializeSampler.perform();
     }
+
     /**
      * TODO: set a timeout condition for this method
      * if the cloud function fails to respond, it can still set
@@ -59,7 +54,7 @@ export default Component.extend({
 
 
   verifyCustomFunction() {
-    // customFunction.function can only be written by a cloud function
+    // customFunctionRecord.function can only be written by a cloud function
     // that filters out dangerous tokens
     let isSafe = !this.get('illegalTokens');
     if (isSafe && this.function) {
@@ -95,7 +90,7 @@ export default Component.extend({
     disableFunction() {
       // TODO: fix
       this.saveFunctionTask.perform('functionPreCheck', '');
-      this.track.set('onStepFunction', null);
+      this.track.set('customFunctionRef', null);
     }
   }
 });

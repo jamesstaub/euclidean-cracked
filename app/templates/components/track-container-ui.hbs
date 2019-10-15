@@ -1,12 +1,15 @@
-{{#mdc-list-item class="relative pv0 pl0 pr2"}}
-  <div class="flex justify-between items-center w-100 h-100 pa2">
-    <div class="flex h-100">
-      {{yield}}
-      {{ui-step-sequencer
-        sequence=track.sequence 
-        stepIndex=track.stepIndex
-      }}
-    </div>
-    {{mdc-icon-button icon="close" title="Delete Track" class="dark-red delete-track-btn" click=(action "deleteTrack" track bubbles=false)}}
-  </div>
-{{/mdc-list-item}}
+<div class="flex h-100 flex-wrap ml4">
+  {{yield}}
+  {{ui-step-sequencer
+    sequence=track.sequence 
+    stepIndex=track.stepIndex
+  }}
+</div>
+{{mdc-icon-button icon="close" title="Delete Track" class="dark-red delete-track-btn" click=(action "deleteTrack" track bubbles=false)}}
+
+{{#if isActive}}
+  <CurrentTrackFooter 
+    @track={{track}}
+    @saveTrackTask={{saveTrackTask}}
+  />
+{{/if}}

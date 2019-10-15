@@ -1,27 +1,32 @@
 <section class="pa3 w-100 overflow-hidden">
   <div class="flex justify-between items-center">
-    <h3>Step Automation</h3>
-      {{#mdc-button
-        title="Add new parameter control"
-        style="raised"
-        click=(action "newControl" "multislider") 
-      }}
-        {{mdc-button-icon "add"}}
-        {{#mdc-button-label}}Add Control{{/mdc-button-label}}
-      {{/mdc-button}}
+    <h3>Automation Controls</h3>
   </div>
 
-  <div class="flex flex-column h-100 w-100 overflow-scroll mb4 mt3">
+  <div class="flex flex-column h-100 w-100 mb4">
+    <ul class="track-ctrl-btn-list list flex pb3 ph0 ma0 overflow-scroll mw6">
+      {{#each track.trackControls as |trackControl|}}
+        <li class="">
+          {{#mdc-button
+            click=(action (mut currentTrackControlId) trackControl.id) 
+            class="f7"
+            title= (concat "audio node " trackControl.nodeName " : attribute: " trackControl.nodeAttr)
+            style=(if (eq trackControl.id currentTrackControlId) "raised")
+          }} 
+            {{trackControl.nodeName}}:{{trackControl.nodeAttr}} 
+          {{/mdc-button}}
+        </li>
+      {{/each}}
+    </ul>
+    
     {{#each track.trackControls as |trackControl|}}
-      {{#if trackControl.isLoaded}}
-        <TrackControlWrapper 
+      {{#if (and (eq trackControl.id currentTrackControlId) trackControl.isLoaded (not trackControl.isDeleted))}}
+        <TrackControlWrapper
           @track={{track}} 
-          @sequence={{track.sequence}} 
           @trackControl={{trackControl}}
           @stepIndex={{stepIndex}}
         />
       {{/if}}
     {{/each}}
-    <div class="mb5">{{!-- spacer --}}</div>
   </div>
 </section>
