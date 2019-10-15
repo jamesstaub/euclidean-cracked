@@ -6,7 +6,7 @@ import exampleOnstepFunctions from '../utils/example-onstep-functions';
 export default Component.extend({
   init() {
     this._super(...arguments);
-    this.set('functionType', 'onstep');
+    this.set('functionType', 'init');
   },
   // eslint-disable-next-line complexity
   async didReceiveAttrs() {

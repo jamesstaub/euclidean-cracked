@@ -1,9 +1,8 @@
 {{! template-lint-disable }}
 <section ...attributes>
   {{yield}}
-  <div class="flex justify-between items-center" >
+  <div class="flex flex-column justify-between items-start" >
     <UiDial
-      class="flex flex-column items-center w3"
       @max=16
       @step=1
       @onChangeValue={{action "updateSequenceParam" "hits"}}
@@ -15,7 +14,6 @@
     </dl>
     </UiDial>
     <UiDial
-      class="flex flex-column items-center w3"
       @max=16
       @step=1
       @onChangeValue={{action "updateSequenceParam" "steps"}}
@@ -27,7 +25,6 @@
     </dl>
     </UiDial>
     <UiDial
-      class="flex flex-column items-center w3"
       @max=16
       @step=1
       @onChangeValue={{action "updateSequenceParam" "offset"}}

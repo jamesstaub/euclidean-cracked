@@ -32,7 +32,7 @@ export default DS.Model.extend({
           .bind(track.get('customFunctionScope'));
         return functionRef;
       } catch (e) {
-        alert('problem with function', e);
+        alert('problem with function', e.message);
       }
     }
   },

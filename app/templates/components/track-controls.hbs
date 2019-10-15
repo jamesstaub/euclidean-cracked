@@ -4,14 +4,14 @@
   </div>
 
   <div class="flex flex-column h-100 w-100 mb4">
-    <ul class="list flex pb3 ph0 ma0 overflow-scroll mw6">
+    <ul class="track-ctrl-btn-list list flex pb3 ph0 ma0 overflow-scroll mw6">
       {{#each track.trackControls as |trackControl|}}
         <li class="">
           {{#mdc-button
             click=(action (mut currentTrackControlId) trackControl.id) 
             class="f7"
             title= (concat "audio node " trackControl.nodeName " : attribute: " trackControl.nodeAttr)
-            style=(if (eq trackControl.id currentTrackControl.id) "raised")
+            style=(if (eq trackControl.id currentTrackControlId) "raised")
           }} 
             {{trackControl.nodeName}}:{{trackControl.nodeAttr}} 
           {{/mdc-button}}
