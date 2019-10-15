@@ -64,8 +64,9 @@ export default Component.extend({
 
   actions: {
     async start() {
-      __.loop(this.project.get('interval'));
+      console.log(this.project.get('interval'));
       this.initSignalChain();
+      __.loop(this.project.get('interval'));
       await this.project.initializeTrackSamplers();
       __.play();
       __.loop('start');
