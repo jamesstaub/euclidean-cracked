@@ -64,13 +64,13 @@ export default Component.extend({
 
   actions: {
     async start() {
+      __.loop(this.project.get('interval'));
       this.initSignalChain();
       await this.project.initializeTrackSamplers();
       __.play();
       __.loop('start');
       
       // + 1 hack to fix unknown playback problem
-      __.loop(this.project.interval + 1);
       this.project.set('isPlaying', true);
     },
 

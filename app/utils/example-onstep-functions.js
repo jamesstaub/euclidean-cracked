@@ -22,44 +22,6 @@ console.log('index', index);
 console.log('array', array);
 `
   },
-  {
-    name: 'audio node signal chain',
-    code: `
-/*
-
-Each track consists of a chain of audio nodes
-[sampler]->[lowpass]->[gain]
-
-The following selectors can be used to select and modify
-the audio nodes.
-
-See the cracked overview to understand selecting and modifying nodes
-https://github.com/billorcutt/i_dropped_my_phone_the_screen_cracked/blob/master/OVERVIEW.md#selecting
-
-Audio node selectors
-  this.sampler : the node ID for this sampler
-  this.lowpass : the node ID for the track's lowpass filter
-  this.gain : the node ID for the gain node this sampler is connected to
-
-  nodes can be selected with a jquery-like syntax:
-  __(this.sampler).attr({someAttribute: someValue});
-
-  see the cracked documentation for more info on these audio nodes
-  http://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/
-*/
-
-
-// play the sample at half speed
-__(this.sampler).attr({speed: .5});
-
-// modify the lowpass filter frequency and Q
-// on every step
-var f = (index * 100) + 100;
-var q = (index * 10) % 30;
-__(this.lowpass).attr({frequency: f, q: q});
-
-`
-  }
 ];
 
 const filters = [
@@ -67,6 +29,8 @@ const filters = [
     name: 'filter sweep',
     code: `
 /*
+  First select the lowpass filter example in the SETUP function
+
   Use the cracked library's __.scale() to convert the current step index
   into a frequency value for the lowpass filter
 */
@@ -79,7 +43,7 @@ if (data) {
   var type = 'logarithmic';
 
   var f = __.scale(index, inMin, inMax, outMin, outMax, type);
-  __(this.lowpass).attr({ frequency: f, q: 30 });
+  __('lowpass').attr({ frequency: f, q: 30 });
 }
 `
   },

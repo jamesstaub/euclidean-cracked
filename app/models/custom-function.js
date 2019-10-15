@@ -28,7 +28,7 @@ export default DS.Model.extend({
     let functionRef;
     if (this.function) {
       try {
-        functionRef = new Function(...[this.function, ...args])
+        functionRef = new Function(args, this.function)
           .bind(track.get('customFunctionScope'));
         return functionRef;
       } catch (e) {

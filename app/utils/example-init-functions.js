@@ -37,7 +37,28 @@ __()
   })
   .connect('#master-compressor');
   `
-}];
+},
+{
+  name:'lowpass filter',
+  code:`
+  __()
+  .sampler({
+    id: this.samplerId,
+    path: this.path,
+    class: this.className
+  })
+  .gain({ 
+    id: this.gainId, // assign gainID to connect to the track's main volume slider
+  })
+  .lowpass({
+    class: this.className,
+    frequency: 2000,
+    q:8
+  })
+  .connect('#master-compressor');
+`
+}
+];
 const lfo = [{
   name: '',
   code: ``
