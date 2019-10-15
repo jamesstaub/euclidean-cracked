@@ -194,6 +194,7 @@ export default Model.extend({
   }),
 
   async setupInitFunctionAndControls() {
+    __(this.samplerSelector).remove();
     await waitForProperty(this.initFunction.content, 'function');
     const initFunctionRef = this.initFunction.content.createRef(this);
     this.set('initFunctionRef', initFunctionRef);

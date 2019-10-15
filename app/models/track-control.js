@@ -31,7 +31,7 @@ export default DS.Model.extend({
 
   setDefaultValue() {
     const controlData = this.get('controlDataArray')
-      .map(() => this.get('default'))
+      .map(() => this.get('defaultVal') || 0)
       .join(',');
     this.set('controlData', controlData);
   },
@@ -60,7 +60,7 @@ export default DS.Model.extend({
     }
   }),
 
-  default: DS.attr('number', {
+  defaultVal: DS.attr('number', {
     defaultValue() {
       return 1;
     }

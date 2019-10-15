@@ -23,7 +23,7 @@ export default Route.extend({
 
       // track.get('initFunction');));
     if (!model.tracks.length) {
-      return await this.createDefaultTrack(model, transition);
+      this.createDefaultTrack(model, transition);
     }
   },
 
@@ -35,7 +35,7 @@ export default Route.extend({
 
   async createDefaultTrack(project, transition) {
     await transition;
-    await this.controllerFor('user.creator.project').createTrack.perform(project);
+    this.controllerFor('user.creator.project').createTrack.perform(project);
   },
 
   async addProjectActiveUser(model) {

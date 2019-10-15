@@ -26,9 +26,9 @@ export default Component.extend({
       ...params,
       min: nodeAttrParams.min,
       max: nodeAttrParams.max,
-      default: nodeAttrParams.default,
+      defaultVal: nodeAttrParams.defaultVal,
       controlData: this.trackControl.get('controlDataArray')
-        .map(() => nodeAttrParams.default)
+        .map(() => nodeAttrParams.defaultVal)
         .join(',')
     });
 
@@ -42,13 +42,13 @@ export default Component.extend({
       this.saveTask.perform();
     },
     
-    // min, max, default
+    // min, max, defaultVal
     updateNumberParam() {
-      let {min, max} = this.trackControl;
+      let { min, max, defaultVal } = this.trackControl;
       if (min > max) {
         max = min;
       }
-      this.trackControl.set('max', max);
+      this.trackControl.setProperties({min, max, defaultVal});
       this.saveTask.perform();
     },
    
