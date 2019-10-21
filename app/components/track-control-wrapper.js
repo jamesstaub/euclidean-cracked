@@ -16,8 +16,8 @@ export default Component.extend({
   }),
 
   saveTask: task(function*(){
-    this.trackControl.save();
-    yield timeout(300);
+    yield this.trackControl.save();
+    yield timeout(100);
   }).keepLatest(),
 
   setNodeParam(params, nodeAttrParams) {

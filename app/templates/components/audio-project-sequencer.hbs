@@ -7,7 +7,8 @@
   {{/if}}
   <label>
     {{input
-      value=bpm
+      value=project.bpm
+      change=(perform setBpmTask)
       class="w3 bg-transparent bw1 b--black"
       type="number"
     }} BPM

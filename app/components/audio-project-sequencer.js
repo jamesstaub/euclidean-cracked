@@ -1,26 +1,15 @@
 import Component from '@ember/component';
 import { get } from '@ember/object';
-import { computed } from '@ember/object';
-
+import { task, timeout } from 'ember-concurrency';
 export default Component.extend({
   intervalSliderSize: [120, 20],
 
   classNames: ['audio-project-sequencer'],
   dacGain: .9,
 
-  bpm: computed({
-    get() {
-      return (60000 / this.project.interval);
-    },
-    set(key, val) {
-      const interval = 60000 / val;
-      this.project.set('interval', interval);
-      __.loop(interval);
-      this.project.save();
-      
-      return val;
-    }
-  }),
+  _intervalFromBpm(bpm) {
+    return 60000 / bpm;
+  },
   
   didInsertElement() {
     this.initSignalChain();
@@ -62,10 +51,21 @@ export default Component.extend({
       .dac(this.dacGain);
   },
 
+  setBpmTask: task(function*(e) {
+    const bpm = +e.currentTarget.value;
+    __.loop(this._intervalFromBpm(bpm));
+    if (bpm) {
+      this.project.set('bpm', bpm);
+      yield this.project.saveTask.perform();
+    }
+    yield timeout(50);
+  }).keepLatest(),
+
   actions: {
+
     async start() {
       this.initSignalChain();
-      __.loop(this.project.get('interval'));
+      __.loop(this._intervalFromBpm(this.project.get('bpm')));
       await this.project.initializeTrackSamplers();
       __.play();
       __.loop('start');

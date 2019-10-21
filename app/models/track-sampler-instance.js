@@ -98,13 +98,11 @@ export default Model.extend({
     }
   }),
 
-  // TODO: cracked: how to set new filepath without rebuilding node?
-
-    // create multisliders for each web audio node defined in the init function
+  // create multisliders for each web audio node defined in the init function
   async createTrackControls() {
     // TODO delete orphaned records as user add/removes audio nodes
-    // let newTrackControlIds = new Set(newTrackControls.map((ctrl)=> ctrl.uniqueNameAttr));
-    // let loadedTrackControlIds = new Set(this.trackControls.map((ctrl)=> ctrl.uniqueNameAttr));
+    // ENDSURE this is trying to find existing track controls first, and using their values, not overwriting them with the defaults
+
     // // get diff of newly updated records and those already loaded on track
     // const diff = [...newTrackControlIds].filter(x => !loadedTrackControlIds.has(x));
     // TODO when to save (destroy) the deleted record, and do i need to also save the track?
