@@ -87,8 +87,8 @@ __(this.sampler).attr({speed: speed});
   {
     name: 'reverse',
     code: `
-var isReverse = index % 2; // isReverse is true on every other step. 
-__(this.sampler).attr({reverse: isReverse});
+var reverseSpeed = index % 2 ? -1 : 1; // reverseSpeed is -1 on every other step. 
+__(this.sampler).attr({speed: reverseSpeed});
 `
   },
 

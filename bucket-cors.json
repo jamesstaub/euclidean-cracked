@@ -1,6 +1,6 @@
 [
     {
-      "origin": ["http://euclidean-cracked.appspot.com", "https://euclidean-cracked.firebaseapp.com", "http://localhost:4300", "http://localhost:4200"],
+      "origin": ["http://euclidean-cracked.appspot.com", "https://euclidean-cracked.firebaseapp.com", "http://localhost:4300", "http://localhost:4200", "https://euclip.app"],
       "responseHeader": ["Content-Type"],
       "method": ["GET", "HEAD"],
       "maxAgeSeconds": 3600

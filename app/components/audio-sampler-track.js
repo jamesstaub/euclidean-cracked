@@ -7,7 +7,7 @@ export default Component.extend(DidChangeAttrs, {
   // only re-initialize if necessary
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   didChangeAttrsConfig: {
-    attrs: ['filepath', 'sequence'],
+    attrs: ['filepath', 'sequence', 'gain'],
   },
 
   didInsertElement() {
@@ -15,24 +15,27 @@ export default Component.extend(DidChangeAttrs, {
     this.track.initializeSampler.perform();
   },
 
+  // eslint-disable-next-line complexity
   didChangeAttrs(changes) {
     this._super(...arguments);
     if (changes) {
       if (changes.sequence && Object.keys(changes).length === 1) {
         this.track.bindTrackSampler();
+      } else if (changes.gain){ 
+          __(this.gainSelector).attr({ gain: changes.gain.current });
       } else {
         this.track.initializeSampler.perform();
       }
     }
   },
 
-  /* cracked node attribute setters */
-  // track gain slider
-  gain: computed({
-    set(key, val) {
-      __(this.gainSelector).attr({ gain: val });
-      return val;
-    }
-  }),
+  // /* cracked node attribute setters */
+  // // track gain slider
+  // gain: computed({
+  //   set(key, val) {
+  //     __(this.gainSelector).attr({ gain: val });
+  //     return val;
+  //   }
+  // }),
 
 });

@@ -65,6 +65,7 @@ export default Model.extend({
   /* Class selector for every node bound to this track */
   trackNodeSelector: selectorFor('class', 'nodeWithControllerClass'),
 
+
   path: computed('directory', 'filepath', {
     get() {
       const filepath = this.filepath.replace(' ', '%20');
@@ -150,7 +151,7 @@ export default Model.extend({
 
       __(this.samplerSelector).attr({ loop: this.isLooping });
     } else {
-      __(this.samplerSelector).stop();
+      // __(this.samplerSelector).stop();
       // if (!get(this, 'isLegato')) {
       // __(this).attr({loop:false});
       // }
