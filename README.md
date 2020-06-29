@@ -1,3 +1,8 @@
+# This project has moved!
+this repo is no longer in development, the EUCLIP project now lives at
+https://github.com/jamesstaub/euclip-octane
+
+
 # Euclip Drum Console
 [Open the app](https://euclidean-cracked.firebaseapp.com)
 
@@ -22,11 +27,6 @@ Pre-release TODOs:
 - about / help page
 
 
-Future features:
-
-- Audio uploads
-    - user can upload their own samples, expand drum file picker to show users' collection
-    - cloud function (or possibly client service worker) performs beat tracking analysis, creates a track-script variable which is an array of start/end times of the beat tracking. 
 
 
 
